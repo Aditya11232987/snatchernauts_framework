@@ -16,9 +16,8 @@ include "room_display.rpy"
 
 # Screen for the room exploration - Now fully modular
 screen room_exploration():
-    # Room background and objects
-    use room_background
-    use room_objects
+    # Room background and objects on the same layer
+    use room_background_and_objects
     use room_bloom_effects
     
     # Interactive elements
@@ -57,16 +56,61 @@ screen room_exploration():
         
         # Toggle gamepad navigation (always available)
         key "pad_back_press" action Function(toggle_gamepad_navigation)
+    
+    # Keyboard shortcuts for new features (always available)
+    key "c" action Function(toggle_crt_effect)
+    key "f" action Function(fade_out_room_audio)
+    key "r" action Function(renpy.restart_interaction)  # Refresh/restart interaction
+    
+    # Scanline size testing shortcuts
+    key "1" action Function(set_crt_parameters, scanline_size=0.5)   # Fine scanlines
+    key "2" action Function(set_crt_parameters, scanline_size=1.0)   # Normal scanlines
+    key "3" action Function(set_crt_parameters, scanline_size=1.5)   # Thick scanlines
+    key "4" action Function(set_crt_parameters, scanline_size=3.0)   # Very thick scanlines
 
+# Initialize CRT variables with your specified defaults
+init python:
+    # Force these values every time (override any saved values)
+    store.crt_enabled = True
+    store.crt_warp = 0.2
+    store.crt_scan = 0.5
+    store.crt_chroma = 0.9
+    store.crt_scanline_size = 1.0  # Your preferred scanline size (same as key '2')
+    
+    print(f"CRT defaults initialized - scanline_size: {store.crt_scanline_size}")
+    
+    
 # Label to start room exploration
 label explore_room:
     scene black with fade
     "You step into a mysterious room..."
     
+    # Reset fade state so room can fade in properly
+    $ store.room_faded_in = False
+    
+    # Ensure CRT parameters are set to defaults
+    $ store.crt_enabled = True
+    $ store.crt_warp = 0.2
+    $ store.crt_scan = 0.5
+    $ store.crt_chroma = 0.9
+    $ store.crt_scanline_size = 1.0
+    
+    # Apply the CRT parameters using the function
+    $ set_crt_parameters(warp=store.crt_warp, scan=store.crt_scan, chroma=store.crt_chroma, scanline_size=store.crt_scanline_size)
+    
     # Ensure room1 is loaded
     $ load_room("room1")
     
+    # Start music at 0 volume and begin playing immediately
+    $ renpy.music.set_volume(0.0, channel="music")
+    play music "audio/room1.mp3" loop
+    
+    # Start volume tween immediately to sync with visual fade-in (2 second duration)
+    $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
+    
     call screen room_exploration
     
+    # Fade out audio when leaving
+    stop music fadeout 2.0
     "You step back, having examined the room thoroughly."
     return
