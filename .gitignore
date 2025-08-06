@@ -1,0 +1,89 @@
+# Ren'Py specific files
+*.rpyc
+*.rpymc
+*.rpyb
+log.txt
+errors.txt
+traceback.txt
+cache/
+saves/
+persistent
+screenshot*.png
+tmp/
+.android.json
+
+# Ren'Py directories
+/game/saves/
+/game/cache/
+
+# Ren'Py bytecode cache
+__pycache__/
+*.pyc
+
+# Ren'Py generated files
+/game/**/*.bak
+/game/**/*.new
+/game/**/*.old
+/errors.txt
+/files.txt
+/image_cache.txt
+/log.txt
+/save_dump.txt
+/traceback.txt
+/dialogue.tab
+/dialogue.txt
+/strings.json
+
+# Ren'Py Android builds
+android-*/
+rapt-*/
+
+# Ren'Py iOS builds  
+ios-*/
+
+# Distribution builds
+*-dists/
+dist/
+build/
+
+# Mac specific
+.DS_Store
+*.app
+
+# Windows specific
+Thumbs.db
+*.exe
+*.dll
+
+# Linux specific
+*.so
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+
+# System files
+.Trash-*
+.fuse_hidden*
+
+# Steam specific (if using Steam integration)  
+.steam/
+
+# Custom ignores for framework
+archive.rpa
+*.rpa
+personal_notes.txt
+dev_notes/
