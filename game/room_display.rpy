@@ -251,11 +251,7 @@ screen room_bloom_effects_internal():
         $ bloom_data = apply_bloom_to_object(room_objects[current_hover_object], current_hover_object, current_hover_object)
         
         if bloom_data:
-            # Debug: Log color being used
-            if config.developer:
-                $ print("Bloom color for {}: {}".format(current_hover_object, bloom_data["color"]))
-            
-            # Create enhanced matrix-based bloom effect using global utilities
+            # Create enhanced matrix-based bloom effect with pulsing
             add bloom_data["image"] at configurable_bloom(
                 bloom_data["parameters"]["bloom_alpha_min"], 
                 bloom_data["parameters"]["bloom_alpha_max"], 

@@ -62,6 +62,9 @@ init python:
 
 # Screen fragment for floating description box - using property functions to eliminate duplication
 screen floating_description_box(obj, box_width, box_height, box_x, box_y, float_intensity):
+    # Put description boxes on high z-order to appear above letterbox
+    zorder 150
+    
     $ frame_props = get_description_frame_properties(box_x, box_y, box_width, box_height)
     $ text_props = get_description_text_properties(box_width)
     

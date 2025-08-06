@@ -35,20 +35,23 @@ define DEBUG_TEXT_STYLE = {
 
 define DEBUG_POSITIONS = {
     "mouse": {"xpos": 10, "ypos": 10},
-    "room_info": {"xpos": 10, "ypos_start": 50, "line_height": 20}
+    "room_info": {"xpos": 10, "ypos_start": 30, "line_height": 20}
 }
 
-# Screen fragment for debug display
+# Screen fragment for debug display (appears above letterbox)
 screen debug_overlay():
+    # Put debug info on a high z-order to appear above letterbox
+    zorder 200
+    
     if is_developer_mode():
-        # Mouse coordinates
+        # Mouse coordinates (original position)
         text get_debug_mouse_text():
             xpos DEBUG_POSITIONS["mouse"]["xpos"]
             ypos DEBUG_POSITIONS["mouse"]["ypos"]
             color DEBUG_TEXT_STYLE["color"]
             size DEBUG_TEXT_STYLE["size"]
         
-        # Room information - dynamically show all info lines
+        # Room information - dynamically show all info lines (original position)
         $ room_info = get_debug_room_info()
         for i, info_line in enumerate(room_info):
             text info_line:

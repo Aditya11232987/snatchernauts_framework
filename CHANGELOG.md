@@ -5,6 +5,36 @@ All notable changes to the Snatchernauts Framework will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-07
+
+### Added
+- **CRT Shader Effects** - Authentic retro CRT monitor simulation with customizable scanlines
+- **Advanced Bloom System** - Enhanced matrix-based bloom effects with color tinting and brightness
+- **CRT Integration with Bloom** - Bloom effects properly integrated within CRT shader rendering
+- **Resolution-Independent Scanlines** - Consistent CRT scanline appearance across all window sizes
+- **Dynamic CRT Controls** - Keyboard shortcuts for toggling CRT and adjusting scanline thickness
+- **Improved Room Display System** - Unified background and object rendering on same layer
+- **Fade-In Effects** - Smooth room entrance animations for backgrounds and objects
+- **Enhanced Visual Pipeline** - Better integration between CRT shaders and bloom effects
+
+### Changed
+- **Room Rendering Architecture** - Combined background and objects into single layer for better CRT effects
+- **Bloom Color System** - Added debug output for bloom color verification
+- **CRT Shader Parameters** - Optimized default values for better visual quality
+- **Transform System** - Improved conditional fade-in effects for room elements
+
+### Technical Improvements
+- **Shader Registration System** - Proper CRT shader initialization and management
+- **Matrix Color Operations** - Enhanced bloom effects using TintMatrix and BrightnessMatrix
+- **Frame-Based Rendering** - Better organization of visual effects within rendering pipeline
+- **Conditional Rendering Logic** - Smart display decisions based on CRT enablement state
+
+### Fixed
+- **CRT-Bloom Integration** - Resolved issues with bloom effects not appearing correctly with CRT shaders
+- **Scanline Consistency** - Fixed resolution-dependent scanline thickness variations
+- **Transform Conflicts** - Eliminated conflicts between room fade-in and CRT effects
+- **Layer Management** - Proper separation of CRT and non-CRT rendering paths
+
 ## [1.0.0] - 2025-01-07
 
 ### Added

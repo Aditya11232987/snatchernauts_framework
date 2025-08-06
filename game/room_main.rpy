@@ -13,6 +13,8 @@ include "room_debug.rpy"
 include "room_descriptions.rpy"
 include "room_ui.rpy"
 include "room_display.rpy"
+include "letterbox_gui.rpy"
+include "object_interactions.rpy"
 
 # Screen for the room exploration - Now fully modular
 screen room_exploration():
@@ -23,8 +25,8 @@ screen room_exploration():
     # Interactive elements
     use object_hotspots
     
-    # Description system - show floating descriptions on hover
-    if current_hover_object:
+    # Description system - show floating descriptions on hover (only when interaction menu is not active)
+    if current_hover_object and not interaction_menu_active:
         $ obj = room_objects[current_hover_object]
         $ box_width, box_height = calculate_description_box_size(obj["description"])
         $ position_setting = obj.get("box_position", "auto")
@@ -39,20 +41,32 @@ screen room_exploration():
     
     # Gamepad controls for object navigation
     if gamepad_navigation_enabled:
-        # Object navigation controls
-        key "pad_dpleft_press" action Function(gamepad_navigate, "left")
-        key "pad_dpright_press" action Function(gamepad_navigate, "right")
-        key "pad_dpup_press" action Function(gamepad_navigate, "up")
-        key "pad_dpdown_press" action Function(gamepad_navigate, "down")
+        # Object navigation controls - but allow interaction menu navigation when active
+        if interaction_menu_active:
+            key "pad_dpup_press" action Function(navigate_interaction_menu, "up")
+            key "pad_dpdown_press" action Function(navigate_interaction_menu, "down")
+            key "pad_lefty_neg" action Function(navigate_interaction_menu, "up")
+            key "pad_lefty_pos" action Function(navigate_interaction_menu, "down")
+        else:
+            key "pad_dpleft_press" action Function(gamepad_navigate, "left")
+            key "pad_dpright_press" action Function(gamepad_navigate, "right")
+            key "pad_dpup_press" action Function(gamepad_navigate, "up")
+            key "pad_dpdown_press" action Function(gamepad_navigate, "down")
+            
+            # Alternative gamepad controls (left stick)
+            key "pad_leftx_neg" action Function(gamepad_navigate, "left")
+            key "pad_leftx_pos" action Function(gamepad_navigate, "right")
+            key "pad_lefty_neg" action Function(gamepad_navigate, "up")
+            key "pad_lefty_pos" action Function(gamepad_navigate, "down")
         
-        # Alternative gamepad controls (left stick)
-        key "pad_leftx_neg" action Function(gamepad_navigate, "left")
-        key "pad_leftx_pos" action Function(gamepad_navigate, "right")
-        key "pad_lefty_neg" action Function(gamepad_navigate, "up")
-        key "pad_lefty_pos" action Function(gamepad_navigate, "down")
+        # A button - activate object or confirm action
+        key "pad_a_press" action Function(gamepad_confirm_action)
         
-        # Select first object if none selected
-        key "pad_a_press" action Function(gamepad_select_first_object)
+        # B button - cancel interaction or select first object
+        if interaction_menu_active:
+            key "pad_b_press" action Function(gamepad_cancel_action)
+        else:
+            key "pad_b_press" action Function(gamepad_select_first_object)
         
         # Toggle gamepad navigation (always available)
         key "pad_back_press" action Function(toggle_gamepad_navigation)
@@ -60,6 +74,7 @@ screen room_exploration():
     # Keyboard shortcuts for new features (always available)
     key "c" action Function(toggle_crt_effect)
     key "f" action Function(fade_out_room_audio)
+    key "l" action Function(toggle_letterbox)  # Toggle letterbox effect
     key "r" action Function(renpy.restart_interaction)  # Refresh/restart interaction
     
     # Scanline size testing shortcuts
@@ -76,6 +91,12 @@ init python:
     store.crt_scan = 0.5
     store.crt_chroma = 0.9
     store.crt_scanline_size = 1.0  # Your preferred scanline size (same as key '2')
+    
+    # Initialize bloom fade-out state variables
+    store.bloom_fade_active = False
+    store.bloom_fade_object = None
+    store.bloom_fade_data = None
+    store.bloom_fade_start_time = 0.0
     
     print(f"CRT defaults initialized - scanline_size: {store.crt_scanline_size}")
     

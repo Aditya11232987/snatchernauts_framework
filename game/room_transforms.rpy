@@ -22,13 +22,25 @@ transform floating_bubble(intensity=1.0):
 transform no_float:
     pass
 
-# Configurable bloom transform with fade-in from normal values
+# Configurable bloom transform with fade-in and natural fade-out
 transform configurable_bloom(alpha_min=0.2, alpha_max=0.6, pulse_speed=2.0):
     # Start from completely normal (no bloom)
     alpha 0.0
     # Fade in to minimum bloom over 0.3 seconds
     linear 0.3 alpha alpha_min
     # Then start the normal pulsing cycle between min and max (never back to 0)
+    block:
+        linear pulse_speed alpha alpha_max
+        linear pulse_speed alpha alpha_min
+        repeat
+
+# Bloom transform with graceful fade-out - simple approach with default dissolve
+transform bloom_with_fadeout(alpha_min=0.2, alpha_max=0.6, pulse_speed=2.0):
+    # Start from completely normal (no bloom)
+    alpha 0.0
+    # Fade in to minimum bloom over 0.3 seconds
+    linear 0.3 alpha alpha_min
+    # Then start the normal pulsing cycle between min and max
     block:
         linear pulse_speed alpha alpha_max
         linear pulse_speed alpha alpha_min

@@ -90,8 +90,8 @@ init python:
     
     class BloomShaderModel(model.Model):
         def __init__(self, bloom_color="#ffffff", bloom_intensity=0.5, bloom_radius=8.0, 
-                     bloom_threshold=0.1, bloom_softness=0.7, alpha_min=0.2, 
-                     alpha_max=0.8, pulse_speed=1.0):
+                    bloom_threshold=0.1, bloom_softness=0.7, alpha_min=0.2, 
+                    alpha_max=0.8, pulse_speed=1.0):
             super(BloomShaderModel, self).__init__()
             
             # Convert hex color to RGB

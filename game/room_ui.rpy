@@ -26,6 +26,7 @@ define ROOM_BUTTON_CONFIG = {
 }
 
 init python:
+    import time
     def create_object_hotspot(obj_name, obj_data):
         """Create hotspot configuration for an object"""
         return {
@@ -50,6 +51,18 @@ init python:
     def get_editor_mode_action():
         """Get the action for entering editor mode"""
         return [SetVariable("editor_mode", True), ShowMenu("object_editor")]
+    
+    def handle_object_hover(obj_name):
+        """Handle object hover - only update if interaction menu is not active"""
+        if not interaction_menu_active:
+            store.current_hover_object = obj_name
+            renpy.restart_interaction()
+    
+    def handle_object_unhover():
+        """Handle object unhover - only update if interaction menu is not active"""
+        if not interaction_menu_active:
+            store.current_hover_object = None
+            renpy.restart_interaction()
 
 # Screen fragment for object hotspots
 screen object_hotspots():
@@ -61,16 +74,21 @@ screen object_hotspots():
             xsize obj_data["width"]
             ysize obj_data["height"]
             background None
-            action NullAction()
-            hovered SetVariable("current_hover_object", obj_name)
-            unhovered SetVariable("current_hover_object", None)
+            action Function(show_interaction_menu, obj_name)
+            hovered Function(handle_object_hover, obj_name)
+            unhovered Function(handle_object_unhover)
 
 # Screen fragment for UI buttons
 screen room_ui_buttons():
+    # Calculate letterbox offset for UI positioning
+    $ letterbox_offset = 0
+    if letterbox_active:
+        $ letterbox_offset = letterbox_bar_height
+    
     # Exit button in top right
     textbutton ROOM_BUTTON_CONFIG["exit"]["text"]:
         xpos ROOM_BUTTON_CONFIG["exit"]["xpos"]
-        ypos ROOM_BUTTON_CONFIG["exit"]["ypos"]
+        ypos letterbox_offset + ROOM_BUTTON_CONFIG["exit"]["ypos"]
         action get_room_exit_action()
         text_color ROOM_BUTTON_CONFIG["exit"]["text_color"]
         text_hover_color ROOM_BUTTON_CONFIG["exit"]["text_hover_color"]
@@ -84,7 +102,7 @@ screen room_ui_buttons():
     # Editor mode button
     textbutton ROOM_BUTTON_CONFIG["editor"]["text"]:
         xpos ROOM_BUTTON_CONFIG["editor"]["xpos"]
-        ypos ROOM_BUTTON_CONFIG["editor"]["ypos"]
+        ypos letterbox_offset + ROOM_BUTTON_CONFIG["editor"]["ypos"]
         action get_editor_mode_action()
         text_color ROOM_BUTTON_CONFIG["editor"]["text_color"]
         text_hover_color ROOM_BUTTON_CONFIG["editor"]["text_hover_color"]
@@ -94,6 +112,7 @@ screen room_ui_buttons():
             ROOM_BUTTON_CONFIG["editor"]["padding"]["vertical"]
         )
         text_size ROOM_BUTTON_CONFIG["editor"]["text_size"]
+    
 
 # Utility functions for button customization
 init python:

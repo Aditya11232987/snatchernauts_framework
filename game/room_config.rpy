@@ -53,19 +53,17 @@ define ROOM_DEFINITIONS = {
                 "object_type": "character",
             },
             # Custom bloom configuration (overrides defaults)
-            create_bloom_config({
-                "bloom_intensity": 0.05,        # Lower intensity for subtle effect
-                "bloom_radius": 6.0,           # Smaller radius
-                "bloom_threshold": 0.02,       # Lower threshold
-                "bloom_softness": 0.9,         # High softness
-                "bloom_alpha_max": 0.8,        # Higher max alpha
-                "bloom_pulse_speed": 1.0       # Normal pulse speed
-            }),
+            create_bloom_config(
+                BLOOM_PRESETS["starlight_intense"]),
             # Custom animation configuration
             create_animation_config({
-                "hover_animation_type": "breath",  # Breathing animation
-                "hover_scale_boost": 1.04,        # Slightly larger scale
-                "hover_brightness_boost": 0.1     # Normal brightness boost
+                "hover_scale_boost": 1.00,         # Slightly larger scale
+                "hover_brightness_boost": 0.0      # Normal brightness boost
+            }),
+            create_animation_config({
+                "hover_animation_type": "breathe",
+                "hover_scale_boost": 1.01,
+                "hover_brightness_boost": 0.05
             })),
             
             "patreon": merge_configs({
@@ -75,7 +73,7 @@ define ROOM_DEFINITIONS = {
                 "width": 364,   # calc_size("patreon", 100)[0] = 364 pixels
                 "height": 450,  # calc_size("patreon", 100)[1] = 450 pixels
                 "image": "images/patreon.png",
-                "description": "A Patreon logo. Perhaps this is how the creator gets support for their work.",
+                "description": "Another down on his luck fool drinking his last drink before contemplating his existence.",
                 "box_position": "right+40",
                 "float_intensity": 0.5,
                 # Object type

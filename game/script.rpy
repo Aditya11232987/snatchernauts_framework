@@ -11,6 +11,10 @@ label start:
     menu:
         "Explore the room":
             call explore_room
+        "Explore with letterbox effect":
+            $ show_letterbox()
+            call explore_room
+            $ hide_letterbox()
         "Exit":
             return
     

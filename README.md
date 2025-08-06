@@ -7,11 +7,13 @@ A comprehensive Ren'Py point-and-click adventure game framework inspired by clas
 ### Core Systems
 - **🏠 Room Exploration System** - Point-and-click interface with hover descriptions
 - **🎮 Gamepad Support** - Full controller navigation with D-pad and analog sticks  
-- **✨ Advanced Visual Effects** - Dynamic bloom effects and hover animations
-- **📺 CRT Shader Effects** - Authentic retro CRT monitor simulation with scanlines
+- **✨ Advanced Visual Effects** - Dynamic bloom effects with matrix-based color tinting
+- **📺 CRT Shader Effects** - Authentic retro CRT monitor simulation with customizable scanlines
+- **🌟 CRT-Bloom Integration** - Bloom effects properly rendered within CRT shader pipeline
 - **📝 Floating Descriptions** - Smart auto-positioning description boxes
 - **🔧 Live Editor Mode** - In-game object positioning and scaling tools
 - **🎨 Pixel-Perfect Rendering** - Optimized for pixel art with the Quaver font
+- **🎭 Smooth Transitions** - Fade-in effects for room backgrounds and objects
 
 ### Technical Highlights
 - **Modular Architecture** - Organized, reusable code components

@@ -95,13 +95,15 @@ init python:
 
 # Bloom presets for common object types
 define BLOOM_PRESETS = {
+    # Original legacy presets (kept for compatibility)
     "subtle": {
         "bloom_intensity": 0.3,
         "bloom_radius": 5.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.5,
         "bloom_pulse_speed": 0.8,
-        "bloom_softness": 0.8
+        "bloom_softness": 0.8,
+        "bloom_fade_duration": 0.4
     },
     "moderate": {
         "bloom_intensity": 0.5,
@@ -109,7 +111,8 @@ define BLOOM_PRESETS = {
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.0,
-        "bloom_softness": 0.7
+        "bloom_softness": 0.7,
+        "bloom_fade_duration": 0.3
     },
     "intense": {
         "bloom_intensity": 0.8,
@@ -117,7 +120,8 @@ define BLOOM_PRESETS = {
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.9,
         "bloom_pulse_speed": 1.2,
-        "bloom_softness": 0.6
+        "bloom_softness": 0.6,
+        "bloom_fade_duration": 0.2
     },
     "gentle": {
         "bloom_intensity": 0.2,
@@ -125,7 +129,405 @@ define BLOOM_PRESETS = {
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.6,
+        "bloom_softness": 0.9,
+        "bloom_fade_duration": 0.8
+    },
+    
+    # EXPLOSIVE variants
+    "explosive_subtle": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 12.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 1.2,
+        "bloom_softness": 0.6,
+        "bloom_fade_duration": 0.15
+    },
+    "explosive_normal": {
+        "bloom_intensity": 1.0,
+        "bloom_radius": 15.0,
+        "bloom_alpha_min": 0.5,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 1.5,
+        "bloom_softness": 0.5,
+        "bloom_fade_duration": 0.1
+    },
+    "explosive_intense": {
+        "bloom_intensity": 1.2,
+        "bloom_radius": 18.0,
+        "bloom_alpha_min": 0.7,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 2.0,
+        "bloom_softness": 0.4,
+        "bloom_fade_duration": 0.05
+    },
+    
+    # WHISPER variants
+    "whisper_subtle": {
+        "bloom_intensity": 0.1,
+        "bloom_radius": 2.0,
+        "bloom_alpha_min": 0.02,
+        "bloom_alpha_max": 0.15,
+        "bloom_pulse_speed": 0.3,
+        "bloom_softness": 0.98,
+        "bloom_fade_duration": 1.2
+    },
+    "whisper_normal": {
+        "bloom_intensity": 0.15,
+        "bloom_radius": 3.0,
+        "bloom_alpha_min": 0.05,
+        "bloom_alpha_max": 0.25,
+        "bloom_pulse_speed": 0.4,
+        "bloom_softness": 0.95,
+        "bloom_fade_duration": 1.0
+    },
+    "whisper_intense": {
+        "bloom_intensity": 0.25,
+        "bloom_radius": 4.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.4,
+        "bloom_pulse_speed": 0.6,
+        "bloom_softness": 0.9,
+        "bloom_fade_duration": 0.8
+    },
+    
+    # HEARTBEAT variants
+    "heartbeat_subtle": {
+        "bloom_intensity": 0.4,
+        "bloom_radius": 7.0,
+        "bloom_alpha_min": 0.05,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 1.5,
+        "bloom_softness": 0.8
+    },
+    "heartbeat_normal": {
+        "bloom_intensity": 0.6,
+        "bloom_radius": 9.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 1.8,
+        "bloom_softness": 0.7
+    },
+    "heartbeat_intense": {
+        "bloom_intensity": 0.8,
+        "bloom_radius": 11.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 2.2,
+        "bloom_softness": 0.6
+    },
+    
+    # FLICKER variants
+    "flicker_subtle": {
+        "bloom_intensity": 0.5,
+        "bloom_radius": 5.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 2.0,
+        "bloom_softness": 0.7
+    },
+    "flicker_normal": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 7.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.9,
+        "bloom_pulse_speed": 2.5,
+        "bloom_softness": 0.6
+    },
+    "flicker_intense": {
+        "bloom_intensity": 0.9,
+        "bloom_radius": 9.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 3.0,
+        "bloom_softness": 0.5
+    },
+    
+    # ETHEREAL variants
+    "ethereal_subtle": {
+        "bloom_intensity": 0.25,
+        "bloom_radius": 9.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.4,
+        "bloom_pulse_speed": 0.5,
+        "bloom_softness": 0.95
+    },
+    "ethereal_normal": {
+        "bloom_intensity": 0.4,
+        "bloom_radius": 11.0,
+        "bloom_alpha_min": 0.15,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 0.7,
         "bloom_softness": 0.9
+    },
+    "ethereal_intense": {
+        "bloom_intensity": 0.6,
+        "bloom_radius": 13.0,
+        "bloom_alpha_min": 0.25,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 0.9,
+        "bloom_softness": 0.85
+    },
+    
+    # LIGHTNING variants
+    "lightning_subtle": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 4.0,
+        "bloom_alpha_min": 0.4,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 2.5,
+        "bloom_softness": 0.5
+    },
+    "lightning_normal": {
+        "bloom_intensity": 0.9,
+        "bloom_radius": 6.0,
+        "bloom_alpha_min": 0.6,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 3.0,
+        "bloom_softness": 0.4
+    },
+    "lightning_intense": {
+        "bloom_intensity": 1.1,
+        "bloom_radius": 8.0,
+        "bloom_alpha_min": 0.8,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 3.5,
+        "bloom_softness": 0.3
+    },
+    
+    # DREAM variants
+    "dream_subtle": {
+        "bloom_intensity": 0.2,
+        "bloom_radius": 8.0,
+        "bloom_alpha_min": 0.05,
+        "bloom_alpha_max": 0.3,
+        "bloom_pulse_speed": 0.4,
+        "bloom_softness": 0.98
+    },
+    "dream_normal": {
+        "bloom_intensity": 0.3,
+        "bloom_radius": 10.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.5,
+        "bloom_pulse_speed": 0.5,
+        "bloom_softness": 0.95
+    },
+    "dream_intense": {
+        "bloom_intensity": 0.5,
+        "bloom_radius": 12.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 0.7,
+        "bloom_softness": 0.9
+    },
+    
+    # EMBER variants
+    "ember_subtle": {
+        "bloom_intensity": 0.4,
+        "bloom_radius": 3.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.5,
+        "bloom_pulse_speed": 1.0,
+        "bloom_softness": 0.7
+    },
+    "ember_normal": {
+        "bloom_intensity": 0.6,
+        "bloom_radius": 4.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 1.3,
+        "bloom_softness": 0.6
+    },
+    "ember_intense": {
+        "bloom_intensity": 0.8,
+        "bloom_radius": 5.0,
+        "bloom_alpha_min": 0.4,
+        "bloom_alpha_max": 0.9,
+        "bloom_pulse_speed": 1.6,
+        "bloom_softness": 0.5
+    },
+    
+    # AURORA variants
+    "aurora_subtle": {
+        "bloom_intensity": 0.3,
+        "bloom_radius": 10.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.4,
+        "bloom_pulse_speed": 0.6,
+        "bloom_softness": 0.9
+    },
+    "aurora_normal": {
+        "bloom_intensity": 0.5,
+        "bloom_radius": 13.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 0.8,
+        "bloom_softness": 0.85
+    },
+    "aurora_intense": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 16.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 1.0,
+        "bloom_softness": 0.8
+    },
+    
+    # CRYSTAL variants
+    "crystal_subtle": {
+        "bloom_intensity": 0.5,
+        "bloom_radius": 6.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 0.9,
+        "bloom_softness": 0.8
+    },
+    "crystal_normal": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 8.0,
+        "bloom_alpha_min": 0.4,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 1.1,
+        "bloom_softness": 0.75
+    },
+    "crystal_intense": {
+        "bloom_intensity": 0.9,
+        "bloom_radius": 10.0,
+        "bloom_alpha_min": 0.5,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 1.3,
+        "bloom_softness": 0.7
+    },
+    
+    # PHANTOM variants
+    "phantom_subtle": {
+        "bloom_intensity": 0.15,
+        "bloom_radius": 10.0,
+        "bloom_alpha_min": 0.02,
+        "bloom_alpha_max": 0.25,
+        "bloom_pulse_speed": 0.5,
+        "bloom_softness": 0.95
+    },
+    "phantom_normal": {
+        "bloom_intensity": 0.25,
+        "bloom_radius": 12.0,
+        "bloom_alpha_min": 0.05,
+        "bloom_alpha_max": 0.4,
+        "bloom_pulse_speed": 0.6,
+        "bloom_softness": 0.9
+    },
+    "phantom_intense": {
+        "bloom_intensity": 0.4,
+        "bloom_radius": 14.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 0.8,
+        "bloom_softness": 0.85
+    },
+    
+    # NEON variants
+    "neon_subtle": {
+        "bloom_intensity": 0.6,
+        "bloom_radius": 4.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 1.2,
+        "bloom_softness": 0.6
+    },
+    "neon_normal": {
+        "bloom_intensity": 0.8,
+        "bloom_radius": 5.0,
+        "bloom_alpha_min": 0.5,
+        "bloom_alpha_max": 0.9,
+        "bloom_pulse_speed": 1.4,
+        "bloom_softness": 0.5
+    },
+    "neon_intense": {
+        "bloom_intensity": 1.0,
+        "bloom_radius": 6.0,
+        "bloom_alpha_min": 0.7,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 1.6,
+        "bloom_softness": 0.4
+    },
+    
+    # CANDLE variants
+    "candle_subtle": {
+        "bloom_intensity": 0.3,
+        "bloom_radius": 5.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.4,
+        "bloom_pulse_speed": 0.7,
+        "bloom_softness": 0.85
+    },
+    "candle_normal": {
+        "bloom_intensity": 0.4,
+        "bloom_radius": 7.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.6,
+        "bloom_pulse_speed": 0.9,
+        "bloom_softness": 0.8
+    },
+    "candle_intense": {
+        "bloom_intensity": 0.6,
+        "bloom_radius": 9.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.8,
+        "bloom_pulse_speed": 1.1,
+        "bloom_softness": 0.75
+    },
+    
+    # STARLIGHT variants
+    "starlight_subtle": {
+        "bloom_intensity": 0.25,
+        "bloom_radius": 12.0,
+        "bloom_alpha_min": 0.05,
+        "bloom_alpha_max": 0.35,
+        "bloom_pulse_speed": 0.5,
+        "bloom_softness": 0.95
+    },
+    "starlight_normal": {
+        "bloom_intensity": 0.35,
+        "bloom_radius": 14.0,
+        "bloom_alpha_min": 0.1,
+        "bloom_alpha_max": 0.5,
+        "bloom_pulse_speed": 0.7,
+        "bloom_softness": 0.9
+    },
+    "starlight_intense": {
+        "bloom_intensity": 0.5,
+        "bloom_radius": 16.0,
+        "bloom_alpha_min": 0.2,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 0.9,
+        "bloom_softness": 0.85,
+        "bloom_fade_duration": 0.6
+    },
+    
+    # VOLCANIC variants
+    "volcanic_subtle": {
+        "bloom_intensity": 0.7,
+        "bloom_radius": 8.0,
+        "bloom_alpha_min": 0.3,
+        "bloom_alpha_max": 0.7,
+        "bloom_pulse_speed": 1.3,
+        "bloom_softness": 0.7
+    },
+    "volcanic_normal": {
+        "bloom_intensity": 0.9,
+        "bloom_radius": 10.0,
+        "bloom_alpha_min": 0.4,
+        "bloom_alpha_max": 0.95,
+        "bloom_pulse_speed": 1.6,
+        "bloom_softness": 0.6
+    },
+    "volcanic_intense": {
+        "bloom_intensity": 1.1,
+        "bloom_radius": 12.0,
+        "bloom_alpha_min": 0.6,
+        "bloom_alpha_max": 1.0,
+        "bloom_pulse_speed": 2.0,
+        "bloom_softness": 0.5
     }
 }
 
