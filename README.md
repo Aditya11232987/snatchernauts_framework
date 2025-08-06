@@ -8,6 +8,7 @@ A comprehensive Ren'Py point-and-click adventure game framework inspired by clas
 - **🏠 Room Exploration System** - Point-and-click interface with hover descriptions
 - **🎮 Gamepad Support** - Full controller navigation with D-pad and analog sticks  
 - **✨ Advanced Visual Effects** - Dynamic bloom effects and hover animations
+- **📺 CRT Shader Effects** - Authentic retro CRT monitor simulation with scanlines
 - **📝 Floating Descriptions** - Smart auto-positioning description boxes
 - **🔧 Live Editor Mode** - In-game object positioning and scaling tools
 - **🎨 Pixel-Perfect Rendering** - Optimized for pixel art with the Quaver font
@@ -115,6 +116,24 @@ create_bloom_config({
 })
 ```
 
+#### CRT Shader Effects
+
+Authentic retro CRT monitor simulation with customizable parameters:
+
+**Keyboard Controls:**
+- **C** - Toggle CRT effect on/off
+- **1** - Fine scanlines (0.5)
+- **2** - Normal scanlines (1.0) - Default
+- **3** - Thick scanlines (1.5)
+- **4** - Very thick scanlines (3.0)
+
+**Features:**
+- **Resolution-independent scanlines** - Consistent appearance across window sizes
+- **Barrel distortion (warp)** - Authentic CRT curvature effect
+- **Chromatic aberration** - Color separation for retro authenticity
+- **Adjustable scanline thickness** - Four preset intensity levels
+- **Enabled by default** - Starts with optimal scanline settings
+
 #### Animation System
 
 Configure hover animations:
@@ -130,6 +149,28 @@ create_animation_config({
 #### Editor Mode
 
 Enable live editing with F1 or the "Editor Mode" button:
+- **Arrow Keys** - Move selected object
+- **+/-** - Scale object up/down
+- **R** - Reset object to 100% scale
+- **S** - Save changes to persistent storage
+- **U** - Update room_config.rpy file
+- **Tab** - Cycle through objects
+
+### Keyboard Controls
+
+**General Navigation:**
+- **C** - Toggle CRT effect on/off
+- **F** - Fade out room audio
+- **R** - Refresh/restart interaction
+- **F1** - Toggle Editor Mode
+
+**CRT Scanline Controls:**
+- **1** - Fine scanlines (0.5)
+- **2** - Normal scanlines (1.0) - Default
+- **3** - Thick scanlines (1.5)
+- **4** - Very thick scanlines (3.0)
+
+**Editor Mode (when enabled):**
 - **Arrow Keys** - Move selected object
 - **+/-** - Scale object up/down
 - **R** - Reset object to 100% scale
