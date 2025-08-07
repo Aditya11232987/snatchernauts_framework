@@ -5,7 +5,39 @@ All notable changes to the Snatchernauts Framework will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2025-01-07 (Current Release)
+## [0.3.1] - 2025-08-07 (Current Release)
+
+### Added
+- **Enhanced Audio System** - Professional UI sound integration with dedicated menu_nav audio channel
+- **Audio Asset Management** - Complete UI audio library with 4 professional sound files:
+  - `cancel.wav` (28KB) - Menu cancellation and back actions
+  - `down.wav` (140KB) - Downward navigation sounds
+  - `select.wav` (246KB) - Selection confirmation audio
+  - `up.wav` (144KB) - Upward navigation sounds
+- **Progressive Download Support** - RenPyWeb optimization with `progressive_download.txt` configuration
+- **Advanced Interaction Menu System** - Enhanced object_interactions.rpy with 64+ lines of improvements
+- **Web Platform Optimization** - Progressive loading for audio and image assets
+
+### Changed
+- **Project Version** - Updated config.version from 0.3.0 to 0.3.1 in options.rpy
+- **Audio Channel Registration** - Added dedicated `menu_nav` audio channel with SFX mixer integration
+- **Project Build Configuration** - Updated project.json with enhanced build settings
+- **Room Navigation Logic** - Improved room_main.rpy with better interaction handling
+- **Documentation Updates** - Updated README.md and UPDATE.md with version 0.3.1 references
+
+### Technical Improvements
+- **Audio Channel Management** - Proper audio channel registration with loop=False and stop_on_mute=True
+- **Web Asset Delivery** - Progressive download rules for optimized web performance
+- **Build System Enhancement** - Refined build configuration for better distribution
+- **Version Consistency** - Unified version display across all project files and documentation
+
+### Fixed
+- **Audio File Organization** - Properly structured audio assets in dedicated game/audio/ui/ directory
+- **Version Display Consistency** - All UI elements now correctly show version 0.3.1
+- **Configuration Alignment** - Synchronized project settings across configuration files
+- **Web Platform Compatibility** - Optimized asset loading for RenPyWeb deployment
+
+## [0.3.0] - 2025-01-07
 
 ### Added
 - **Complete Object Interaction System** - Context-sensitive action menus for different object types (character, item, door, container)
