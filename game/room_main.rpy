@@ -49,7 +49,7 @@ screen room_exploration():
         key "K_UP" action Function(navigate_interaction_menu, "up")
         key "K_DOWN" action Function(navigate_interaction_menu, "down")
         key "K_RETURN" action Function(execute_selected_action)
-        key "K_ESCAPE" action Function(hide_interaction_menu)
+        key "K_ESCAPE" action Function(keyboard_cancel_action)
     
     # Gamepad controls for object navigation
     if gamepad_navigation_enabled:

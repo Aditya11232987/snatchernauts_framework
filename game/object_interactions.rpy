@@ -15,6 +15,8 @@ init offset = -1
 default interaction_menu_active = False
 default interaction_target_object = None
 default interaction_selected_action = 0
+default previous_hover_action = 0
+
 
 ## Action definitions by object type
 define INTERACTION_ACTIONS = {
@@ -170,8 +172,10 @@ init python:
         actions = INTERACTION_ACTIONS.get(obj_type, [])
         
         if direction == "up":
+            renpy.sound.play("audio/ui/up.wav", channel="menu_nav")
             interaction_selected_action = (interaction_selected_action - 1) % len(actions)
         elif direction == "down":
+            renpy.sound.play("audio/ui/down.wav", channel="menu_nav")
             interaction_selected_action = (interaction_selected_action + 1) % len(actions)
         
         # Force a complete screen refresh to reset button states
@@ -219,6 +223,7 @@ init python:
         elif action_type == "search":
             handle_search_action(obj_name)
         elif action_type == "leave":
+            renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
             # For leave, we still want to keep the object selected and show description
             pass
         else:
@@ -356,10 +361,19 @@ screen interaction_menu():
                         textbutton action_data["label"]:
                             background None
                             hover_background None
-                            action Function(execute_object_action, interaction_target_object, action_data["action"])
+                            # Use helper function to get appropriate action
+                            action get_button_action(interaction_target_object, action_data)
                             
-                            # Mouse interaction: update selection on hover (optimized for responsiveness)
-                            hovered [SetVariable("interaction_selected_action", i), Function(renpy.restart_interaction)]
+                            # Mouse interaction: update selection on hover with sound feedback
+                            hovered [
+                                Function(lambda i=i: renpy.sound.play(
+                                    "audio/ui/down.wav" if i > previous_hover_action else "audio/ui/up.wav",
+                                    channel="menu_nav"
+                                )),
+                                SetVariable("previous_hover_action", i),
+                                SetVariable("interaction_selected_action", i),
+                                Function(renpy.restart_interaction)
+                            ]
                             unhovered NullAction()
                             
                             if is_selected:
@@ -416,10 +430,19 @@ screen interaction_menu():
                         textbutton action_data["label"]:
                             background None
                             hover_background None
-                            action Function(execute_object_action, interaction_target_object, action_data["action"])
+                            # Use helper function to get appropriate action
+                            action get_button_action(interaction_target_object, action_data)
                             
                             # Mouse interaction: update selection on hover (optimized for responsiveness)
-                            hovered [SetVariable("interaction_selected_action", i), Function(renpy.restart_interaction)]
+                            hovered [
+                            Function(lambda i=i: renpy.sound.play(
+                                "audio/ui/down.wav" if i > previous_hover_action else "audio/ui/up.wav",
+                                channel="menu_nav"
+                            )),
+                            SetVariable("previous_hover_action", i),
+                            SetVariable("interaction_selected_action", i),
+                            Function(renpy.restart_interaction)
+                            ]
                             unhovered NullAction()
                             
                             if is_selected:
@@ -445,14 +468,43 @@ init python:
     def gamepad_confirm_action():
         """Confirm selected action (A button when menu is active)"""
         if interaction_menu_active:
+            renpy.sound.play("audio/ui/confirm.wav", channel="menu_nav")
             execute_selected_action()
         else:
+            renpy.sound.play("audio/ui/confirm.wav", channel="menu_nav")
             gamepad_activate_object()
     
     def gamepad_cancel_action():
         """Cancel current action (B button)"""
         if interaction_menu_active:
-            hide_interaction_menu()
+            renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
+            # Keep the object selected and show its description, same as "Leave" button
+            hide_interaction_menu(keep_object_selected=True, target_object=interaction_target_object)
+    
+    def keyboard_cancel_action():
+        """Cancel current action (Escape key)"""
+        if interaction_menu_active:
+            renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
+            # Keep the object selected and show its description
+            hide_interaction_menu(keep_object_selected=True, target_object=interaction_target_object)
+    
+    def mouse_leave_action(obj_name, action_type):
+        """Handle Leave button click"""
+        # Store the object name to keep highlighted after action
+        previous_object = obj_name
+        
+        # Hide the interaction menu but keep the object selected
+        hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
+        
+        # Handle the leave action with sound
+        renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
+    
+    def get_button_action(obj_name, action_data):
+        """Get the appropriate action function for a button based on action type"""
+        if action_data["action"] == "leave":
+            return Function(mouse_leave_action, obj_name, action_data["action"])
+        else:
+            return Function(execute_object_action, obj_name, action_data["action"])
 
 ## Initialize interaction menu screen
 init python:

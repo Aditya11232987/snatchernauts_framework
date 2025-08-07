@@ -13,6 +13,7 @@
 ## The _() surrounding the string marks it as eligible for translation.
 
 define config.name = _("snatchernauts framework")
+define build.itch_project = "Grahf/snatchernauts-framework"
 
 
 ## Determines if the title given above is shown on the main menu screen. Set
@@ -49,6 +50,9 @@ define build.name = "snatchernauts_framework"
 define config.has_sound = True
 define config.has_music = True
 define config.has_voice = True
+
+init python:
+    renpy.music.register_channel("menu_nav", mixer="sfx", loop=False, stop_on_mute=True)
 
 
 ## To allow the user to play a test sound on the sound or voice channel,
