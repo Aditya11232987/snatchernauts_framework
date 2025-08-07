@@ -2,9 +2,9 @@
 
 This comprehensive guide covers installation, configuration, and updating procedures for **Snatchernauts Framework v0.3** - a complete point-and-click adventure game framework.
 
-## Current Version: 0.3.0
+## Current Version: 0.3.1
 
-### 🎯 What's New in v0.3.0
+### 🎯 What's New in v0.3.1
 
 #### Major Features Added
 - **Complete Object Interaction System** with context-sensitive menus
@@ -325,7 +325,7 @@ room_debug.rpy        # Debug overlay system
 
 ## 🔄 Update Process
 
-### Updating from v0.2.x to v0.3.0
+### Updating from v0.2.x to v0.3.1
 
 **Major Changes to Account For:**
 
@@ -337,7 +337,7 @@ room_debug.rpy        # Debug overlay system
        "bloom_color": "#ff0000"
    }
    
-   # New v0.3.0 format with factory pattern
+   # New v0.3.1 format with factory pattern
    "object": merge_configs({
        "x": 100, "y": 200,
    }, create_bloom_config(BLOOM_PRESETS["neon_normal"]))
