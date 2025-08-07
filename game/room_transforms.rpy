@@ -45,3 +45,15 @@ transform bloom_with_fadeout(alpha_min=0.2, alpha_max=0.6, pulse_speed=2.0):
         linear pulse_speed alpha alpha_max
         linear pulse_speed alpha alpha_min
         repeat
+
+# Pulsing border transform for interaction buttons
+transform pulsing_border:
+    alpha 1.0
+    block:
+        linear 0.8 alpha 0.3
+        linear 0.8 alpha 1.0
+        repeat
+
+# Static border transform for non-selected buttons
+transform static_border:
+    alpha 1.0

@@ -15,6 +15,10 @@ include "room_ui.rpy"
 include "room_display.rpy"
 include "letterbox_gui.rpy"
 include "object_interactions.rpy"
+include "info_overlay.rpy"
+
+# Initialize info overlay
+default show_info_overlay = False
 
 # Screen for the room exploration - Now fully modular
 screen room_exploration():
@@ -38,6 +42,14 @@ screen room_exploration():
     # UI and debug
     use room_ui_buttons
     use debug_overlay
+    use info_overlay
+    
+    # Keyboard navigation for interaction menus (always available)
+    if interaction_menu_active:
+        key "K_UP" action Function(navigate_interaction_menu, "up")
+        key "K_DOWN" action Function(navigate_interaction_menu, "down")
+        key "K_RETURN" action Function(execute_selected_action)
+        key "K_ESCAPE" action Function(hide_interaction_menu)
     
     # Gamepad controls for object navigation
     if gamepad_navigation_enabled:
@@ -76,6 +88,7 @@ screen room_exploration():
     key "f" action Function(fade_out_room_audio)
     key "l" action Function(toggle_letterbox)  # Toggle letterbox effect
     key "r" action Function(renpy.restart_interaction)  # Refresh/restart interaction
+    key "i" action ToggleVariable("show_info_overlay")  # Toggle info overlay
     
     # Scanline size testing shortcuts
     key "1" action Function(set_crt_parameters, scanline_size=0.5)   # Fine scanlines
@@ -103,7 +116,6 @@ init python:
     
 # Label to start room exploration
 label explore_room:
-    scene black with fade
     "You step into a mysterious room..."
     
     # Reset fade state so room can fade in properly

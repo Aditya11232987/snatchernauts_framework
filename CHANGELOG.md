@@ -5,37 +5,42 @@ All notable changes to the Snatchernauts Framework will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2025-01-07
+## [0.3.0] - 2025-01-07 (Current Release)
 
 ### Added
-- **CRT Shader Effects** - Authentic retro CRT monitor simulation with customizable scanlines
-- **Advanced Bloom System** - Enhanced matrix-based bloom effects with color tinting and brightness
-- **CRT Integration with Bloom** - Bloom effects properly integrated within CRT shader rendering
-- **Resolution-Independent Scanlines** - Consistent CRT scanline appearance across all window sizes
-- **Dynamic CRT Controls** - Keyboard shortcuts for toggling CRT and adjusting scanline thickness
-- **Improved Room Display System** - Unified background and object rendering on same layer
-- **Fade-In Effects** - Smooth room entrance animations for backgrounds and objects
-- **Enhanced Visual Pipeline** - Better integration between CRT shaders and bloom effects
+- **Complete Object Interaction System** - Context-sensitive action menus for different object types (character, item, door, container)
+- **Professional Info Overlay System** - Startup introduction and in-game reference with version display and control documentation
+- **Enhanced Input System** - Full gamepad, keyboard, and mouse navigation with context-aware controls
+- **Smart Menu Positioning** - Interaction menus positioned intelligently relative to objects with screen boundary detection
+- **Advanced Animation System** - Floating bubble effects with pulsing borders for interactive elements
+- **Performance Optimizations** - Efficient hover system with targeted redraws instead of full screen refreshes
+- **Live Object Editor** - Real-time positioning and scaling with visual feedback and persistent saving
+- **Audio Integration** - Smooth fade-in/out with room transitions and volume management
+- **Debug Integration** - Built-in debug keys (I, C, L, F, R, 1-4) and developer tools
+- **Professional Branding** - Updated from "testgame" to "Snatchernauts Framework" throughout
 
-### Changed
-- **Room Rendering Architecture** - Combined background and objects into single layer for better CRT effects
-- **Bloom Color System** - Added debug output for bloom color verification
-- **CRT Shader Parameters** - Optimized default values for better visual quality
-- **Transform System** - Improved conditional fade-in effects for room elements
+### Changed  
+- **Startup Flow** - Direct entry to Room1 with professional info overlay and continue button
+- **Font System** - Consistent typography across all UI elements
+- **Input Handling** - Context-aware controls for exploration vs. interaction menus
+- **Project Structure** - Organized into 18+ specialized files for maintainability
+- **Configuration System** - JSON-like object definitions with merge_configs pattern
 
 ### Technical Improvements
-- **Shader Registration System** - Proper CRT shader initialization and management
-- **Matrix Color Operations** - Enhanced bloom effects using TintMatrix and BrightnessMatrix
-- **Frame-Based Rendering** - Better organization of visual effects within rendering pipeline
-- **Conditional Rendering Logic** - Smart display decisions based on CRT enablement state
+- **Modular Architecture** - Separation of concerns across specialized modules
+- **Factory Pattern** - Standardized object creation with bloom and animation presets
+- **Utility Libraries** - Shared functions across multiple systems
+- **Code Documentation** - Comprehensive inline documentation and comments
+- **Performance** - Optimized mouse hover with selective screen updates
 
 ### Fixed
-- **CRT-Bloom Integration** - Resolved issues with bloom effects not appearing correctly with CRT shaders
-- **Scanline Consistency** - Fixed resolution-dependent scanline thickness variations
-- **Transform Conflicts** - Eliminated conflicts between room fade-in and CRT effects
-- **Layer Management** - Proper separation of CRT and non-CRT rendering paths
+- **Interaction Menu Positioning** - Resolved placement issues and floating inconsistencies
+- **Mouse Hover Performance** - Eliminated laggy interactions with optimized redraws
+- **Object State Persistence** - Objects remain highlighted with descriptions after menu interactions
+- **Font Consistency** - Unified typography across all overlay systems
+- **UI Element Integration** - Proper letterbox-aware control placement
 
-## [1.0.0] - 2025-01-07
+## [0.2.0] - 2025-01-06
 
 ### Added
 - **Core Room Exploration System** - Point-and-click interface with hover descriptions
@@ -81,6 +86,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - macOS (Ren'Py supported)  
 - Linux (Ren'Py supported)
 - Android (Ren'Py supported, touch controls)
+
+## [0.1.0] - 2025-01-05
+
+### Added
+- **CRT Shader Effects** - Authentic retro CRT monitor simulation with customizable scanlines
+- **Advanced Bloom System** - Enhanced matrix-based bloom effects with color tinting and brightness
+- **CRT Integration with Bloom** - Bloom effects properly integrated within CRT shader rendering
+- **Resolution-Independent Scanlines** - Consistent CRT scanline appearance across all window sizes
+- **Dynamic CRT Controls** - Keyboard shortcuts for toggling CRT and adjusting scanline thickness
+- **Improved Room Display System** - Unified background and object rendering on same layer
+- **Fade-In Effects** - Smooth room entrance animations for backgrounds and objects
+- **Enhanced Visual Pipeline** - Better integration between CRT shaders and bloom effects
+- **Letterbox GUI System** - Cinematic widescreen presentation
+- **Basic Object Interaction** - Simple hover and click functionality
+
+### Technical Improvements
+- **Shader Registration System** - Proper CRT shader initialization and management
+- **Matrix Color Operations** - Enhanced bloom effects using TintMatrix and BrightnessMatrix
+- **Frame-Based Rendering** - Better organization of visual effects within rendering pipeline
+- **Conditional Rendering Logic** - Smart display decisions based on CRT enablement state
+
+### Fixed
+- **CRT-Bloom Integration** - Resolved issues with bloom effects not appearing correctly with CRT shaders
+- **Scanline Consistency** - Fixed resolution-dependent scanline thickness variations
+- **Transform Conflicts** - Eliminated conflicts between room fade-in and CRT effects
+- **Layer Management** - Proper separation of CRT and non-CRT rendering paths
 
 ## [Unreleased]
 

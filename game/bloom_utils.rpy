@@ -98,7 +98,7 @@ define BLOOM_PRESETS = {
     # Original legacy presets (kept for compatibility)
     "subtle": {
         "bloom_intensity": 0.3,
-        "bloom_radius": 5.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.5,
         "bloom_pulse_speed": 0.8,
@@ -107,7 +107,7 @@ define BLOOM_PRESETS = {
     },
     "moderate": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 8.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.0,
@@ -116,7 +116,7 @@ define BLOOM_PRESETS = {
     },
     "intense": {
         "bloom_intensity": 0.8,
-        "bloom_radius": 12.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.9,
         "bloom_pulse_speed": 1.2,
@@ -125,7 +125,7 @@ define BLOOM_PRESETS = {
     },
     "gentle": {
         "bloom_intensity": 0.2,
-        "bloom_radius": 6.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.6,
@@ -136,7 +136,7 @@ define BLOOM_PRESETS = {
     # EXPLOSIVE variants
     "explosive_subtle": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 12.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.2,
@@ -145,7 +145,7 @@ define BLOOM_PRESETS = {
     },
     "explosive_normal": {
         "bloom_intensity": 1.0,
-        "bloom_radius": 15.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.5,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 1.5,
@@ -154,7 +154,7 @@ define BLOOM_PRESETS = {
     },
     "explosive_intense": {
         "bloom_intensity": 1.2,
-        "bloom_radius": 18.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.7,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 2.0,
@@ -194,7 +194,7 @@ define BLOOM_PRESETS = {
     # HEARTBEAT variants
     "heartbeat_subtle": {
         "bloom_intensity": 0.4,
-        "bloom_radius": 7.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.05,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 1.5,
@@ -202,7 +202,7 @@ define BLOOM_PRESETS = {
     },
     "heartbeat_normal": {
         "bloom_intensity": 0.6,
-        "bloom_radius": 9.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 1.8,
@@ -210,7 +210,7 @@ define BLOOM_PRESETS = {
     },
     "heartbeat_intense": {
         "bloom_intensity": 0.8,
-        "bloom_radius": 11.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 2.2,
@@ -220,7 +220,7 @@ define BLOOM_PRESETS = {
     # FLICKER variants
     "flicker_subtle": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 5.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 2.0,
@@ -228,7 +228,7 @@ define BLOOM_PRESETS = {
     },
     "flicker_normal": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 7.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.9,
         "bloom_pulse_speed": 2.5,
@@ -236,7 +236,7 @@ define BLOOM_PRESETS = {
     },
     "flicker_intense": {
         "bloom_intensity": 0.9,
-        "bloom_radius": 9.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 3.0,
@@ -246,7 +246,7 @@ define BLOOM_PRESETS = {
     # ETHEREAL variants
     "ethereal_subtle": {
         "bloom_intensity": 0.25,
-        "bloom_radius": 9.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.5,
@@ -254,7 +254,7 @@ define BLOOM_PRESETS = {
     },
     "ethereal_normal": {
         "bloom_intensity": 0.4,
-        "bloom_radius": 11.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.15,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 0.7,
@@ -262,7 +262,7 @@ define BLOOM_PRESETS = {
     },
     "ethereal_intense": {
         "bloom_intensity": 0.6,
-        "bloom_radius": 13.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.25,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 0.9,
@@ -272,7 +272,7 @@ define BLOOM_PRESETS = {
     # LIGHTNING variants
     "lightning_subtle": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 4.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 2.5,
@@ -280,7 +280,7 @@ define BLOOM_PRESETS = {
     },
     "lightning_normal": {
         "bloom_intensity": 0.9,
-        "bloom_radius": 6.0,
+        "bloom_radius": 3.0,
         "bloom_alpha_min": 0.6,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 3.0,
@@ -288,7 +288,7 @@ define BLOOM_PRESETS = {
     },
     "lightning_intense": {
         "bloom_intensity": 1.1,
-        "bloom_radius": 8.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.8,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 3.5,
@@ -298,7 +298,7 @@ define BLOOM_PRESETS = {
     # DREAM variants
     "dream_subtle": {
         "bloom_intensity": 0.2,
-        "bloom_radius": 8.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.05,
         "bloom_alpha_max": 0.3,
         "bloom_pulse_speed": 0.4,
@@ -306,7 +306,7 @@ define BLOOM_PRESETS = {
     },
     "dream_normal": {
         "bloom_intensity": 0.3,
-        "bloom_radius": 10.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.5,
         "bloom_pulse_speed": 0.5,
@@ -314,7 +314,7 @@ define BLOOM_PRESETS = {
     },
     "dream_intense": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 12.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 0.7,
@@ -324,7 +324,7 @@ define BLOOM_PRESETS = {
     # EMBER variants
     "ember_subtle": {
         "bloom_intensity": 0.4,
-        "bloom_radius": 3.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.5,
         "bloom_pulse_speed": 1.0,
@@ -332,7 +332,7 @@ define BLOOM_PRESETS = {
     },
     "ember_normal": {
         "bloom_intensity": 0.6,
-        "bloom_radius": 4.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.3,
@@ -340,7 +340,7 @@ define BLOOM_PRESETS = {
     },
     "ember_intense": {
         "bloom_intensity": 0.8,
-        "bloom_radius": 5.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.9,
         "bloom_pulse_speed": 1.6,
@@ -350,7 +350,7 @@ define BLOOM_PRESETS = {
     # AURORA variants
     "aurora_subtle": {
         "bloom_intensity": 0.3,
-        "bloom_radius": 10.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.6,
@@ -358,7 +358,7 @@ define BLOOM_PRESETS = {
     },
     "aurora_normal": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 13.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 0.8,
@@ -366,7 +366,7 @@ define BLOOM_PRESETS = {
     },
     "aurora_intense": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 16.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 1.0,
@@ -376,7 +376,7 @@ define BLOOM_PRESETS = {
     # CRYSTAL variants
     "crystal_subtle": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 6.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 0.9,
@@ -384,7 +384,7 @@ define BLOOM_PRESETS = {
     },
     "crystal_normal": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 8.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 1.1,
@@ -392,7 +392,7 @@ define BLOOM_PRESETS = {
     },
     "crystal_intense": {
         "bloom_intensity": 0.9,
-        "bloom_radius": 10.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.5,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 1.3,
@@ -402,7 +402,7 @@ define BLOOM_PRESETS = {
     # PHANTOM variants
     "phantom_subtle": {
         "bloom_intensity": 0.15,
-        "bloom_radius": 10.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.02,
         "bloom_alpha_max": 0.25,
         "bloom_pulse_speed": 0.5,
@@ -410,7 +410,7 @@ define BLOOM_PRESETS = {
     },
     "phantom_normal": {
         "bloom_intensity": 0.25,
-        "bloom_radius": 12.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.05,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.6,
@@ -418,7 +418,7 @@ define BLOOM_PRESETS = {
     },
     "phantom_intense": {
         "bloom_intensity": 0.4,
-        "bloom_radius": 14.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 0.8,
@@ -428,7 +428,7 @@ define BLOOM_PRESETS = {
     # NEON variants
     "neon_subtle": {
         "bloom_intensity": 0.6,
-        "bloom_radius": 4.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.2,
@@ -436,7 +436,7 @@ define BLOOM_PRESETS = {
     },
     "neon_normal": {
         "bloom_intensity": 0.8,
-        "bloom_radius": 5.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.5,
         "bloom_alpha_max": 0.9,
         "bloom_pulse_speed": 1.4,
@@ -454,7 +454,7 @@ define BLOOM_PRESETS = {
     # CANDLE variants
     "candle_subtle": {
         "bloom_intensity": 0.3,
-        "bloom_radius": 5.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.4,
         "bloom_pulse_speed": 0.7,
@@ -462,7 +462,7 @@ define BLOOM_PRESETS = {
     },
     "candle_normal": {
         "bloom_intensity": 0.4,
-        "bloom_radius": 7.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.6,
         "bloom_pulse_speed": 0.9,
@@ -470,7 +470,7 @@ define BLOOM_PRESETS = {
     },
     "candle_intense": {
         "bloom_intensity": 0.6,
-        "bloom_radius": 9.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.8,
         "bloom_pulse_speed": 1.1,
@@ -480,7 +480,7 @@ define BLOOM_PRESETS = {
     # STARLIGHT variants
     "starlight_subtle": {
         "bloom_intensity": 0.25,
-        "bloom_radius": 12.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.05,
         "bloom_alpha_max": 0.35,
         "bloom_pulse_speed": 0.5,
@@ -488,7 +488,7 @@ define BLOOM_PRESETS = {
     },
     "starlight_normal": {
         "bloom_intensity": 0.35,
-        "bloom_radius": 14.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.1,
         "bloom_alpha_max": 0.5,
         "bloom_pulse_speed": 0.7,
@@ -496,7 +496,7 @@ define BLOOM_PRESETS = {
     },
     "starlight_intense": {
         "bloom_intensity": 0.5,
-        "bloom_radius": 16.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.2,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 0.9,
@@ -507,7 +507,7 @@ define BLOOM_PRESETS = {
     # VOLCANIC variants
     "volcanic_subtle": {
         "bloom_intensity": 0.7,
-        "bloom_radius": 8.0,
+        "bloom_radius": 2.0,
         "bloom_alpha_min": 0.3,
         "bloom_alpha_max": 0.7,
         "bloom_pulse_speed": 1.3,
@@ -515,7 +515,7 @@ define BLOOM_PRESETS = {
     },
     "volcanic_normal": {
         "bloom_intensity": 0.9,
-        "bloom_radius": 10.0,
+        "bloom_radius": 4.0,
         "bloom_alpha_min": 0.4,
         "bloom_alpha_max": 0.95,
         "bloom_pulse_speed": 1.6,
@@ -523,7 +523,7 @@ define BLOOM_PRESETS = {
     },
     "volcanic_intense": {
         "bloom_intensity": 1.1,
-        "bloom_radius": 12.0,
+        "bloom_radius": 6.0,
         "bloom_alpha_min": 0.6,
         "bloom_alpha_max": 1.0,
         "bloom_pulse_speed": 2.0,

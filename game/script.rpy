@@ -2,21 +2,19 @@
 
 # Main entry point - calls the room exploration system
 label start:
-    "Welcome to the Interactive Room Explorer!"
-    "This will display your room1.png as a point-and-click interface."
+    # Show the info overlay with continue button
+    $ show_info_overlay = True
+    $ show_continue_button = True
     
-    "NOTE: You'll need to adjust the object coordinates in room_config.rpy"
-    "to match the actual objects visible in your room1.png image."
+    # Show a simple background while displaying the overlay
+    scene black
     
-    menu:
-        "Explore the room":
-            call explore_room
-        "Explore with letterbox effect":
-            $ show_letterbox()
-            call explore_room
-            $ hide_letterbox()
-        "Exit":
-            return
+    # Call screen to show the info overlay with continue button
+    call screen info_overlay_start
     
-    "Thanks for exploring!"
+    # After clicking continue, hide the overlay and proceed to room
+    $ show_info_overlay = False
+    $ show_continue_button = False
+    
+    call explore_room from _call_explore_room
     return

@@ -54,17 +54,13 @@ define ROOM_DEFINITIONS = {
             },
             # Custom bloom configuration (overrides defaults)
             create_bloom_config(
-                BLOOM_PRESETS["starlight_intense"]),
+                BLOOM_PRESETS["neon_normal"]),
             # Custom animation configuration
             create_animation_config({
                 "hover_scale_boost": 1.00,         # Slightly larger scale
-                "hover_brightness_boost": 0.0      # Normal brightness boost
-            }),
-            create_animation_config({
-                "hover_animation_type": "breathe",
-                "hover_scale_boost": 1.01,
-                "hover_brightness_boost": 0.05
+                "hover_brightness_boost": 0.2      # Normal brightness boost
             })),
+
             
             "patreon": merge_configs({
                 # Basic object properties
@@ -80,20 +76,13 @@ define ROOM_DEFINITIONS = {
                 "object_type": "item",
             },
             # Custom bloom configuration (overrides defaults)
-            create_bloom_config({
-                "bloom_intensity": 0.6,         # Higher intensity for prominence
-                "bloom_radius": 10.0,          # Wider radius
-                "bloom_threshold": 0.03,       # Default threshold
-                "bloom_softness": 0.95,        # Maximum softness
-                "bloom_alpha_min": 0.2,        # Lower min alpha
-                "bloom_pulse_speed": 0.6       # Slower pulse speed
-            }),
+            create_bloom_config(
+                BLOOM_PRESETS["neon_subtle"]),
             # Custom animation configuration
             create_animation_config({
-                "hover_animation_type": "breathe", # Breathing animation
-                "hover_scale_boost": 1.01,        # Subtle scale boost
-                "hover_brightness_boost": 0.05    # Minimal brightness boost
-            }))
+                "hover_scale_boost": 1.00,         # Slightly larger scale
+                "hover_brightness_boost": 0.0      # Normal brightness boost
+            })),
             # You can add more objects here if you have more images
             # or create invisible hotspots for objects painted directly in room1.png
         }
