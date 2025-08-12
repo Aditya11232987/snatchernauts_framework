@@ -136,9 +136,8 @@ screen debug_overlay():
     zorder 200
 
     if is_developer_mode():
-        # Toggle verbosity with Left Shift + V
-        key "K_LSHIFT_v" action ToggleVariable("debug_verbose")
-        key "K_LSHIFT_V" action ToggleVariable("debug_verbose")
+        # Toggle verbosity with Shift+V
+        key "shift_v" action ToggleVariable("debug_verbose")
         # Snap to corners with function keys
         key "K_F1" action Function(_snap_debug_overlay, 'tl')
         key "K_F2" action Function(_snap_debug_overlay, 'tr')
