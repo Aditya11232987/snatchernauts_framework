@@ -19,7 +19,9 @@ define DESCRIPTION_TEXT_CONFIG = {
     "color": "#e9af78",
     "size": 16,
     "align": 0.5,
-    "font": "fonts/quaver.ttf"
+    "font": "fonts/quaver.ttf",
+    # Outline used as a soft drop shadow for readability
+    "outline": {"size": 2, "color": "#000000aa", "xoffset": 0, "yoffset": 2}
 }
 
 define BOTTOM_DESCRIPTION_CONFIG = {
@@ -85,6 +87,7 @@ screen floating_description_box(obj, box_width, box_height, box_x, box_y, float_
                 text_align text_props["text_align"]
                 xmaximum text_props["xmaximum"]
                 font text_props["font"]
+                outlines text_props["outlines"]
                 line_spacing 2
     else:
         frame at no_float:
@@ -103,6 +106,7 @@ screen floating_description_box(obj, box_width, box_height, box_x, box_y, float_
                 text_align text_props["text_align"]
                 xmaximum text_props["xmaximum"]
                 font text_props["font"]
+                outlines text_props["outlines"]
                 line_spacing 2
 
 # Python function to create shared frame properties
@@ -128,6 +132,15 @@ init python:
     
     def get_description_text_properties(box_width):
         """Get common text properties for description text"""
+        outline_cfg = DESCRIPTION_TEXT_CONFIG.get("outline") or {}
+        outlines = [
+            (
+                outline_cfg.get("size", 2),
+                outline_cfg.get("color", "#000000aa"),
+                outline_cfg.get("xoffset", 0),
+                outline_cfg.get("yoffset", 2),
+            )
+        ]
         return {
             "xalign": DESCRIPTION_TEXT_CONFIG["align"],
             "yalign": DESCRIPTION_TEXT_CONFIG["align"],
@@ -135,7 +148,8 @@ init python:
             "size": DESCRIPTION_TEXT_CONFIG["size"],
             "text_align": DESCRIPTION_TEXT_CONFIG["align"],
             "xmaximum": box_width - DESCRIPTION_BOX_CONFIG["text_margin"],
-            "font": get_font()
+            "font": get_font(),
+            "outlines": outlines
         }
 
 # Screen fragment for bottom description area
