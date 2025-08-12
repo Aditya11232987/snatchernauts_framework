@@ -85,6 +85,29 @@ init python:
 
         return info
 
+    def get_perf_info_line():
+        """Return a single line with FPS and memory usage if available."""
+        fps_txt = "FPS: n/a"
+        mem_txt = "Mem: n/a"
+        try:
+            fps = float(renpy.get_fps())
+            fps_txt = "FPS: {:.1f}".format(fps)
+        except Exception:
+            pass
+        # Try to read process RSS on Linux, fallback to n/a
+        try:
+            import os
+            pagesize = os.sysconf('SC_PAGESIZE')
+            with open('/proc/self/statm', 'r') as f:
+                parts = f.read().split()
+                rss_pages = int(parts[1]) if len(parts) > 1 else 0
+            rss_bytes = rss_pages * pagesize
+            mem_mb = rss_bytes / (1024.0 * 1024.0)
+            mem_txt = "Mem: {:.1f} MB".format(mem_mb)
+        except Exception:
+            pass
+        return fps_txt + "  " + mem_txt
+
     def get_debug_compact_info():
         """Short one-line summary for compact mode"""
         room_id = getattr(store, 'current_room_id', None)
@@ -136,8 +159,9 @@ screen debug_overlay():
     zorder 200
 
     if is_developer_mode():
-        # Toggle verbosity with Shift+V
+        # Toggle verbosity with Shift+V; also allow Ctrl+Shift+V as fallback
         key "shift_v" action ToggleVariable("debug_verbose")
+        key "ctrl_shift_v" action ToggleVariable("debug_verbose")
         # Snap to corners with function keys
         key "K_F1" action Function(_snap_debug_overlay, 'tl')
         key "K_F2" action Function(_snap_debug_overlay, 'tr')
@@ -145,6 +169,15 @@ screen debug_overlay():
         key "K_F4" action Function(_snap_debug_overlay, 'br')
 
         $ info_lines = get_debug_room_info() if debug_verbose else get_debug_compact_info()
+        $ info_lines.insert(0, get_perf_info_line())
+
+        # Clamp position to keep overlay fully visible
+        $ margin = 10
+        $ block_w, block_h = 380, 220
+        $ max_x = max(margin, config.screen_width - block_w - margin)
+        $ max_y = max(margin, config.screen_height - block_h - margin)
+        $ store.debug_ui_x = int(max(margin, min(store.debug_ui_x, max_x)))
+        $ store.debug_ui_y = int(max(margin, min(store.debug_ui_y, max_y)))
 
         drag:
             drag_name "debug_overlay"

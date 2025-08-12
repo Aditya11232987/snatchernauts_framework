@@ -88,7 +88,7 @@ screen info_overlay_content():
             text "• -: Narrow vignette, =: Widen vignette, 0: Reset":
                 size 16
                 color "#ffffff"
-            text "• Shift+V: Toggle verbose debug overlay":
+            text "• Shift+V (or Ctrl+Shift+V): Toggle verbose debug overlay":
                 size 16
                 color "#ffffff"
             
