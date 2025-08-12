@@ -25,6 +25,7 @@ default first_room_entry = True
 # Usage: call play_room("room1", "audio/room1.mp3")
 label play_room(room=None, music=None):
     # Reset visual state
+    $ print(f":: ENTER label play_room room={room} music={music}")
     $ store.room_faded_in = False
 
     # Ensure CRT parameters are set to defaults
@@ -41,27 +42,31 @@ label play_room(room=None, music=None):
     # Resolve room and music
     if room is None:
         $ room = default_room
+    $ print(f":: load_room({room})")
     $ load_room(room)
 
     if music is None:
         $ music = default_room_music
     if music:
         $ renpy.music.set_volume(0.0, channel="music")
+        $ print(f":: play music {music} loop")
         play music music loop
         $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
 
     # Run the exploration screen
+    $ print(":: call screen room_exploration")
     call screen room_exploration
 
     # Teardown
     if music:
         stop music fadeout 2.0
+    $ print(":: EXIT label play_room")
     return
 
 # Convenience alias for cleaner script calls
 label go(room, music=None):
     $ default_room = room
-    call play_room(room, music)
+    call play_room(room, music) from _call_play_room_2
     return
 
 # Main entry point - calls the room exploration system
@@ -86,5 +91,5 @@ label start:
 
 # Developer helper to jump straight into any room during local testing
 label dev_start_room(room="room1", music=None):
-    call play_room(room, music)
+    call play_room(room, music) from _call_play_room_3
     return

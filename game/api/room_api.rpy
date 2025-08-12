@@ -150,7 +150,7 @@ init python:
     
     def save_room_changes():
         if store.current_room_id and store.current_room_id in ROOM_DEFINITIONS:
-            print("=== SAVING ROOM CHANGES ===")
+            print(":: === SAVING ROOM CHANGES ===")
             print(f"Current room: {store.current_room_id}")
             if not hasattr(persistent, 'room_overrides') or persistent.room_overrides is None:
                 persistent.room_overrides = {}
@@ -165,7 +165,7 @@ init python:
                     orig_obj["scale_percent"] = obj_data["scale_percent"]
                     orig_obj["width"] = obj_data["width"]
                     orig_obj["height"] = obj_data["height"]
-            print("=== SAVE COMPLETE ===")
+            print(":: === SAVE COMPLETE ===")
             renpy.notify("Room changes saved to memory & persistent storage!")
             return True
         else:
@@ -232,7 +232,7 @@ init python:
                             print(f"⚠ Could not find pattern for {obj_name}")
             with open(config_file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print("=== FILE UPDATE COMPLETE ===")
+            print(":: === FILE UPDATE COMPLETE ===")
             renpy.notify("room_config.rpy updated successfully!")
             return True
         except Exception as e:
@@ -347,9 +347,9 @@ init python:
                 config_text += f'                "height": {obj_data["height"]},\n'
                 config_text += f'                # ... other properties remain the same\n'
                 config_text += f'            }},\n\n'
-            print("=== ROOM CONFIGURATION ===")
+            print(":: === ROOM CONFIGURATION ===")
             print(config_text)
-            print("=== END CONFIGURATION ===")
+            print(":: === END CONFIGURATION ===")
             renpy.notify("Configuration exported to console!")
             return config_text
         return None
