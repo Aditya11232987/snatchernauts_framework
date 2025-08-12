@@ -61,9 +61,11 @@ screen room_objects():
 # Main exploration composition screen (easy to edit)
 screen room_exploration():
     $ locked = getattr(store, 'room_input_locked', False)
-    # Hide cursor while locked using a transparent cursor mapping
+    # Hide/show cursor while locked using a transparent cursor mapping
     if locked:
-        mouse "hidden"
+        $ renpy.set_mouse_cursor('hidden')
+    else:
+        $ renpy.set_mouse_cursor('default')
     # Room background and objects on the same layer
     use room_background_and_objects
     use room_bloom_effects
