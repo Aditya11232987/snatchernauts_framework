@@ -82,6 +82,15 @@ screen info_overlay_content():
             text "• 1-4: Adjust CRT scanline size":
                 size 16
                 color "#ffffff"
+            text "• [: Decrease vignette strength, ]: Increase":
+                size 16
+                color "#ffffff"
+            text "• -: Narrow vignette, =: Widen vignette, 0: Reset":
+                size 16
+                color "#ffffff"
+            text "• V: Toggle verbose debug overlay":
+                size 16
+                color "#ffffff"
             
             text "• Back/Select (Gamepad): Toggle gamepad navigation":
                 size 16
