@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate project structure
+        run: |
+          python - << 'PY'
+          import os, sys
+          assert os.path.exists('game'), 'game directory not found'
+          assert os.path.exists('game/script.rpy'), 'script.rpy not found'
+          assert os.path.exists('game/core/options.rpy'), 'options.rpy not found'
+          assert os.path.exists('game/core/rooms/room_main.rpy'), 'room_main.rpy not found'
+          assert os.path.exists('game/core/rooms/room_config.rpy'), 'room_config.rpy not found'
+          assert os.path.exists('game/fonts/quaver.ttf'), 'Quaver font not found'
+          assert os.path.exists('game/images/room1.png'), 'Room background not found'
+          print('✓ Structure looks good')
+          PY
+
+      - name: Check Python blocks in .rpy files
+        run: |
+          python - << 'PY'
+          import re, os, sys
+          rpy_files=[]
+          for root, dirs, files in os.walk('game'):
+              for f in files:
+                  if f.endswith('.rpy'):
+                      rpy_files.append(os.path.join(root,f))
+          errors=0
+          for path in rpy_files:
+              with open(path,'r',encoding='utf-8') as f:
+                  content=f.read()
+              blocks=re.findall(r'init python:(.*?)(?=^[a-zA-Z]|\Z)', content, re.M|re.S)
+              for i,block in enumerate(blocks):
+                  try:
+                      compile(block, f'{path}:python_block_{i}', 'exec')
+                  except SyntaxError as e:
+                      print('Syntax error:', path, e)
+                      errors+=1
+          print('Checked', len(rpy_files), 'files. Python block errors:', errors)
+          sys.exit(1 if errors else 0)
+          PY
+

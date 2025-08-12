@@ -1,0 +1,18 @@
+site_name: Snatchernauts Framework Docs
+site_description: Ren'Py 8.4.2 room exploration framework documentation
+repo_url: https://gitlab.com/grahfmusic/snatchernauts_framework
+docs_dir: Wiki
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Getting Started: Getting-Started.md
+  - Architecture: Architecture.md
+  - Rooms & Objects: Rooms-and-Objects.md
+  - UI & Screens: UI-and-Screens.md
+  - Interactions: Interactions.md
+  - Effects & Overlays: Effects-and-Overlays.md
+  - Build & CI: Build-and-CI.md
+  - CI Examples: CI-Examples.md
+  - Mini Tutorial: Mini-Tutorial.md
+  - Troubleshooting: Troubleshooting.md

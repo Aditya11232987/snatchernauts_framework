@@ -79,18 +79,11 @@ build_docs:
   image: python:3.11
   script:
     - pip install mkdocs mkdocs-material
-    - echo "Building documentation..."
-    # For now, just validate markdown files exist
-    - test -f README.md
-    - test -f AGENTS.md
-    - test -f Wiki/README.md
-    - test -f Wiki/Getting-Started.md
-    - echo "✓ Documentation files validated"
+    - echo "Building documentation (MkDocs)..."
+    - mkdocs build -f mkdocs.yml -d site
   artifacts:
     paths:
-      - README.md
-      - AGENTS.md
-      - Wiki/
+      - site/
     expire_in: 1 week
   only:
     - main
@@ -127,10 +120,8 @@ pages:
   image: python:3.11
   script:
     - pip install mkdocs mkdocs-material
-    - mkdir -p public
-    - cp README.md public/
-    - cp -r Wiki/ public/wiki/
-    - echo "✓ Documentation deployed to GitLab Pages"
+    - mkdocs build -f mkdocs.yml -d public
+    - echo "✓ Built MkDocs site into public/ for GitLab Pages"
   artifacts:
     paths:
       - public
