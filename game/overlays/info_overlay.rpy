@@ -82,7 +82,7 @@ screen info_overlay_content():
             text "• 1-4: Adjust CRT scanline size":
                 size 16
                 color "#ffffff"
-            text "• [: Decrease vignette strength, ]: Increase":
+            text "• [[: Decrease vignette strength, ]]: Increase":
                 size 16
                 color "#ffffff"
             text "• -: Narrow vignette, =: Widen vignette, 0: Reset":
