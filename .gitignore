@@ -87,3 +87,5 @@ archive.rpa
 *.rpa
 personal_notes.txt
 dev_notes/
+.aider*
+game/renpy_warp_1.35.0_fa4e5e97.rpe.py

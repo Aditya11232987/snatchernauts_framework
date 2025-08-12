@@ -1,8 +1,7 @@
 # Room Description Box System
 # Floating and fixed description boxes with dynamic sizing
 
-# Include common utilities
-include "core/common_utils.rpy"
+# Common utilities are loaded by Ren'Py loader already.
 
 # Description box configuration
 define DESCRIPTION_BOX_CONFIG = {

@@ -3,30 +3,7 @@
 #
 # INSTRUCTIONS: To modify objects, edit room_config.rpy
 
-# Include the separated files
-include "core/rooms/room_config.rpy"
-include "ui/room_transforms.rpy"
-
-# Core API
-include "api/room_api.rpy"
-include "api/display_api.rpy"
-include "api/ui_api.rpy"
-include "api/interactions_api.rpy"
-
-include "core/rooms/room_editor.rpy"
-
-# Shaders
-include "shaders/bloom_shader.rpy"
-include "shaders/crt_shader.rpy"
-
-include "overlays/debug_overlay.rpy"
-include "ui/room_descriptions.rpy"
-include "ui/room_ui.rpy"
-include "ui/screens_room.rpy"
-include "ui/screens_bloom.rpy"
-include "overlays/letterbox_gui.rpy"
-include "ui/screens_interactions.rpy"
-include "overlays/info_overlay.rpy"
+# Utility and API modules loaded by Ren'Py script loader
 
 ## Main exploration screen moved to ui/screens_room.rpy for easier editing
 

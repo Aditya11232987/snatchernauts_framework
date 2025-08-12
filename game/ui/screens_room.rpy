@@ -1,7 +1,6 @@
 # Room Display Screens (Room & Objects)
 
-# Include common utilities
-include "core/common_utils.rpy"
+# Common utilities are loaded by Ren'Py loader already.
 
 # Display configuration
 define ROOM_DISPLAY_CONFIG = {

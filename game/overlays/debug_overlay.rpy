@@ -1,8 +1,7 @@
 # Room Debug Display System
 # Debug information and development utilities
 
-# Include common utilities
-include "core/common_utils.rpy"
+# Common utilities are loaded elsewhere in the project.
 
 init python:
     def get_debug_mouse_text():

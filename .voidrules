@@ -1,0 +1,43 @@
+# .voidrules
+# Rules for packaging this Ren'Py project
+# Specify include and exclude patterns for distribution
+
+[include]
+# Core game files
+game/**
+
+# Documentation
+README.md
+Wiki/**
+mkdocs.yml
+
+# Resources
+game/audio/**
+game/fonts/**
+game/images/**
+game/gui/**
+game/overlays/**
+game/shaders/**
+
+dist/**
+
+[exclude]
+# Ignore compiled and cache files
+**/*.rpyc
+**/*.pyc
+game/cache/**
+
+# Development and CI
+.git/**
+.github/**
+.gitlab-ci.yml
+.gitignore
+.vscode/**
+mkdocs.yml
+scripts/**
+log.txt
+site/**
+public/**
+
+# Distribution artifacts
+dist/**
