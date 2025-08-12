@@ -11,6 +11,11 @@ default crt_scan = 0.5
 default crt_chroma = 0.9
 default crt_scanline_size = 1.0
 default crt_animated = True
+# CRT vignette defaults
+default crt_vignette_strength = 0.95
+default crt_vignette_width = 0.14
+default crt_vignette_strength = 0.3
+default crt_vignette_width = 0.95
 default bloom_fade_active = False
 default bloom_fade_object = None
 default bloom_fade_data = None
@@ -30,6 +35,8 @@ label play_room(room=None, music=None):
     $ store.crt_chroma = 0.9
     $ store.crt_scanline_size = 1.0
     $ store.crt_animated = True
+    $ store.crt_vignette_strength = 0.95
+    $ store.crt_vignette_width = 0.14
     $ set_crt_parameters(warp=store.crt_warp, scan=store.crt_scan, chroma=store.crt_chroma, scanline_size=store.crt_scanline_size)
 
     # Resolve room and music
