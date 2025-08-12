@@ -60,17 +60,15 @@ screen room_objects():
 
 # Main exploration composition screen (easy to edit)
 screen room_exploration():
-    $ locked = getattr(store, 'room_input_locked', False)
     # Room background and objects on the same layer
     use room_background_and_objects
     use room_bloom_effects
 
     # Interactive elements
-    if not locked:
-        use object_hotspots
+    use object_hotspots
 
     # Description system - show floating descriptions on hover
-    if (not locked) and current_hover_object and not interaction_menu_active:
+    if current_hover_object and not interaction_menu_active:
         $ obj = room_objects[current_hover_object]
         $ box_width, box_height = calculate_description_box_size(obj["description"])
         $ position_setting = obj.get("box_position", "auto")
@@ -79,20 +77,19 @@ screen room_exploration():
         use floating_description_box(obj, box_width, box_height, box_x, box_y, float_intensity)
 
     # UI and debug overlays
-    if not locked:
-        use room_ui_buttons
+    use room_ui_buttons
     use debug_overlay
     use info_overlay
 
     # Keyboard navigation for interaction menus
-    if (not locked) and interaction_menu_active:
+    if interaction_menu_active:
         key "K_UP" action Function(navigate_interaction_menu, "up")
         key "K_DOWN" action Function(navigate_interaction_menu, "down")
         key "K_RETURN" action Function(execute_selected_action)
         key "K_ESCAPE" action Function(keyboard_cancel_action)
 
     # Gamepad controls
-    if (not locked) and gamepad_navigation_enabled:
+    if gamepad_navigation_enabled:
         if interaction_menu_active:
             key "pad_dpup_press" action Function(navigate_interaction_menu, "up")
             key "pad_dpdown_press" action Function(navigate_interaction_menu, "down")
@@ -115,30 +112,27 @@ screen room_exploration():
             key "pad_b_press" action Function(gamepad_select_first_object)
         key "pad_back_press" action Function(toggle_gamepad_navigation)
 
-    # Global shortcuts (disabled while locked)
-    if not locked:
-        key "c" action Function(toggle_crt_effect)
-        key "f" action Function(fade_out_room_audio)
-        key "l" action Function(toggle_letterbox)
-        key "r" action Function(renpy.restart_interaction)
-        key "i" action ToggleVariable("show_info_overlay")
-        # Toggle CRT scanline animation
-        key "a" action Function(toggle_crt_animation)
+    # Global shortcuts
+    key "c" action Function(toggle_crt_effect)
+    key "f" action Function(fade_out_room_audio)
+    key "l" action Function(toggle_letterbox)
+    key "r" action Function(renpy.restart_interaction)
+    key "i" action ToggleVariable("show_info_overlay")
+    # Toggle CRT scanline animation
+    key "a" action Function(toggle_crt_animation)
 
     # Scanline size testing
-    if not locked:
-        key "1" action Function(set_crt_parameters, scanline_size=0.5)
-        key "2" action Function(set_crt_parameters, scanline_size=1.0)
-        key "3" action Function(set_crt_parameters, scanline_size=1.5)
-        key "4" action Function(set_crt_parameters, scanline_size=3.0)
+    key "1" action Function(set_crt_parameters, scanline_size=0.5)
+    key "2" action Function(set_crt_parameters, scanline_size=1.0)
+    key "3" action Function(set_crt_parameters, scanline_size=1.5)
+    key "4" action Function(set_crt_parameters, scanline_size=3.0)
 
     # Vignette live tuning
     # Strength: [ decreases, ] increases
-    if not locked:
-        key "[" action Function(adjust_vignette, delta_strength=-0.05)
-        key "]" action Function(adjust_vignette, delta_strength=0.05)
-        # Width: - narrows (stronger edges), = widens (softer edges)
-        key "-" action Function(adjust_vignette, delta_width=-0.02)
-        key "=" action Function(adjust_vignette, delta_width=0.02)
-        # Reset to defaults quickly
-        key "0" action Function(adjust_vignette, set_strength=0.35, set_width=0.25)
+    key "[" action Function(adjust_vignette, delta_strength=-0.05)
+    key "]" action Function(adjust_vignette, delta_strength=0.05)
+    # Width: - narrows (stronger edges), = widens (softer edges)
+    key "-" action Function(adjust_vignette, delta_width=-0.02)
+    key "=" action Function(adjust_vignette, delta_width=0.02)
+    # Reset to defaults quickly
+    key "0" action Function(adjust_vignette, set_strength=0.35, set_width=0.25)
