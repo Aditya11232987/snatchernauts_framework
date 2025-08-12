@@ -14,6 +14,8 @@ default crt_animated = True
 # CRT vignette defaults
 default crt_vignette_strength = 0.95
 default crt_vignette_width = 0.14
+# Lock gameplay input during entry transitions
+default room_input_locked = False
 default bloom_fade_active = False
 default bloom_fade_object = None
 default bloom_fade_data = None
@@ -47,8 +49,10 @@ label play_room(room=None, music=None):
         $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
 
     # Run the exploration screen with a built-in transition
+    $ store.room_input_locked = True
     $ renpy.show_screen("room_exploration")
     $ renpy.with_statement(Dissolve(ROOM_DISPLAY_CONFIG["fade_duration"]))
+    $ store.room_input_locked = False
     $ _scr_ret = ui.interact()
     $ renpy.hide_screen("room_exploration")
 
