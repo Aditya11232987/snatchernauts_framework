@@ -39,8 +39,10 @@ screen room_background_and_objects():
         $ crt_scan = getattr(store, 'crt_scan', 0.5)
         $ crt_chroma = getattr(store, 'crt_chroma', 0.9)
         $ crt_scanline_size = getattr(store, 'crt_scanline_size', 1.0)
+        $ crt_vignette_strength = getattr(store, 'crt_vignette_strength', 0.35)
+        $ crt_vignette_width = getattr(store, 'crt_vignette_width', 0.25)
         $ crt_animated = getattr(store, 'crt_animated', False)
-        frame at (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size)):
+        frame at (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width)):
             background None
             add get_fallback_background() at black_background()
             if not room_has_faded_in:
