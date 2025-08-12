@@ -159,9 +159,10 @@ screen debug_overlay():
     zorder 200
 
     if is_developer_mode():
-        # Toggle verbosity with Shift+V; also allow Ctrl+Shift+V as fallback
-        key "shift_v" action ToggleVariable("debug_verbose")
-        key "ctrl_shift_v" action ToggleVariable("debug_verbose")
+        # Toggle verbosity with Command+Shift+F12 on macOS (meta = Command),
+        # with Ctrl+Shift+F12 as cross-platform fallback.
+        key "meta_shift_K_F12" action ToggleVariable("debug_verbose")
+        key "ctrl_shift_K_F12" action ToggleVariable("debug_verbose")
         # Snap to corners with function keys
         key "K_F1" action Function(_snap_debug_overlay, 'tl')
         key "K_F2" action Function(_snap_debug_overlay, 'tr')
