@@ -139,10 +139,10 @@ screen debug_overlay():
         # Toggle verbosity with V
         key "v" action ToggleVariable("debug_verbose")
         # Snap to corners with function keys
-        key "f1" action Function(_snap_debug_overlay, 'tl')
-        key "f2" action Function(_snap_debug_overlay, 'tr')
-        key "f3" action Function(_snap_debug_overlay, 'bl')
-        key "f4" action Function(_snap_debug_overlay, 'br')
+        key "K_F1" action Function(_snap_debug_overlay, 'tl')
+        key "K_F2" action Function(_snap_debug_overlay, 'tr')
+        key "K_F3" action Function(_snap_debug_overlay, 'bl')
+        key "K_F4" action Function(_snap_debug_overlay, 'br')
 
         $ info_lines = get_debug_room_info() if debug_verbose else get_debug_compact_info()
 
