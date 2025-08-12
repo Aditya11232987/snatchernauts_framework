@@ -185,41 +185,42 @@ screen debug_overlay():
         key "K_F3" action Function(_snap_debug_overlay, 'bl')
         key "K_F4" action Function(_snap_debug_overlay, 'br')
 
-        if not debug_overlay_visible:
-            # Hidden: only hotkeys are active, no UI drawn.
-            return
+        if debug_overlay_visible:
+            use debug_overlay_body
 
-        $ info_lines = get_debug_room_info() if debug_verbose_level >= 2 else get_debug_compact_info()
-        $ info_lines.insert(0, get_perf_info_line())
+screen debug_overlay_body():
+    # Compute info lines for current verbosity and add perf line
+    $ info_lines = get_debug_room_info() if debug_verbose_level >= 2 else get_debug_compact_info()
+    $ info_lines.insert(0, get_perf_info_line())
 
-        # Clamp position to keep overlay fully visible
-        $ margin = 10
-        $ block_w, block_h = 380, 220
-        $ max_x = max(margin, config.screen_width - block_w - margin)
-        $ max_y = max(margin, config.screen_height - block_h - margin)
-        $ store.debug_ui_x = int(max(margin, min(store.debug_ui_x, max_x)))
-        $ store.debug_ui_y = int(max(margin, min(store.debug_ui_y, max_y)))
+    # Clamp position to keep overlay fully visible
+    $ margin = 10
+    $ block_w, block_h = 380, 220
+    $ max_x = max(margin, config.screen_width - block_w - margin)
+    $ max_y = max(margin, config.screen_height - block_h - margin)
+    $ store.debug_ui_x = int(max(margin, min(store.debug_ui_x, max_x)))
+    $ store.debug_ui_y = int(max(margin, min(store.debug_ui_y, max_y)))
 
-        drag:
-            drag_name "debug_overlay"
-            draggable True
-            drag_raise True
-            xpos debug_ui_x
-            ypos debug_ui_y
-            frame:
-                background "#00000088"
-                padding (8, 8)
-                vbox:
-                    spacing 4
-                    text get_debug_mouse_text():
+    drag:
+        drag_name "debug_overlay"
+        draggable True
+        drag_raise True
+        xpos debug_ui_x
+        ypos debug_ui_y
+        frame:
+            background "#00000088"
+            padding (8, 8)
+            vbox:
+                spacing 4
+                text get_debug_mouse_text():
+                    color DEBUG_TEXT_STYLE["color"]
+                    size DEBUG_TEXT_STYLE["size"]
+                    substitute False
+                for line in info_lines:
+                    text line:
                         color DEBUG_TEXT_STYLE["color"]
                         size DEBUG_TEXT_STYLE["size"]
                         substitute False
-                    for line in info_lines:
-                        text line:
-                            color DEBUG_TEXT_STYLE["color"]
-                            size DEBUG_TEXT_STYLE["size"]
-                            substitute False
 
 init python:
     # Ensure the debug overlay is an overlay screen so it renders above gameplay
