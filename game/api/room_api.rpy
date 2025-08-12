@@ -302,6 +302,39 @@ init python:
         renpy.notify(f"CRT animation {'enabled' if store.crt_animated else 'disabled'}")
         if hasattr(store, 'crt_enabled') and store.crt_enabled:
             renpy.restart_interaction()
+
+    def adjust_vignette(delta_strength=0.0, delta_width=0.0, set_strength=None, set_width=None):
+        """Adjust or set CRT vignette parameters live.
+        - Strength range: 0.0..1.0 (higher = darker edges)
+        - Width range: 0.05..0.50 (smaller = narrower, stronger band)
+        """
+        # Initialize defaults if missing
+        if not hasattr(store, 'crt_vignette_strength'):
+            store.crt_vignette_strength = 0.35
+        if not hasattr(store, 'crt_vignette_width'):
+            store.crt_vignette_width = 0.25
+
+        strength = store.crt_vignette_strength
+        width = store.crt_vignette_width
+
+        if set_strength is not None:
+            strength = float(set_strength)
+        else:
+            strength = float(strength) + float(delta_strength)
+        if set_width is not None:
+            width = float(set_width)
+        else:
+            width = float(width) + float(delta_width)
+
+        # Clamp to safe ranges
+        strength = max(0.0, min(1.0, strength))
+        width = max(0.05, min(0.50, width))
+
+        store.crt_vignette_strength = strength
+        store.crt_vignette_width = width
+        renpy.notify(f"Vignette: strength={strength:.2f}, width={width:.2f}")
+        if hasattr(store, 'crt_enabled') and store.crt_enabled:
+            renpy.restart_interaction()
     
     def export_room_config():
         if store.current_room_id and store.current_room_id in ROOM_DEFINITIONS:
@@ -390,4 +423,3 @@ init python:
             if store.current_hover_object == store.gamepad_selected_object:
                 store.current_hover_object = None
         renpy.notify(f"Gamepad navigation {'enabled' if store.gamepad_navigation_enabled else 'disabled'}")
-

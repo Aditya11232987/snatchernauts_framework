@@ -162,3 +162,13 @@ screen room_exploration():
     key "2" action Function(set_crt_parameters, scanline_size=1.0)
     key "3" action Function(set_crt_parameters, scanline_size=1.5)
     key "4" action Function(set_crt_parameters, scanline_size=3.0)
+
+    # Vignette live tuning
+    # Strength: [ decreases, ] increases
+    key "[" action Function(adjust_vignette, delta_strength=-0.05)
+    key "]" action Function(adjust_vignette, delta_strength=0.05)
+    # Width: - narrows (stronger edges), = widens (softer edges)
+    key "-" action Function(adjust_vignette, delta_width=-0.02)
+    key "=" action Function(adjust_vignette, delta_width=0.02)
+    # Reset to defaults quickly
+    key "0" action Function(adjust_vignette, set_strength=0.35, set_width=0.25)
