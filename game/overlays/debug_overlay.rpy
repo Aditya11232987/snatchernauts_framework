@@ -128,7 +128,9 @@ screen debug_overlay():
                 text get_debug_mouse_text():
                     color DEBUG_TEXT_STYLE["color"]
                     size DEBUG_TEXT_STYLE["size"]
+                    substitute False
                 for line in info_lines:
                     text line:
                         color DEBUG_TEXT_STYLE["color"]
                         size DEBUG_TEXT_STYLE["size"]
+                        substitute False
