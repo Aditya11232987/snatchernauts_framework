@@ -89,11 +89,16 @@ init python:
         """Return a single line with FPS and memory usage if available."""
         fps_txt = "FPS: n/a"
         mem_txt = "Mem: n/a"
+        fps = None
         try:
             fps = float(renpy.get_fps())
-            fps_txt = "FPS: {:.1f}".format(fps)
         except Exception:
-            pass
+            try:
+                fps = float(renpy.display.draw.get_fps())
+            except Exception:
+                fps = None
+        if fps is not None:
+            fps_txt = "FPS: {:.1f}".format(fps)
         # Try to read process RSS on Linux, fallback to n/a
         try:
             import os
@@ -128,7 +133,8 @@ define DEBUG_TEXT_STYLE = {
     "size": 16
 }
 
-default debug_verbose = True
+default debug_overlay_visible = False
+default debug_verbose_level = 0
 default debug_ui_x = 10
 default debug_ui_y = 10
 
@@ -153,23 +159,37 @@ init python:
             store.debug_ui_y = max(margin, sh - block_h - margin)
         renpy.restart_interaction()
 
+    def bump_debug_verbosity():
+        """Show overlay if hidden; otherwise increase verbosity up to max."""
+        if not getattr(store, 'debug_overlay_visible', False):
+            store.debug_overlay_visible = True
+            store.debug_verbose_level = 1
+        else:
+            lvl = int(getattr(store, 'debug_verbose_level', 1))
+            if lvl < 2:
+                store.debug_verbose_level = lvl + 1
+        renpy.restart_interaction()
+
 # Screen fragment for debug display (appears above letterbox)
 screen debug_overlay():
     # Put debug info on a high z-order to appear above letterbox
     zorder 200
 
     if is_developer_mode():
-        # Toggle verbosity with Command+Shift+F12 on macOS (meta = Command),
-        # with Ctrl+Shift+F12 as cross-platform fallback.
-        key "meta_shift_K_F12" action ToggleVariable("debug_verbose")
-        key "ctrl_shift_K_F12" action ToggleVariable("debug_verbose")
+        # Verbosity bump: Cmd+Shift+F12 (mac) or Ctrl+Shift+F12
+        key "meta_shift_K_F12" action Function(bump_debug_verbosity)
+        key "ctrl_shift_K_F12" action Function(bump_debug_verbosity)
         # Snap to corners with function keys
         key "K_F1" action Function(_snap_debug_overlay, 'tl')
         key "K_F2" action Function(_snap_debug_overlay, 'tr')
         key "K_F3" action Function(_snap_debug_overlay, 'bl')
         key "K_F4" action Function(_snap_debug_overlay, 'br')
 
-        $ info_lines = get_debug_room_info() if debug_verbose else get_debug_compact_info()
+        if not debug_overlay_visible:
+            # Hidden: only hotkeys are active, no UI drawn.
+            return
+
+        $ info_lines = get_debug_room_info() if debug_verbose_level >= 2 else get_debug_compact_info()
         $ info_lines.insert(0, get_perf_info_line())
 
         # Clamp position to keep overlay fully visible
