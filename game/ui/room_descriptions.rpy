@@ -16,7 +16,7 @@ define DESCRIPTION_BOX_CONFIG = {
 }
 
 define DESCRIPTION_TEXT_CONFIG = {
-    "color": "#ffffff",
+    "color": "#e9af78",
     "size": 16,
     "align": 0.5,
     "font": "fonts/quaver.ttf"
@@ -31,7 +31,7 @@ define BOTTOM_DESCRIPTION_CONFIG = {
     "padding": {"horizontal": 30, "vertical": 20},
     "title_color": "#ffff00",
     "title_size": 24,
-    "text_color": "#ffffff",
+    "text_color": "#bce7de",
     "text_size": 16,
     "default_color": "#cccccc",
     "default_size": 16

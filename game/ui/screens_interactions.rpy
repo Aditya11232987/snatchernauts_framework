@@ -45,14 +45,14 @@ define INTERACTION_ACTIONS = {
 
 ## Button styling with curved frames
 define INTERACTION_BUTTON_CONFIG = {
-    "width": 120,
-    "height": 35,
+    "width": 112,
+    "height": 32,
     "spacing": 5,
-    "background_frame": "curved_box_small.png",
+    "background_frame": "button_interaction.png",
     "border_size": 15,
-    "background_normal": "#333333dd",
-    "background_hover": "#663366dd",  # Dark red-purple
-    "background_selected": "#663366dd",  # Dark red-purple for selected
+    "background_normal": "#383838dd",
+    "background_hover": "#335c66dd",  # Dark red-purple
+    "background_selected": "#48c4dadd",  # Dark red-purple for selected
     "text_color": "#ffffff",
     "text_hover_color": "#ffffff",  # White text on hover
     "text_selected_color": "#ffffff",  # White text when selected
