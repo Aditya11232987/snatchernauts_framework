@@ -94,7 +94,8 @@ screen interaction_menu():
         
         # Create menu container with floating animation
         if should_float:
-            vbox at floating_bubble(float_intensity):
+            $ x0, y0, r0, dly = compute_float_phase(interaction_target_object, float_intensity)
+            vbox at floating_bubble(float_intensity, x0, y0, r0, dly):
                 xpos menu_x
                 ypos menu_y
                 spacing INTERACTION_BUTTON_CONFIG["spacing"]

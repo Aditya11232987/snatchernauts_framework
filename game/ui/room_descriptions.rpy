@@ -68,7 +68,8 @@ screen floating_description_box(obj, box_width, box_height, box_x, box_y, float_
     $ text_props = get_description_text_properties(box_width)
     
     if float_intensity > 0.0:
-        frame at floating_bubble(float_intensity):
+        $ x0, y0, r0, dly = compute_float_phase(current_hover_object, float_intensity)
+        frame at floating_bubble(float_intensity, x0, y0, r0, dly):
             xpos frame_props["xpos"]
             ypos frame_props["ypos"]
             xsize frame_props["xsize"]
