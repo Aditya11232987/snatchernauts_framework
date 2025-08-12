@@ -1,6 +1,5 @@
 # Snatchernauts Framework
 
-[![coverage](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/coverage.svg?job=test_framework)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/pipelines)
 [![pages](https://img.shields.io/badge/Pages-Live-brightgreen?logo=gitlab)](https://grahfmusic.gitlab.io/snatchernauts_framework/)
 
 A modular Ren'Py 8.4.2 framework for point‑and‑click room exploration, interaction menus, overlays, and retro display effects. Inspired by the cinematic adventure pacing and UI sensibilities of Snatcher and Policenauts.
