@@ -54,6 +54,14 @@ define config.has_voice = True
 init python:
     renpy.music.register_channel("menu_nav", mixer="sfx", loop=False, stop_on_mute=True)
 
+    # Provide a transparent cursor named 'hidden' we can switch to during locks
+    try:
+        mapping = dict(getattr(config, 'mouse', {}) or {})
+        mapping['hidden'] = [ (Null(1, 1), 0, 0) ]
+        config.mouse = mapping
+    except Exception:
+        pass
+
 
 ## To allow the user to play a test sound on the sound or voice channel,
 ## uncomment a line below and use it to set a sample sound to play.
