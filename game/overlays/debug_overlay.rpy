@@ -160,14 +160,17 @@ init python:
         renpy.restart_interaction()
 
     def bump_debug_verbosity():
-        """Show overlay if hidden; otherwise increase verbosity up to max."""
-        if not getattr(store, 'debug_overlay_visible', False):
+        """Cmd+Shift+F12 (or Ctrl+Shift+F12) cycles: hidden → level1 → level2 → hidden."""
+        visible = bool(getattr(store, 'debug_overlay_visible', False))
+        lvl = int(getattr(store, 'debug_verbose_level', 0))
+        if not visible:
             store.debug_overlay_visible = True
             store.debug_verbose_level = 1
+        elif lvl < 2:
+            store.debug_verbose_level = lvl + 1
         else:
-            lvl = int(getattr(store, 'debug_verbose_level', 1))
-            if lvl < 2:
-                store.debug_verbose_level = lvl + 1
+            store.debug_overlay_visible = False
+            store.debug_verbose_level = 0
         renpy.restart_interaction()
 
 # Screen fragment for debug display (appears above letterbox)
