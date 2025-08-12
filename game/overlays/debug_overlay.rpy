@@ -106,6 +106,29 @@ define DEBUG_TEXT_STYLE = {
 }
 
 default debug_verbose = True
+default debug_ui_x = 10
+default debug_ui_y = 10
+
+init python:
+    def _snap_debug_overlay(corner):
+        margin = 10
+        # Approximate block size; user can still drag to fine-tune.
+        block_w, block_h = 360, 180
+        sw = config.screen_width
+        sh = config.screen_height
+        if corner == 'tl':
+            store.debug_ui_x = margin
+            store.debug_ui_y = margin
+        elif corner == 'tr':
+            store.debug_ui_x = max(margin, sw - block_w - margin)
+            store.debug_ui_y = margin
+        elif corner == 'bl':
+            store.debug_ui_x = margin
+            store.debug_ui_y = max(margin, sh - block_h - margin)
+        elif corner == 'br':
+            store.debug_ui_x = max(margin, sw - block_w - margin)
+            store.debug_ui_y = max(margin, sh - block_h - margin)
+        renpy.restart_interaction()
 
 # Screen fragment for debug display (appears above letterbox)
 screen debug_overlay():
@@ -115,22 +138,31 @@ screen debug_overlay():
     if is_developer_mode():
         # Toggle verbosity with V
         key "v" action ToggleVariable("debug_verbose")
+        # Snap to corners with function keys
+        key "f1" action Function(_snap_debug_overlay, 'tl')
+        key "f2" action Function(_snap_debug_overlay, 'tr')
+        key "f3" action Function(_snap_debug_overlay, 'bl')
+        key "f4" action Function(_snap_debug_overlay, 'br')
 
         $ info_lines = get_debug_room_info() if debug_verbose else get_debug_compact_info()
 
-        frame:
-            background "#00000088"
-            padding (8, 8)
-            xpos 10
-            ypos 10
-            vbox:
-                spacing 4
-                text get_debug_mouse_text():
-                    color DEBUG_TEXT_STYLE["color"]
-                    size DEBUG_TEXT_STYLE["size"]
-                    substitute False
-                for line in info_lines:
-                    text line:
+        drag:
+            drag_name "debug_overlay"
+            draggable True
+            drag_raise True
+            xpos debug_ui_x
+            ypos debug_ui_y
+            frame:
+                background "#00000088"
+                padding (8, 8)
+                vbox:
+                    spacing 4
+                    text get_debug_mouse_text():
                         color DEBUG_TEXT_STYLE["color"]
                         size DEBUG_TEXT_STYLE["size"]
                         substitute False
+                    for line in info_lines:
+                        text line:
+                            color DEBUG_TEXT_STYLE["color"]
+                            size DEBUG_TEXT_STYLE["size"]
+                            substitute False
