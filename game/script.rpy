@@ -14,8 +14,6 @@ default crt_animated = True
 # CRT vignette defaults
 default crt_vignette_strength = 0.95
 default crt_vignette_width = 0.14
-default crt_vignette_strength = 0.3
-default crt_vignette_width = 0.95
 default bloom_fade_active = False
 default bloom_fade_object = None
 default bloom_fade_data = None
