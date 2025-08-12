@@ -1,20 +1,50 @@
 init 900 python:
     # Global logging utilities
-    def log(msg):
+    def _short_repr(val, limit=120):
         try:
-            print(":: " + str(msg))
+            s = val if isinstance(val, str) else repr(val)
+        except Exception:
+            s = '<unrepr>'
+        if s is None:
+            s = 'None'
+        if len(s) > limit:
+            return s[: max(0, limit - 1) ] + '…'
+        return s
+
+    def _truncate_line(s, line_limit=200):
+        if len(s) > line_limit:
+            return s[: max(0, line_limit - 1) ] + '…'
+        return s
+
+    def log(msg, line_limit=200):
+        try:
+            line = _truncate_line(str(msg), line_limit)
+            print(":: " + line)
+        except Exception:
+            pass
+
+    def log_multiline(text, line_limit=200):
+        try:
+            for line in str(text).splitlines():
+                print(":: " + _truncate_line(line, line_limit))
         except Exception:
             pass
 
     def _wrap(name, fn):
         def wrapped(*args, **kwargs):
             try:
-                print(":: ENTER {} args={} kwargs={}".format(name, args, kwargs))
+                args_s = ', '.join(_short_repr(a, 80) for a in args)
+                kwargs_s = ', '.join(f"{k}={_short_repr(v, 80)}" for k, v in kwargs.items())
+                if kwargs_s:
+                    call_sig = f"{args_s} | {kwargs_s}" if args_s else kwargs_s
+                else:
+                    call_sig = args_s
+                log(f"ENTER {name}({call_sig})")
             except Exception:
                 pass
             rv = fn(*args, **kwargs)
             try:
-                print(":: EXIT {} -> {}".format(name, rv))
+                log(f"EXIT {name} -> {_short_repr(rv, 120)}")
             except Exception:
                 pass
             return rv
@@ -45,4 +75,3 @@ init 900 python:
         'gamepad_select_first_object','toggle_gamepad_navigation','adjust_vignette'
     ]:
         _try_wrap(name)
-

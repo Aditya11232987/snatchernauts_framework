@@ -348,7 +348,14 @@ init python:
                 config_text += f'                # ... other properties remain the same\n'
                 config_text += f'            }},\n\n'
             print(":: === ROOM CONFIGURATION ===")
-            print(config_text)
+            try:
+                from core.common_logging import log_multiline  # type: ignore
+            except Exception:
+                log_multiline = None
+            if log_multiline:
+                log_multiline(config_text, line_limit=200)
+            else:
+                print(":: " + (config_text if len(config_text) <= 200 else config_text[:199] + '…'))
             print(":: === END CONFIGURATION ===")
             renpy.notify("Configuration exported to console!")
             return config_text
