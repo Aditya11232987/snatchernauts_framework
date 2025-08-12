@@ -118,7 +118,7 @@ screen room_exploration():
     # UI and debug overlays
     if not input_locked:
         use room_ui_buttons
-    use debug_overlay
+    # Debug overlay is registered as an overlay screen; no need to include here
     use info_overlay
 
     # Keyboard navigation for interaction menus

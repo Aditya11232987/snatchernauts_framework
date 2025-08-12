@@ -136,8 +136,9 @@ screen debug_overlay():
     zorder 200
 
     if is_developer_mode():
-        # Toggle verbosity with V
-        key "v" action ToggleVariable("debug_verbose")
+        # Toggle verbosity with Shift+V (capital V)
+        key "K_SHIFT_v" action ToggleVariable("debug_verbose")
+        key "K_SHIFT_V" action ToggleVariable("debug_verbose")
         # Snap to corners with function keys
         key "K_F1" action Function(_snap_debug_overlay, 'tl')
         key "K_F2" action Function(_snap_debug_overlay, 'tr')
@@ -166,3 +167,9 @@ screen debug_overlay():
                             color DEBUG_TEXT_STYLE["color"]
                             size DEBUG_TEXT_STYLE["size"]
                             substitute False
+
+init python:
+    # Ensure the debug overlay is an overlay screen so it renders above gameplay
+    # and above the letterbox overlay (which is added at init offset -1).
+    if "debug_overlay" not in config.overlay_screens:
+        config.overlay_screens.append("debug_overlay")
