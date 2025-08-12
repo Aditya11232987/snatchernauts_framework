@@ -9,18 +9,6 @@ define ROOM_DISPLAY_CONFIG = {
     "fade_duration": 2.0
 }
 
-# Transforms
-transform room_fade_in(duration=2.0):
-    alpha 0.0
-    ease duration alpha 1.0
-
-transform room_no_fade():
-    alpha 1.0
-
-transform room_fade_out(duration=2.0):
-    alpha 1.0
-    ease duration alpha 0.0
-
 transform black_background():
     alpha 1.0
 
@@ -30,10 +18,6 @@ init python:
 
 # Combined screen for room background and objects
 screen room_background_and_objects():
-    $ room_has_faded_in = getattr(store, 'room_has_faded_in', False)
-    if not room_has_faded_in:
-        timer ROOM_DISPLAY_CONFIG["fade_duration"] action SetVariable('room_has_faded_in', True)
-
     if hasattr(store, 'crt_enabled') and store.crt_enabled:
         $ crt_warp = getattr(store, 'crt_warp', 0.2)
         $ crt_scan = getattr(store, 'crt_scan', 0.5)
@@ -45,47 +29,27 @@ screen room_background_and_objects():
         frame at (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width)):
             background None
             add get_fallback_background() at black_background()
-            if not room_has_faded_in:
-                add get_room_background() at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"])
-            else:
-                add get_room_background() at room_no_fade()
+            add get_room_background()
             for obj_name, obj_data in room_objects.items():
                 if should_display_object(obj_data) and not is_object_hidden(obj_data):
                     $ props = get_object_display_properties(obj_data)
-                    if not room_has_faded_in:
-                        add props["image"] at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"]):
-                            xpos props["xpos"]
-                            ypos props["ypos"]
-                            xsize props["xsize"]
-                            ysize props["ysize"]
-                    else:
-                        add props["image"] at room_no_fade():
-                            xpos props["xpos"]
-                            ypos props["ypos"]
-                            xsize props["xsize"]
-                            ysize props["ysize"]
+                    add props["image"]:
+                        xpos props["xpos"]
+                        ypos props["ypos"]
+                        xsize props["xsize"]
+                        ysize props["ysize"]
             use room_bloom_effects_internal
     else:
         add get_fallback_background() at black_background()
-        if not room_has_faded_in:
-            add get_room_background() at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"])
-        else:
-            add get_room_background() at room_no_fade()
+        add get_room_background()
         for obj_name, obj_data in room_objects.items():
             if should_display_object(obj_data) and not is_object_hidden(obj_data):
                 $ props = get_object_display_properties(obj_data)
-                if not room_has_faded_in:
-                    add props["image"] at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"]):
-                        xpos props["xpos"]
-                        ypos props["ypos"]
-                        xsize props["xsize"]
-                        ysize props["ysize"]
-                else:
-                    add props["image"] at room_no_fade():
-                        xpos props["xpos"]
-                        ypos props["ypos"]
-                        xsize props["xsize"]
-                        ysize props["ysize"]
+                add props["image"]:
+                    xpos props["xpos"]
+                    ypos props["ypos"]
+                    xsize props["xsize"]
+                    ysize props["ysize"]
         use room_bloom_effects_internal
 
 screen room_background():

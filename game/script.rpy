@@ -23,9 +23,6 @@ default room_has_faded_in = False
 # Unified entry to run the room exploration loop.
 # Usage: call play_room("room1", "audio/room1.mp3")
 label play_room(room=None, music=None):
-    # Reset visual state
-    $ store.room_faded_in = False
-
     # Ensure CRT parameters are set to defaults
     $ store.crt_enabled = True
     $ store.crt_warp = 0.2
@@ -49,8 +46,11 @@ label play_room(room=None, music=None):
         play music music loop
         $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
 
-    # Run the exploration screen
-    call screen room_exploration
+    # Run the exploration screen with a built-in transition
+    $ renpy.show_screen("room_exploration")
+    $ renpy.with_statement(Dissolve(ROOM_DISPLAY_CONFIG["fade_duration"]))
+    $ _scr_ret = ui.interact()
+    $ renpy.hide_screen("room_exploration")
 
     # Teardown
     if music:
