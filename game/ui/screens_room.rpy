@@ -61,11 +61,6 @@ screen room_objects():
 # Main exploration composition screen (easy to edit)
 screen room_exploration():
     $ locked = getattr(store, 'room_input_locked', False)
-    # Enforce mouse visibility based on lock state (extra safety during transitions)
-    if locked:
-        $ renpy.hide_mouse()
-    else:
-        $ renpy.show_mouse()
     # Room background and objects on the same layer
     use room_background_and_objects
     use room_bloom_effects
