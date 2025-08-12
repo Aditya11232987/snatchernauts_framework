@@ -2,7 +2,7 @@
 # Floating and fixed description boxes with dynamic sizing
 
 # Include common utilities
-include "common_utils.rpy"
+include "core/common_utils.rpy"
 
 # Description box configuration
 define DESCRIPTION_BOX_CONFIG = {

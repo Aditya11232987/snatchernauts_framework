@@ -5,7 +5,9 @@ stages:
   - deploy
 
 variables:
-  RENPY_VERSION: "8.3.7"
+  RENPY_VERSION: "8.4.2"
+  # Path to Ren'Py SDK on the runner; override per-runner if needed.
+  RENPY_SDK: "/opt/renpy-8.4.2"
 
 # Validate Ren'Py syntax and structure
 validate_syntax:
@@ -15,12 +17,12 @@ validate_syntax:
     - echo "Validating Ren'Py project structure..."
     - python -c "import os; assert os.path.exists('game'), 'game directory not found'"
     - python -c "import os; assert os.path.exists('game/script.rpy'), 'script.rpy not found'"
-    - python -c "import os; assert os.path.exists('game/options.rpy'), 'options.rpy not found'"
+    - python -c "import os; assert os.path.exists('game/core/options.rpy'), 'options.rpy not found'"
     - echo "✓ Basic project structure validated"
     
     # Check for required framework files
-    - python -c "import os; assert os.path.exists('game/room_main.rpy'), 'room_main.rpy not found'"
-    - python -c "import os; assert os.path.exists('game/room_config.rpy'), 'room_config.rpy not found'"
+    - python -c "import os; assert os.path.exists('game/core/rooms/room_main.rpy'), 'room_main.rpy not found'"
+    - python -c "import os; assert os.path.exists('game/core/rooms/room_config.rpy'), 'room_config.rpy not found'"
     - echo "✓ Framework files validated"
     
     # Check for assets
@@ -80,16 +82,15 @@ build_docs:
     - echo "Building documentation..."
     # For now, just validate markdown files exist
     - test -f README.md
-    - test -f CONTRIBUTING.md
-    - test -f CHANGELOG.md
-    - test -f wiki/Home.md
+    - test -f AGENTS.md
+    - test -f Wiki/README.md
+    - test -f Wiki/Getting-Started.md
     - echo "✓ Documentation files validated"
   artifacts:
     paths:
       - README.md
-      - CONTRIBUTING.md
-      - CHANGELOG.md
-      - wiki/
+      - AGENTS.md
+      - Wiki/
     expire_in: 1 week
   only:
     - main
@@ -128,7 +129,7 @@ pages:
     - pip install mkdocs mkdocs-material
     - mkdir -p public
     - cp README.md public/
-    - cp -r wiki/ public/wiki/
+    - cp -r Wiki/ public/wiki/
     - echo "✓ Documentation deployed to GitLab Pages"
   artifacts:
     paths:
@@ -177,3 +178,29 @@ print('✓ Security scan completed')
     - main
     - tags
   allow_failure: true
+
+# Ren'Py lint and distribute using RENPY_SDK path (override per-runner)
+renpy_lint:
+  stage: build
+  image: debian:bookworm-slim
+  script:
+    - test -x "$RENPY_SDK/renpy.sh" || { echo "RENPY_SDK not set or renpy.sh not executable: $RENPY_SDK"; exit 1; }
+    - "$RENPY_SDK/renpy.sh" "$CI_PROJECT_DIR" lint
+  only:
+    - merge_requests
+    - main
+    - tags
+
+renpy_distribute:
+  stage: build
+  image: debian:bookworm-slim
+  script:
+    - test -x "$RENPY_SDK/renpy.sh" || { echo "RENPY_SDK not set or renpy.sh not executable: $RENPY_SDK"; exit 1; }
+    - "$RENPY_SDK/renpy.sh" "$CI_PROJECT_DIR" distribute
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 month
+  needs: [ renpy_lint ]
+  only:
+    - tags

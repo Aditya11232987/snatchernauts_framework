@@ -2,7 +2,7 @@
 # Debug information and development utilities
 
 # Include common utilities
-include "common_utils.rpy"
+include "core/common_utils.rpy"
 
 init python:
     def get_debug_mouse_text():

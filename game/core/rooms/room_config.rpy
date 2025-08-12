@@ -2,13 +2,13 @@
 # Contains all room object definitions and constants organized by room
 
 # Include utility modules
-include "common_utils.rpy"
-include "room_utils.rpy"
-include "bloom_colors.rpy"
-include "bloom_utils.rpy"
-include "config_builders.rpy"
-include "object_factory.rpy"
-include "font_config.rpy"
+include "core/common_utils.rpy"
+include "core/room_utils.rpy"
+include "core/bloom_colors.rpy"
+include "core/bloom_utils.rpy"
+include "core/config_builders.rpy"
+include "core/object_factory.rpy"
+include "core/font_config.rpy"
 
 # Object configuration templates to eliminate duplication
 define DEFAULT_BLOOM_CONFIG = {

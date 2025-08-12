@@ -1,7 +1,8 @@
 # Info Overlay System
 # Shows framework information, controls, and debug keys
 
-# Initialize continue button variable
+# Initialize overlay state
+default show_info_overlay = False
 default show_continue_button = False
 
 # Info overlay content (shared between both screens)
