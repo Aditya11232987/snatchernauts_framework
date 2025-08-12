@@ -304,8 +304,15 @@ init python:
             renpy.restart_interaction()
 
     def set_room_input_locked(locked):
-        """Enable/disable room input lock flag (cursor handled in screen)."""
+        """Enable/disable room input and show/hide mouse accordingly."""
         store.room_input_locked = bool(locked)
+        try:
+            if store.room_input_locked:
+                renpy.hide_mouse()
+            else:
+                renpy.show_mouse()
+        except Exception:
+            pass
 
     def adjust_vignette(delta_strength=0.0, delta_width=0.0, set_strength=None, set_width=None):
         """Adjust or set CRT vignette parameters live.
