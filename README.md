@@ -1,6 +1,5 @@
 # Snatchernauts Framework
 
-[![pipeline status](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/pipeline.svg)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/commits/main)
 [![coverage](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/coverage.svg?job=test_framework)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/pipelines)
 [![pages](https://img.shields.io/badge/Pages-Live-brightgreen?logo=gitlab)](https://grahfmusic.gitlab.io/snatchernauts_framework/)
 
