@@ -303,17 +303,6 @@ init python:
         if hasattr(store, 'crt_enabled') and store.crt_enabled:
             renpy.restart_interaction()
 
-    def set_room_input_locked(locked):
-        """Enable/disable room input and show/hide mouse accordingly."""
-        store.room_input_locked = bool(locked)
-        try:
-            if store.room_input_locked:
-                renpy.hide_mouse()
-            else:
-                renpy.show_mouse()
-        except Exception:
-            pass
-
     def adjust_vignette(delta_strength=0.0, delta_width=0.0, set_strength=None, set_width=None):
         """Adjust or set CRT vignette parameters live.
         - Strength range: 0.0..1.0 (higher = darker edges)

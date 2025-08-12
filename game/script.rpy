@@ -49,10 +49,10 @@ label play_room(room=None, music=None):
         $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
 
     # Run the exploration screen with a built-in transition
-    $ set_room_input_locked(True)
+    $ store.room_input_locked = True
     $ renpy.show_screen("room_exploration")
     $ renpy.with_statement(Dissolve(ROOM_DISPLAY_CONFIG["fade_duration"]))
-    $ set_room_input_locked(False)
+    $ store.room_input_locked = False
     $ _scr_ret = ui.interact()
     $ renpy.hide_screen("room_exploration")
 
