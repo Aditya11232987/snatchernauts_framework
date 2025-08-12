@@ -96,9 +96,16 @@ screen room_objects():
 
 # Main exploration composition screen (easy to edit)
 screen room_exploration():
+    # On first entry, bypass per-object fades and use a modal overlay fade
+    if first_room_entry:
+        $ store.room_has_faded_in = True
     # Room background and objects on the same layer
     use room_background_and_objects
     use room_bloom_effects
+
+    # Modal fade overlay that also blocks input until finished
+    if first_room_entry:
+        use first_room_fade_overlay(ROOM_DISPLAY_CONFIG["fade_duration"])
 
     # Interactive elements
     use object_hotspots

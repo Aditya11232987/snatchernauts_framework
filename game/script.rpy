@@ -19,6 +19,7 @@ default bloom_fade_object = None
 default bloom_fade_data = None
 default bloom_fade_start_time = 0.0
 default room_has_faded_in = False
+default first_room_entry = True
 
 # Unified entry to run the room exploration loop.
 # Usage: call play_room("room1", "audio/room1.mp3")
