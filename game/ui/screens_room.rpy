@@ -39,8 +39,8 @@ screen room_background_and_objects():
         $ crt_scan = getattr(store, 'crt_scan', 0.5)
         $ crt_chroma = getattr(store, 'crt_chroma', 0.9)
         $ crt_scanline_size = getattr(store, 'crt_scanline_size', 1.0)
-
-        frame at static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size):
+        $ crt_animated = getattr(store, 'crt_animated', False)
+        frame at (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size)):
             background None
             add get_fallback_background() at black_background()
             if not room_has_faded_in:
@@ -152,6 +152,8 @@ screen room_exploration():
     key "l" action Function(toggle_letterbox)
     key "r" action Function(renpy.restart_interaction)
     key "i" action ToggleVariable("show_info_overlay")
+    # Toggle CRT scanline animation
+    key "a" action Function(toggle_crt_animation)
 
     # Scanline size testing
     key "1" action Function(set_crt_parameters, scanline_size=0.5)

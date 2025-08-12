@@ -10,6 +10,7 @@ default crt_warp = 0.2
 default crt_scan = 0.5
 default crt_chroma = 0.9
 default crt_scanline_size = 1.0
+default crt_animated = True
 default bloom_fade_active = False
 default bloom_fade_object = None
 default bloom_fade_data = None
@@ -28,6 +29,7 @@ label play_room(room=None, music=None):
     $ store.crt_scan = 0.5
     $ store.crt_chroma = 0.9
     $ store.crt_scanline_size = 1.0
+    $ store.crt_animated = True
     $ set_crt_parameters(warp=store.crt_warp, scan=store.crt_scan, chroma=store.crt_chroma, scanline_size=store.crt_scanline_size)
 
     # Resolve room and music

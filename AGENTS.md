@@ -1,53 +1,55 @@
 # Repository Guidelines
 
-## Targets & Version
-- Engine: Ren'Py 8.4.2.
-- Platforms: Windows and Linux (x86_64) are required.
-
 ## Project Structure & Module Organization
-- Root project opened by Ren'Py; main code under `game/`.
-- Entry points: `game/script.rpy` (boot), `game/core/rooms/` (room runtime + config).
-- Framework APIs: `game/api/` (room, UI, display, interactions).
-- UI and assets: `game/ui/`, `game/gui/`, `game/images/`, `game/audio/`, `game/fonts/`.
-- Effects and helpers: `game/shaders/`, `game/overlays/`, `game/debug/`, `game/libs/`.
+- `game/api/`: Public APIs
+  - `room_api.rpy`: room/object lifecycle, CRT toggles, gamepad.
+  - `display_api.rpy`: display and visibility helpers.
+  - `ui_api.rpy`: hotspots, hover, button customization.
+  - `interactions_api.rpy`: interaction menu routines/handlers.
+- `game/core/`: Config, factories, utilities
+  - `common_utils.rpy`, `room_utils.rpy`: shared helpers.
+  - `config_builders.rpy`, `object_factory.rpy`: build configs/instances.
+  - `bloom_utils.rpy`, `bloom_colors.rpy`: bloom logic/presets.
+  - `font_config.rpy`, `options.rpy`: fonts and Ren’Py options.
+  - `rooms/`: `room_config.rpy`, `room_editor.rpy`, `room_main.rpy`.
+- `game/ui/`: Screens and composition
+  - `screens_room.rpy`, `screens_bloom.rpy`, `screens_interactions.rpy`.
+  - `room_ui.rpy`, `room_descriptions.rpy`, `room_transforms.rpy`, `screens.rpy`.
+- `game/overlays/`: `letterbox_gui.rpy`, `info_overlay.rpy`, `debug_overlay.rpy`.
+- `game/shaders/`: `crt_shader.rpy`, `bloom_shader.rpy`.
+- `Wiki/`: MkDocs docs sources; `scripts/`: utility scripts.
 
 ## Build, Test, and Development Commands
-- Set `RENPY_SDK` to your local Ren'Py 8.4.2 SDK path.
-- Run game (from repo root): `$RENPY_SDK/renpy.sh .`
-- Lint scripts: `$RENPY_SDK/renpy.sh . lint`
-- Distribute builds (Win/Linux): `$RENPY_SDK/renpy.sh . distribute`
-Notes: Outputs go to `dist/` with Windows and Linux packages.
-Launcher build steps: Open project in Ren'Py Launcher → Build & Distribute → select Windows and Linux → Build; results appear in `dist/`.
-
-## CI Builds & Artifacts
-- CI builds Windows and Linux via Ren'Py distribute; lint must pass first.
-- Artifacts: `dist/<project>-*-win/` and `dist/<project>-*-linux/` (zips/executables included).
-
-## Room Startup Helpers
-- `play_room(room, music=None)`: Unified entry. Example: `call play_room("room2", "audio/room2.ogg")`.
-- `go(room, music=None)`: Shorthand alias. Example: `call go("room2")`.
-- `dev_start_room(room="room1", music=None)`: Local testing helper. Example: `call dev_start_room("room3")`.
-
-See also: `Wiki/Getting-Started.md` for newcomer-friendly steps, examples, and screenshot guidance.
+- Run: `$RENPY_SDK/renpy.sh .` (set `RENPY_SDK` to Ren’Py 8.4.2 SDK path).
+- Lint: `$RENPY_SDK/renpy.sh . lint` (validates Ren’Py + embedded Python).
+- Distribute: `$RENPY_SDK/renpy.sh . distribute` (Windows/Linux packages).
+- Docs: `mkdocs serve` (local) or `mkdocs build`.
 
 ## Coding Style & Naming Conventions
-- Indentation: 4 spaces, no tabs; keep lines ≲100 chars.
-- Python/Ren'Py: snake_case for functions/vars and labels; CamelCase for classes; UPPER_SNAKE for constants.
-- Files: group by feature and role (e.g., `room_*.rpy`, `*_config.rpy`, `bloom_*.rpy`).
-- Assets: lowercase_with_underscores; avoid spaces and case mismatches.
+- Indentation: 4 spaces for Ren’Py and Python blocks.
+- Python style: `snake_case` for functions/vars, `UPPER_CASE` for constants.
+- Screens/UI: `screen room_exploration`, `screens_*` files; keep names descriptive.
+- Rooms/objects: lowercase IDs (e.g., `room1`, `lamp`); image files under `game/images/` match usage.
+- Module layout: public interfaces in `game/api/`; helpers in `game/core/` and `game/ui/`.
 
 ## Testing Guidelines
-- Static checks: run lint before every PR and fix all findings.
-- Manual flows: temporarily jump from `game/script.rpy` to target labels for verification; do not commit temporary test labels.
-- Visual changes: attach screenshots or short clips to PRs; verify on a clean cache.
-Example: clear cache with `rm -rf game/cache/` and relaunch.
+- Static checks: run `$RENPY_SDK/renpy.sh . lint` locally and in CI before PRs.
+- Manual verification: launch and use `label dev_start_room(room="room1", music=None)` to jump into a room.
+- Regressions: exercise interaction menu, overlays, and CRT/bloom toggles when changing UI/effects.
+
+## Module Interaction Overview
+- Entry: `label start` calls `play_room`/`go` in `game/api/room_api.rpy`.
+- Config: `room_api` reads room/object definitions from `game/core/rooms/room_config.rpy` via `config_builders` + `object_factory`.
+- Composition: `game/ui/screens_room.rpy` assembles background/objects, wires `ui_api` hotspots; `display_api` manages visibility.
+- Interactions: `interactions_api` builds menus and routes handlers back to room/object functions defined in room config.
+- Effects/Overlays: `room_api` toggles CRT/bloom; `screens_bloom` and `game/shaders/*.rpy` render effects; overlays draw on top.
 
 ## Commit & Pull Request Guidelines
-- Commits: imperative mood; Conventional Commits preferred.
-  - Examples: `feat(room): add tile picker`, `fix(gui): correct textbox padding)`.
-- PRs: include purpose, linked issues, reproduction steps, and before/after visuals for UI changes. Note added assets and licenses. Ensure lint passes and the project runs.
+- Commit style: short imperative subject; use scopes when helpful (e.g., `feat(ui):`, `fix(core):`, `docs:`). Examples in `git log`.
+- PRs must include: clear description, rationale, screenshots/GIFs for UI changes, steps to test, and linked issues.
+- Keep changes modular: API changes in `game/api/`, internal helpers in `game/core/` or `game/ui/` with accompanying notes.
 
 ## Security & Configuration Tips
-- Keep configuration in `options.rpy`, `config_builders.rpy`, and `*_config.rpy`; avoid hard‑coded paths or secrets.
-- Only include licensed assets; avoid committing binaries >10MB without discussion.
-- If the SDK script isn’t executable: `chmod +x "$RENPY_SDK/renpy.sh"`.
+- Do not commit SDKs or secrets; set `RENPY_SDK` in your shell profile.
+- Large binaries: keep under `game/` (images/audio); avoid unused assets.
+- Shaders: test on multiple GPUs if changing CRT/bloom to avoid portability issues.
