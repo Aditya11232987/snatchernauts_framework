@@ -12,4 +12,7 @@ Welcome to the docs. This site covers how to build games with the Snatchernauts 
 - Mini tutorial: Mini-Tutorial
 - Fixes: Troubleshooting
 
+Releases
+- 0.5.1: Release-0.5.1
+
 Use the left navigation to jump to any section.

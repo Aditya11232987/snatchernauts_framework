@@ -13,4 +13,7 @@ Welcome to the Snatchernauts Framework wiki. Start here to learn the architectur
 - CI Examples: `Wiki/CI-Examples.md`
 - Troubleshooting: `Wiki/Troubleshooting.md`
 - Screenshots: `Wiki/screenshots/`
- - Mini Tutorial: `Wiki/Mini-Tutorial.md`
+- Mini Tutorial: `Wiki/Mini-Tutorial.md`
+
+Latest Release
+- 0.5.1 — see `Wiki/Release-0.5.1.md`
