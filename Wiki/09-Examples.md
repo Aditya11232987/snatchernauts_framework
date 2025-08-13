@@ -50,3 +50,12 @@ sequenceDiagram
   API-->>Screen: skip defaults
 ```
 
+ASCII fallback
+```
+Player -> Screen: choose Examine
+Screen -> interactions_api: execute_object_action
+interactions_api -> Logic: on_object_interact(...)
+Logic -> interactions_api: handled=True
+interactions_api -> Screen: skip defaults
+```
+

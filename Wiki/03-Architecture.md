@@ -38,7 +38,18 @@ sequenceDiagram
   Screen->>APIs: query objects/actions
   Screen->>Logic: on_object_hover(room, obj)
   Screen->>Logic: on_object_interact(room, obj, action)
-  Logic-->>Screen: bool (handled?)
+  Logic-->Screen: bool (handled?)
+```
+
+ASCII fallback
+```
+Launcher -> script.rpy -> on_game_start()
+script.rpy -> APIs.load_room(default_room)
+script.rpy -> screen room_exploration
+screen -> APIs (query objects/actions)
+screen -> logic.on_object_hover(room, obj)
+screen -> logic.on_object_interact(room, obj, action)
+logic -> screen (handled? True/False)
 ```
 
 ## Components (Mermaid)
@@ -70,5 +81,17 @@ flowchart LR
   DisplayAPI --> Overlays
   Logic --> APIs
   Rooms --> Logic
+```
+
+ASCII fallback
+```
+[core/options] -> [core/common_logging]
+[core/*] -> [api/*]
+[api/room] -> [ui/screens]
+[api/ui] -> [ui/screens]
+[api/interactions] -> [ui/screens]
+[api/display] -> [overlays]
+[logic] -> [api/*]
+[logic/rooms/*] -> [logic]
 ```
 
