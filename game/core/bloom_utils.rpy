@@ -1,5 +1,15 @@
 # Bloom Effect Utilities
 # Global utilities for bloom effect calculations and configurations
+#
+# Overview
+# - Computes bloom parameters/dimensions and presets.
+# - Extracts colors via get_bloom_color in bloom_colors.rpy.
+#
+# Contracts
+# - calculate_bloom_parameters(obj_config) -> dict
+# - get_bloom_dimensions(obj_config) -> dict{x,y,width,height}
+# - apply_bloom_to_object(obj_config, hover, obj_name) -> displayable data or None
+# - BLOOM_PRESETS: preset dictionaries for common feel styles.
 
 init python:
     def calculate_bloom_parameters(obj_config, scale_factor=None):

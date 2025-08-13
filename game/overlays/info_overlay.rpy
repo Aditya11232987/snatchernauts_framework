@@ -1,5 +1,9 @@
 # Info Overlay System
 # Shows framework information, controls, and debug keys
+#
+# Overview
+# - Startup/info overlay with controls and debug shortcuts reference.
+# - Two modes: start screen with Continue, and in-game toggle.
 
 # Initialize overlay state
 default show_info_overlay = False

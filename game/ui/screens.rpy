@@ -929,6 +929,9 @@ screen history():
 
 
 ## This determines what tags are allowed to be displayed on the history screen.
+##
+## Overview
+## - This file is largely stock Ren'Py UI; customize cautiously.
 
 define gui.history_allow_tags = { "alt", "noalt", "rt", "rb", "art" }
 

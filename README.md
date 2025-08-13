@@ -1,57 +1,59 @@
 # Snatchernauts Framework
 
-[![pages](https://img.shields.io/badge/Pages-Live-brightgreen?logo=gitlab)](https://grahfmusic.gitlab.io/snatchernauts_framework/)
+Modern Ren'Py 8.4.x framework for point‑and‑click room exploration with floating descriptions, interaction menus, and configurable CRT/Bloom effects. Centralized hooks make gameplay logic easy to add and test.
 
-A modular Ren'Py 8.4.2 framework for point‑and‑click room exploration, interaction menus, overlays, and retro display effects. Inspired by the cinematic adventure pacing and UI sensibilities of Snatcher and Policenauts.
+Version: 0.5 • License: MIT
 
 ## Highlights
-- Modular rooms: define backgrounds + interactive objects in `ROOM_DEFINITIONS`.
-- Interaction menus: keyboard, mouse, and gamepad navigation out of the box.
-- Effects: CRT shader toggles and per‑object bloom presets.
-- Unified entry: `play_room(room, music=None)` and shorthand `go(room)` simplify flow.
-- Cross‑platform: Builds for Windows and Linux.
-
-## Requirements
-- Engine: Ren’Py 8.4.2
-- SDK: set `RENPY_SDK` to your local SDK path (source `scripts/env.sh` on this machine).
+- Pixel‑accurate hotspots (click only where the image is opaque)
+- Floating description boxes with soft outline
+- Interaction menus with keyboard/gamepad
+- CRT shader (warp/scan/chroma) + horizontal vignette (live tuning)
+- Bloom overlays with presets
+- Letterbox overlay
+- Debug overlay (FPS/memory) with live logging toggles
+- Centralized game logic: global + per‑room hooks
 
 ## Quick Start
-- Source env (this machine): `. scripts/env.sh`
-- Run: `$RENPY_SDK/renpy.sh .`
-- Lint: `$RENPY_SDK/renpy.sh . lint`
-- Distribute (Win/Linux): `$RENPY_SDK/renpy.sh . distribute`
-- Launcher: open the repo root (not `game/`) → Build & Distribute → Windows + Linux.
+1) Install Ren'Py 8.4.x and set `RENPY_SDK`.
+2) Run: `$RENPY_SDK/renpy.sh .`
+3) Lint: `bash scripts/lint.sh`
 
-## Developing
-- Entry label: `game/script.rpy` → `label start` → `play_room`.
-- Start a specific room: `call play_room("room2", "audio/room2.ogg")` or `call go("room2")`.
-- Main composition screen: `game/ui/screens_room.rpy` → `screen room_exploration` (background, objects, hotspots, overlays, inputs).
-- Define rooms/objects: `game/core/rooms/room_config.rpy` using `create_room_object(...)`.
-- Dev helper: `label dev_start_room(room="room1", music=None)` to jump straight to a room.
+See Wiki/QuickStart.md for full setup and tutorial.
 
-## Directory Layout
-- `game/api/`: room, display, UI, interactions APIs
-- `game/core/`: config builders, room config, bloom utils, common utils
-- `game/ui/`: screens, GUI, transforms, exploration composition
-- `game/overlays/`: info/debug overlays, letterbox
-- `game/shaders/`: CRT + bloom passes
+## Controls
+- A/Enter/Space: interact (open menu)
+- Arrow keys/WASD: navigate objects
+- Esc/B: cancel
+- Mouse: hover/click objects
+- c: toggle CRT • a: toggle scanline animation
+- 1–4: scanline size presets
+- [ / ]: vignette strength • - / =: vignette width • 0: reset
+- i: toggle info overlay
+- Cmd+Shift+F12 / Ctrl+Shift+F12: debug overlay cycle (hidden → compact → verbose → hidden)
 
-## Mini Tutorial (2‑Room Demo)
-1) Add assets under `game/images/` (e.g., `room2.png`, `lamp.png`).
-2) In `room_config.rpy`, add a `"room2"` entry with a `create_room_object(...)` lamp (see Wiki).
-3) From any label: `call play_room("room2")` to jump into the room.
-Full walkthrough: `Wiki/Mini-Tutorial.md`.
+## Game Logic Hooks
+Write gameplay in `game/logic/game_logic.rpy`:
+- `on_game_start()` — once after startup overlay
+- `on_room_enter(room_id)` — after `load_room(room)`
+- `on_object_hover(room_id, obj)` — when hover changes
+- `on_object_interact(room_id, obj, action)` — when an action is executed
+
+Per‑room logic: create `game/logic/rooms/<room>_logic.rpy` and register with `register_room_logic('<room>', Handler())`.
+
+## Structure
+- `game/logic/`: hooks + room handlers
+- `game/api/`: public helpers (room/display/ui/interactions)
+- `game/ui/`: composition screens, transforms
+- `game/overlays/`: letterbox, info, debug, fade
+- `game/shaders/`: CRT and (optional) bloom shader
+- `game/core/`: utilities, builders, room config, options
 
 ## Docs
-- Contributor guide: `AGENTS.md`
-- Documentation site: https://grahfmusic.gitlab.io/snatchernauts_framework/
-- Wiki sources: `Wiki/` (Getting Started, Architecture, Rooms & Objects, UI & Screens, Effects, Interactions, CI, Troubleshooting)
+- Wiki/QuickStart.md — running, linting, hooks, controls
+- Wiki/DeveloperManual.md — lifecycle, hooks, API contracts
+- Wiki/Modules.md — module index
+- CHANGELOG.md — release notes
 
-## CI & Pages
-- GitLab CI runs syntax checks for Python blocks in `.rpy` and builds the docs site.
-- Pages deploys MkDocs output from `Wiki/` to the link above.
-- Coverage badge is included; configure coverage reporting later to show a %.
-
-## Credits & Inspiration
-- Heavily inspired by the atmosphere and UI flow of Konami’s Snatcher and Policenauts.
-- Built on Ren’Py — thank you to the engine and community.
+## License
+MIT — see LICENSE.

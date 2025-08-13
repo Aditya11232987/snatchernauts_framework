@@ -1,5 +1,10 @@
 # Room Debug Display System
 # Debug information and development utilities (verbose + compact modes)
+#
+# Overview
+# - Shows mouse coords, perf (FPS/Mem), room/object/CRT state.
+# - Draggable and snap-to-corners; lives above letterbox on overlay layer.
+# - Visibility cycles: hidden → compact → verbose → hidden via Cmd+Shift+F12 / Ctrl+Shift+F12.
 
 # Common utilities are loaded elsewhere in the project.
 
@@ -224,6 +229,18 @@ screen debug_overlay_body():
                         color DEBUG_TEXT_STYLE["color"]
                         size DEBUG_TEXT_STYLE["size"]
                         substitute False
+                null height 6
+                frame:
+                    background "#111111aa"
+                    padding (6, 6)
+                    vbox:
+                        spacing 4
+                        text "Logging toggles:" color "#ffaa00" size 14 substitute False
+                        hbox:
+                            spacing 10
+                            textbutton ("enabled: " + ("on" if sn_log_enabled else "off")) action ToggleVariable("sn_log_enabled")
+                            textbutton ("color: " + ("on" if sn_log_color else "off")) action ToggleVariable("sn_log_color")
+                            textbutton ("intercept: " + ("on" if sn_log_intercept_prints else "off")) action ToggleVariable("sn_log_intercept_prints")
 
 init python:
     # Ensure the debug overlay is an overlay screen so it renders above gameplay

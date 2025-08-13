@@ -1,5 +1,9 @@
 # Common Utilities
 # Shared functions used across multiple modules
+#
+# Overview
+# - Fonts, dev mode checks, mouse positions, hover checks.
+# - Keep small, generic helpers here only.
 
 init python:
     def get_font():

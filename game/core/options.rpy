@@ -1,4 +1,10 @@
-﻿## This file contains options that can be changed to customize your game.
+﻿## Options
+## Global project options and defaults.
+##
+## Overview
+## - Standard Ren'Py project options with a few framework toggles.
+## - Logging toggles are exposed as store defaults: sn_log_enabled, ...
+## This file contains options that can be changed to customize your game.
 ##
 ## Lines beginning with two '#' marks are comments, and you shouldn't uncomment
 ## them. Lines beginning with a single '#' mark are commented-out code, and you
@@ -24,7 +30,7 @@ define gui.show_name = True
 
 ## The version of the game.
 
-define config.version = "0.3.1"
+define config.version = "0.5"
 
 
 ## Text that is placed on the game's about screen. Place the text between the

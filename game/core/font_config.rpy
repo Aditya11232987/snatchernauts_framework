@@ -1,5 +1,9 @@
 # Font Configuration
 # Defines custom fonts for the game
+#
+# Overview
+# - Central mapping for the project's font face and sizes across UI elements.
+# - Loaded after GUI initialization.
 
 # Use init offset to ensure this runs after GUI initialization
 init offset = -1

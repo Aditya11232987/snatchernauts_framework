@@ -1,5 +1,9 @@
 # Room Configuration
 # Contains all room object definitions and constants organized by room
+#
+# Overview
+# - Author rooms declaratively using merge_configs and builder helpers.
+# - Keep IDs lowercase; images under game/images/.
 
 # Utility modules loaded by Ren'Py script loader
 

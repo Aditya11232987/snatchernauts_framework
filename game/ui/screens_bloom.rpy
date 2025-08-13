@@ -1,4 +1,7 @@
 # Bloom Effect Screens
+#
+# Overview
+# - Renders bloom overlays for hovered objects, inside or outside CRT path.
 
 # Internal bloom effects screen (used inside CRT frame)
 screen room_bloom_effects_internal():
@@ -22,4 +25,3 @@ screen room_bloom_effects_internal():
 screen room_bloom_effects():
     if not (hasattr(store, 'crt_enabled') and store.crt_enabled):
         use room_bloom_effects_internal
-

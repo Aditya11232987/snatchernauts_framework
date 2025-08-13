@@ -5,6 +5,10 @@
 ## This file contains the letterbox functionality to create cinematic
 ## widescreen effects similar to classic film noir movies.
 ##
+## Overview
+## - Draws top/bottom bars for a cinematic look.
+## - Exposes show/hide/toggle functions and integrates with overlay screens.
+##
 
 init offset = -1
 

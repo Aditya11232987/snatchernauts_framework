@@ -42,6 +42,8 @@ label play_room(room=None, music=None):
     if room is None:
         $ room = default_room
     $ load_room(room)
+    # Call centralized logic hook after the room is loaded
+    $ on_room_enter(room)
 
     if music is None:
         $ music = default_room_music
@@ -79,6 +81,8 @@ label start:
     # After clicking continue, hide the overlay and proceed to room
     $ show_info_overlay = False
     $ show_continue_button = False
+    # Global one-time game start hook (optional)
+    $ on_game_start()
     
     # Enter the default room using the unified entry
     call play_room from _call_play_room

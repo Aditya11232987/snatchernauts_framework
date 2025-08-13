@@ -1,5 +1,10 @@
 # Room and Image Utilities
 # General utilities for room management and image processing
+#
+# Overview
+# - Keeps a small registry of original image sizes and helpers to compute
+#   scaled dimensions and infer scale percentages.
+# - Used by room editors and display helpers.
 
 # Original image dimensions for percentage calculations
 define ORIGINAL_SIZES = {

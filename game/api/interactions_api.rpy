@@ -1,5 +1,19 @@
 # Interactions API
 # Object color, gradient backgrounds, and interaction/menu routines
+#
+# Overview
+# - Builds and shows object interaction menus; executes selected actions.
+# - Provides color extraction and gradient backgrounds for UI styling.
+#
+# Contracts
+# - show_interaction_menu(obj_name)
+# - hide_interaction_menu(...)
+# - navigate_interaction_menu(direction)
+# - execute_selected_action() -> calls execute_object_action
+# - execute_object_action(obj_name, action_type)
+#
+# Integration
+# - Before executing built-in side effects, emits on_object_interact(room,obj,action)
 
 init python:
     def get_object_main_color(obj_name):
@@ -98,6 +112,11 @@ init python:
         hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
         obj = store.room_objects[obj_name]
         obj_type = obj.get("object_type", "item")
+        # Notify game logic hooks before executing side effects
+        try:
+            on_object_interact(store.current_room_id, obj_name, action_type)
+        except Exception:
+            pass
         if action_type == "talk":
             handle_talk_action(obj_name)
         elif action_type == "ask_about":
@@ -122,31 +141,31 @@ init python:
     def handle_talk_action(obj_name):
         obj = store.room_objects[obj_name]
         character_name = obj_name.replace("_", " ").title()
-        renpy.notify(f"Starting conversation with {character_name}")
+        narrate(f"You strike up a conversation with {character_name}.")
     
     def handle_ask_about_action(obj_name):
         obj = store.room_objects[obj_name]
         character_name = obj_name.replace("_", " ").title()
-        renpy.notify(f"What would you like to ask {character_name} about?")
+        narrate(f"What would you like to ask {character_name} about?")
     
     def handle_examine_action(obj_name):
         obj = store.room_objects[obj_name]
-        renpy.notify(f"Examining {obj_name.replace('_', ' ')}: {obj.get('description', 'Nothing special.')}")
+        narrate(f"Examining {obj_name.replace('_', ' ')}: {obj.get('description', 'Nothing special.')}")
     
     def handle_take_action(obj_name):
-        renpy.notify(f"You take the {obj_name.replace('_', ' ')}")
+        narrate(f"You take the {obj_name.replace('_', ' ')}")
     
     def handle_use_action(obj_name):
-        renpy.notify(f"How would you like to use the {obj_name.replace('_', ' ')}?")
+        narrate(f"How would you like to use the {obj_name.replace('_', ' ')}?")
     
     def handle_open_action(obj_name):
-        renpy.notify(f"You open the {obj_name.replace('_', ' ')}")
+        narrate(f"You open the {obj_name.replace('_', ' ')}")
     
     def handle_knock_action(obj_name):
-        renpy.notify(f"You knock on the {obj_name.replace('_', ' ')}")
+        narrate(f"You knock on the {obj_name.replace('_', ' ')}")
     
     def handle_search_action(obj_name):
-        renpy.notify(f"You search the {obj_name.replace('_', ' ')}")
+        narrate(f"You search the {obj_name.replace('_', ' ')}")
     
     def get_menu_base_position(obj_name):
         if obj_name not in store.room_objects:
@@ -201,4 +220,3 @@ init python:
             return Function(mouse_leave_action, obj_name, action_data["action"])
         else:
             return Function(execute_object_action, obj_name, action_data["action"])
-

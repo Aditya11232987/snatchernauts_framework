@@ -1,4 +1,8 @@
 # CRT Shader Integration
+#
+# Overview
+# - GLSL shader for CRT warp, scanlines, chroma offset, and horizontal vignette.
+# - Exposes static/animated transforms with tunable uniforms.
 
 init python hide:
     renpy.register_shader(

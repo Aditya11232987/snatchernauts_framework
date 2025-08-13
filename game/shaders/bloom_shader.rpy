@@ -1,5 +1,9 @@
 # Custom Bloom Shader using Ren'Py Shader Parts System
 # Based on the proper Ren'Py model-based rendering approach
+#
+# Overview
+# - Registers shader parts and a model-based displayable to apply bloom.
+# - This file is optional; bloom can also be achieved via filters.
 
 init python:
     # Helper function to convert hex color to RGB tuple

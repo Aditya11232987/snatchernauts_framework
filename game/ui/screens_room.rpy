@@ -1,4 +1,8 @@
 # Room Display Screens (Room & Objects)
+#
+# Overview
+# - Composes background, objects, bloom, and CRT into the exploration scene.
+# - Honors fade-in state and routes object display via display_api helpers.
 
 # Common utilities are loaded by Ren'Py loader already.
 

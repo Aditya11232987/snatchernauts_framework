@@ -1,5 +1,18 @@
 # Room API
 # Consolidated room management and object manipulation functions
+#
+# Overview
+# - Manipulates object positions/scales; persists and resets room changes.
+# - Toggles CRT settings and exposes navigation helpers.
+#
+# Contracts
+# - move_object(name, dx, dy) / scale_object(name, delta|'reset')
+# - save_room_changes(), reset_room_changes(), clear_persistent_overrides()
+# - toggle_crt_effect(), set_crt_parameters(...), toggle_crt_animation()
+# - get_object_list_for_navigation(), gamepad_navigate(dir), ...
+#
+# Notes
+# - Functions operate on store.room_objects (current room) and definitions.
 
 init python:
     def move_object(obj_name, dx, dy, room_id=None):
@@ -150,7 +163,7 @@ init python:
     
     def save_room_changes():
         if store.current_room_id and store.current_room_id in ROOM_DEFINITIONS:
-            print(":: === SAVING ROOM CHANGES ===")
+            log("=== SAVING ROOM CHANGES ===")
             print(f"Current room: {store.current_room_id}")
             if not hasattr(persistent, 'room_overrides') or persistent.room_overrides is None:
                 persistent.room_overrides = {}
@@ -165,7 +178,7 @@ init python:
                     orig_obj["scale_percent"] = obj_data["scale_percent"]
                     orig_obj["width"] = obj_data["width"]
                     orig_obj["height"] = obj_data["height"]
-            print(":: === SAVE COMPLETE ===")
+            log("=== SAVE COMPLETE ===")
             renpy.notify("Room changes saved to memory & persistent storage!")
             return True
         else:
@@ -232,7 +245,7 @@ init python:
                             print(f"⚠ Could not find pattern for {obj_name}")
             with open(config_file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(":: === FILE UPDATE COMPLETE ===")
+            log("=== FILE UPDATE COMPLETE ===")
             renpy.notify("room_config.rpy updated successfully!")
             return True
         except Exception as e:
@@ -347,7 +360,7 @@ init python:
                 config_text += f'                "height": {obj_data["height"]},\n'
                 config_text += f'                # ... other properties remain the same\n'
                 config_text += f'            }},\n\n'
-            print(":: === ROOM CONFIGURATION ===")
+            log("=== ROOM CONFIGURATION ===")
             try:
                 from core.common_logging import log_multiline  # type: ignore
             except Exception:
@@ -355,7 +368,7 @@ init python:
             if log_multiline:
                 log_multiline(config_text, line_limit=200)
             else:
-                print(":: " + (config_text if len(config_text) <= 200 else config_text[:199] + '…'))
+                log(config_text)
             print(":: === END CONFIGURATION ===")
             renpy.notify("Configuration exported to console!")
             return config_text

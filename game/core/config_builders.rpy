@@ -1,5 +1,9 @@
 # Configuration Builder Utilities
 # Functions for creating and merging object configurations
+#
+# Overview
+# - Factory-style helpers to produce normalized configs for objects and traits.
+# - Use create_* helpers and merge_configs to keep definitions consistent.
 
 init python:
     def create_object_config(base_config, overrides=None):

@@ -1,5 +1,9 @@
 # Global Room Editor
 # Contains the live object editor screen - globally accessible
+#
+# Overview
+# - Debug-only room/object editor to move/scale and save changes.
+# - Accessible via editor button in room UI (developer mode recommended).
 
 # GLOBAL REAL-TIME OBJECT EDITOR SCREEN
 screen object_editor(room_id=None):

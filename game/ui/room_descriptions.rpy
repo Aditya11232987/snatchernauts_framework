@@ -1,5 +1,9 @@
 # Room Description Box System
 # Floating and fixed description boxes with dynamic sizing
+#
+# Overview
+# - Computes box sizes from text length and renders a curved frame with text.
+# - Supports floating animation and bottom area variant.
 
 # Common utilities are loaded by Ren'Py loader already.
 

@@ -5,6 +5,10 @@
 ## This file contains the interaction system for objects in the room.
 ## When A is pressed on an object, context-sensitive action buttons appear.
 ##
+## Overview
+## - Builds action lists per object type and renders a simple vertical menu.
+## - Exposes keyboard/gamepad bindings for selection and confirm/cancel.
+##
 
 init offset = -1
 

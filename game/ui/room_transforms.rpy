@@ -1,5 +1,8 @@
 # Room Transforms
 # Contains all animation transforms for the room exploration system
+#
+# Overview
+# - Reusable transforms and helpers for floating descriptions and bloom.
 
 init python:
     import hashlib

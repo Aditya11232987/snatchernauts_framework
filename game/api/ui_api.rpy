@@ -1,5 +1,18 @@
 # UI API
 # Hotspot creation, hover handling, and button customization
+#
+# Overview
+# - Creates hotspot configs for objects and handles hover/unhover events.
+# - Exposes helpers to customize editor/exit buttons and add custom buttons.
+#
+# Contracts
+# - create_object_hotspot(obj_name, obj_data) -> dict{xpos,ypos,xsize,ysize,obj_name}
+# - get_all_object_hotspots() -> list of hotspot dicts
+# - handle_object_hover(obj_name), handle_object_unhover()
+# - customize_exit_button(...), customize_editor_button(...), add_custom_button(...)
+#
+# Integration
+# - handle_object_hover emits on_object_hover(room_id, obj) into game logic hooks.
 
 init python:
     def create_object_hotspot(obj_name, obj_data):
@@ -31,6 +44,10 @@ init python:
         """Handle object hover - only update if interaction menu is not active"""
         if not interaction_menu_active:
             store.current_hover_object = obj_name
+            try:
+                on_object_hover(store.current_room_id, obj_name)
+            except Exception:
+                pass
             renpy.restart_interaction()
     
     def handle_object_unhover():
@@ -64,3 +81,26 @@ init python:
         """Add a custom button to the room UI"""
         ROOM_BUTTON_CONFIG[button_id] = config
 
+    def get_object_focus_mask(obj_data):
+        """Return a displayable to use as a focus mask matching the object's opaque pixels.
+
+        Scales the object's source image to the configured width/height so the
+        alpha channel can be used to determine the clickable/hoverable area.
+        Returns None if scaling information is unavailable.
+        """
+        try:
+            img = obj_data.get("image")
+            if not img:
+                return None
+            name = img.split('/')[-1].split('.')[0]
+            orig = get_original_size(name)
+            ow, oh = int(orig.get("width", 0)), int(orig.get("height", 0))
+            w, h = int(obj_data.get("width", 0)), int(obj_data.get("height", 0))
+            if ow > 0 and oh > 0 and w > 0 and h > 0:
+                import renpy.display.transform as t
+                zx = float(w) / float(ow)
+                zy = float(h) / float(oh)
+                return t.Transform(img, xzoom=zx, yzoom=zy)
+        except Exception:
+            pass
+        return None

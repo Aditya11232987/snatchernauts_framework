@@ -1,5 +1,9 @@
 # Bloom Color Extraction System
 # Global utilities for extracting and caching dominant colors from images
+#
+# Overview
+# - Extracts a representative color from an image for bloom tinting.
+# - Caches results to avoid repeated processing.
 
 init python:
     def extract_dominant_color(image_path):

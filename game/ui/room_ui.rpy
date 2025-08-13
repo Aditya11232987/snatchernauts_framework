@@ -1,5 +1,9 @@
 # Room UI Controls System
 # Buttons, hotspots, and interactive elements
+#
+# Overview
+# - Hosts UI buttons (exit, editor) and object hotspots for exploration.
+# - Delegates actions to UI/API functions to avoid screen logic bloat.
 
 # UI button configuration
 define ROOM_BUTTON_CONFIG = {
@@ -39,6 +43,8 @@ screen object_hotspots():
             xsize obj_data["width"]
             ysize obj_data["height"]
             background None
+            if get_object_focus_mask(obj_data):
+                focus_mask get_object_focus_mask(obj_data)
             action Function(show_interaction_menu, obj_name)
             hovered Function(handle_object_hover, obj_name)
             unhovered Function(handle_object_unhover)

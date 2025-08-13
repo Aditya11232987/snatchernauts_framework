@@ -1,5 +1,18 @@
 # Display API
 # Background, object visibility, and display helpers
+#
+# Overview
+# - Provides helpers to fetch backgrounds and determine object visibility.
+# - Consumed by room composition screens and higher-level APIs.
+#
+# Contracts
+# - get_room_background() -> str displayable path or color
+# - get_fallback_background() -> color string
+# - should_display_object(obj: dict) -> bool
+# - get_object_display_properties(obj: dict) -> {image, xpos, ypos, xsize, ysize}
+#
+# Notes
+# - Keep objects as plain dicts; this API translates them for UI screens.
 
 init python:
     def get_room_background():
@@ -48,4 +61,3 @@ init python:
     def is_object_hidden(obj_data):
         """Check if an object is hidden"""
         return obj_data.get("_hidden", False)
-

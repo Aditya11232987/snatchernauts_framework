@@ -1,5 +1,9 @@
 # Object Factory Utilities
 # Functions for creating complete room object configurations
+#
+# Overview
+# - Applies defaults and builders to create normalized object dicts.
+# - Computes width/height from original sizes and scale_percent when possible.
 
 init python:
     def create_room_object(x, y, image, description, 
