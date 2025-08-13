@@ -7,8 +7,8 @@ variables:
 wiki_sync:
   stage: wiki
   image: alpine:3.20
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+  only:
+    - main
   before_script:
     - apk add --no-cache git bash rsync
   script:
