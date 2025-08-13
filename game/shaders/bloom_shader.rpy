@@ -75,12 +75,20 @@ init python:
         
         if (bloom_mask > 0.0) {
             vec4 bloom = bloomBlur(v_tex_coord, u_bloom_radius) * bloom_mask;
-            bloom.rgb *= u_bloom_color;
+            
+            // If a sepia/vintage tone is present (approximate by redish dominance), bias bloom color warmer
+            vec3 warm_bias = vec3(1.05, 0.98, 0.90);
+            vec3 sepia_hint = normalize(max(original.rgb, 0.0001));
+            float warm_factor = smoothstep(0.0, 0.3, sepia_hint.r - sepia_hint.b);
+            vec3 correlated_bloom_color = mix(u_bloom_color, warm_bias, warm_factor);
+            bloom.rgb *= correlated_bloom_color;
             
             float pulse = sin(u_time * u_pulse_speed) * 0.5 + 0.5;
             float bloom_alpha = mix(u_alpha_min, u_alpha_max, pulse);
             
-            gl_FragColor.rgb += bloom.rgb * u_bloom_intensity * bloom_alpha;
+            // When sepia is strong, dim bloom a bit to match tone
+            float dim = mix(1.0, 0.6, warm_factor);
+            gl_FragColor.rgb += bloom.rgb * u_bloom_intensity * bloom_alpha * dim;
             gl_FragColor.a = max(original.a, bloom.a * bloom_alpha * u_bloom_softness);
         }
     """)

@@ -31,77 +31,48 @@ define DEFAULT_OBJECT_CONFIG = {
 }
 
 
-# Room definitions organized by room ID
-define ROOM_DEFINITIONS = {
-    "room1": {
-        "background": "images/room1.png",
-        "objects": {
-            "detective": merge_configs({
-                # Basic object properties
-                "x": 211, "y": 124, 
-                "scale_percent": 100,
-                "width": 328,   # calc_size("detective", 101)[0] = 328 pixels
-                "height": 499,  # calc_size("detective", 101)[1] = 499 pixels
-                "image": "images/detective.png",
-                "description": "A mysterious detective figure. They seem to be investigating something important.",
-                "box_position": "right",
-                "float_intensity": 0.5,
-                # Object type
-                "object_type": "character",
-            },
-            # Custom bloom configuration (overrides defaults)
-            create_bloom_config(
-                BLOOM_PRESETS["neon_normal"]),
-            # Custom animation configuration
-            create_animation_config({
-                "hover_scale_boost": 1.00,         # Slightly larger scale
-                "hover_brightness_boost": 0.2      # Normal brightness boost
-            })),
+# Room definitions - now integrated with room-based directory structure
+# Individual room configurations are defined in their respective directories:
+# - rooms/room1/scripts/room1_config.rpy
+# - rooms/room2/scripts/room2_config.rpy
+# - rooms/room3/scripts/room3_config.rpy
 
+init python:
+    # This combines all room definitions from the room-specific configs
+    def get_combined_room_definitions():
+        """Combine room definitions from all room-specific configuration files"""
+        combined_rooms = {}
+        
+        # Merge room1 definitions if they exist
+        if 'ROOM_DEFINITIONS_ROOM1' in globals():
+            combined_rooms.update(ROOM_DEFINITIONS_ROOM1)
+        
+        # Merge room2 definitions if they exist
+        if 'ROOM_DEFINITIONS_ROOM2' in globals():
+            combined_rooms.update(ROOM_DEFINITIONS_ROOM2)
             
-            "patreon": merge_configs({
-                # Basic object properties
-                "x": 690, "y": 167, 
-                "scale_percent": 100,
-                "width": 364,   # calc_size("patreon", 100)[0] = 364 pixels
-                "height": 450,  # calc_size("patreon", 100)[1] = 450 pixels
-                "image": "images/patreon.png",
-                "description": "I'm not sure if this man is human or an object.",
-                "box_position": "right+40",
-                "float_intensity": 0.5,
-                # Object type
-                "object_type": "item",
-            },
-            # Custom bloom configuration (overrides defaults)
-            create_bloom_config(
-                BLOOM_PRESETS["neon_subtle"]),
-            # Custom animation configuration
-            create_animation_config({
-                "hover_scale_boost": 1.00,         # Slightly larger scale
-                "hover_brightness_boost": 0.0      # Normal brightness boost
-            })),
-            # You can add more objects here if you have more images
-            # or create invisible hotspots for objects painted directly in room1.png
-        }
-    },
-    # Add more rooms here:
-    # "room2": {
-    #     "background": "images/room2.png",
-    #     "objects": {
-    #         # Using the helper function for easy object creation:
-    #         "new_object": create_room_object(
-    #             x=100, y=200,
-    #             image="images/object.png",
-    #             description="Description here",
-    #             scale_percent=100,
-    #             box_position="auto",
-    #             float_intensity=1.0,
-    #             bloom_overrides={"bloom_intensity": 0.8},
-    #             animation_overrides={"hover_scale_boost": 1.05}
-    #         )
-    #     }
-    # }
-}
+        # Merge room3 definitions if they exist
+        if 'ROOM_DEFINITIONS_ROOM3' in globals():
+            combined_rooms.update(ROOM_DEFINITIONS_ROOM3)
+        
+        # No fallback definitions; rooms must provide their own configs
+        return combined_rooms
+
+# Initialize room definitions variable
+define ROOM_DEFINITIONS = {}
+
+# Dynamic room definitions that update based on loaded room configs
+init python:
+    def update_room_definitions():
+        """Update the global ROOM_DEFINITIONS with combined room data"""
+        global ROOM_DEFINITIONS
+        ROOM_DEFINITIONS = get_combined_room_definitions()
+        print(f"[RoomConfig] Loaded {len(ROOM_DEFINITIONS)} room definitions")
+
+# Initialize room definitions
+init 2 python:
+    # Call after all room config files have loaded
+    update_room_definitions()
 
 # BOX POSITION OPTIONS:
 # "top+30"    - Above object, 30px distance
@@ -129,8 +100,6 @@ default show_editor_help = True
 default gamepad_selected_object = None  # Currently highlighted object via gamepad
 default gamepad_navigation_enabled = True  # Enable/disable gamepad navigation
 
-
-
 # Load room1 by default
-init 1 python:
+init 3 python:
     load_room("room1")

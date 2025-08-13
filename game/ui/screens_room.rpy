@@ -9,7 +9,8 @@
 # Display configuration
 define ROOM_DISPLAY_CONFIG = {
     "fallback_background_color": "#000000",
-    "default_background": "images/room1.png",
+    # Leave default_background unset; each room provides its own
+    "default_background": None,
     "fade_duration": 2.0
 }
 
@@ -106,6 +107,9 @@ screen room_exploration():
     use room_background_and_objects
     use room_bloom_effects
 
+    # Simplified: No longer using pending dialogue system
+    # Dialogue is called directly from room logic with proper UI clearing
+    
     # Interactive elements
     if not input_locked:
         use object_hotspots

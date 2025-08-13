@@ -43,8 +43,8 @@ label play_room(room=None, music=None):
         play music music loop
         $ renpy.music.set_volume(1.0, delay=2.0, channel="music")
 
-    # Run the exploration screen
-    call screen room_exploration
+    # Run the exploration screen with shader support
+    call screen room_exploration_shaders
 
     # Teardown
     if music:
@@ -79,6 +79,9 @@ label start:
     $ show_continue_button = False
     # Global one-time game start hook (optional)
     $ on_game_start()
+    
+    # Install the enhanced shader system
+    $ install_shader_system()
     
     # Enter the default room using the unified entry
     call play_room from _call_play_room

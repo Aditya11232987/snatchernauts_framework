@@ -27,13 +27,11 @@ define INTERACTION_ACTIONS = {
     "character": [
         {"label": "Talk", "action": "talk"},
         {"label": "Ask About", "action": "ask_about"}, 
-        {"label": "Examine", "action": "examine"},
         {"label": "Leave", "action": "leave"}
     ],
     "item": [
-        {"label": "Examine", "action": "examine"},
         {"label": "Take", "action": "take"},
-        {"label": "Use", "action": "use"},
+        {"label": "Investigate", "action": "investigate"},
         {"label": "Leave", "action": "leave"}
     ],
     "door": [

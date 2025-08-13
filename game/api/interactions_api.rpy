@@ -47,7 +47,25 @@ init python:
         except:
             return base_color + "{:02x}".format(int(255 * alpha))
 
+# Framework dialogue system - handles scene transitions from interaction hooks
+default pending_dialogue_scene = None
+default pending_dialogue_args = None
+
 init python:
+    def trigger_dialogue_scene(scene_label, args=None):
+        """Framework function to safely trigger dialogue scenes from interaction hooks.
+        
+        This handles the complexity of transitioning from Python interaction context
+        to Ren'Py script context for developers.
+        
+        Args:
+            scene_label: The label name to call (e.g. "detective_talk_scene")
+            args: Optional arguments to pass to the scene
+        """
+        store.pending_dialogue_scene = scene_label
+        store.pending_dialogue_args = args
+        log_debug("InteractionAPI", f"Dialogue scene '{scene_label}' queued for execution")
+    
     def show_interaction_menu(obj_name):
         """Show interaction menu for the specified object"""
         global interaction_menu_active, interaction_target_object, interaction_selected_action
@@ -138,12 +156,10 @@ init python:
             handle_talk_action(obj_name)
         elif action_type == "ask_about":
             handle_ask_about_action(obj_name)
-        elif action_type == "examine":
-            handle_examine_action(obj_name)
         elif action_type == "take":
             handle_take_action(obj_name)
-        elif action_type == "use":
-            handle_use_action(obj_name)
+        elif action_type == "investigate":
+            handle_investigate_action(obj_name)
         elif action_type == "open":
             handle_open_action(obj_name)
         elif action_type == "knock":
@@ -158,7 +174,6 @@ init python:
                 pass
         else:
             renpy.notify(f"Unknown action: {action_type}")
-            renpy.notify(f"Unknown action: {action_type}")
     
     def handle_talk_action(obj_name):
         obj = store.room_objects[obj_name]
@@ -170,15 +185,12 @@ init python:
         character_name = obj_name.replace("_", " ").title()
         narrate(f"What would you like to ask {character_name} about?")
     
-    def handle_examine_action(obj_name):
-        obj = store.room_objects[obj_name]
-        narrate(f"Examining {obj_name.replace('_', ' ')}: {obj.get('description', 'Nothing special.')}")
-    
     def handle_take_action(obj_name):
         narrate(f"You take the {obj_name.replace('_', ' ')}")
     
-    def handle_use_action(obj_name):
-        narrate(f"How would you like to use the {obj_name.replace('_', ' ')}?")
+    def handle_investigate_action(obj_name):
+        obj = store.room_objects[obj_name]
+        narrate(f"You carefully investigate the {obj_name.replace('_', ' ')}: {obj.get('description', 'Nothing of interest.')}")
     
     def handle_open_action(obj_name):
         narrate(f"You open the {obj_name.replace('_', ' ')}")

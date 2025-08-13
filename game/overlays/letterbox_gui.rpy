@@ -25,7 +25,7 @@ define letterbox_color = "#000000"
 define letterbox_animation_duration = 1.0
 
 ## Whether letterbox is currently active
-default letterbox_active = True
+default letterbox_active = False
 
 ## Letterbox integration with existing systems
 define letterbox_adjust_ui = True  # Automatically adjust UI elements
@@ -35,28 +35,12 @@ define letterbox_adjust_descriptions = True  # Adjust floating descriptions
 ## Letterbox Screen
 ################################################################################
 
-screen letterbox_overlay():
-    ## Ensure this appears on top of other screens but below menus
-    zorder 90
-    
-    if letterbox_active:
-        ## Top letterbox bar
-        frame:
-            style "letterbox_bar"
-            xalign 0.0
-            yalign 0.0
-            xsize config.screen_width
-            ysize letterbox_bar_height
-            background letterbox_color
-            
-        ## Bottom letterbox bar  
-        frame:
-            style "letterbox_bar"
-            xalign 0.0
-            yalign 1.0
-            xsize config.screen_width
-            ysize letterbox_bar_height
-            background letterbox_color
+## Letterbox animation state tracking
+default letterbox_hiding = False
+
+# DISABLED: Old letterbox overlay replaced by shader-based letterbox
+# screen letterbox_overlay():
+#     pass
             
 
 ## Letterbox control screen (for testing/debugging)
@@ -83,57 +67,36 @@ style letterbox_bar:
 ################################################################################
 
 init python:
-    def show_letterbox(duration=None):
-        """Show the letterbox effect with optional custom duration"""
-        global letterbox_active
-        if duration is None:
-            duration = letterbox_animation_duration
-            
-        letterbox_active = True
-        
-        # Add the letterbox overlay to the screen
-        if not renpy.get_screen("letterbox_overlay"):
-            renpy.show_screen("letterbox_overlay")
-            
-        return
+    # Redirect legacy GUI functions to shader-backed implementations
+    def show_letterbox(duration=None, wait_for_animation=True):
+        try:
+            return renpy.store.show_letterbox_shader(duration=duration, wait_for_animation=wait_for_animation)
+        except Exception:
+            return None
 
-    def hide_letterbox(duration=None):
-        """Hide the letterbox effect with optional custom duration"""
-        global letterbox_active
-        if duration is None:
-            duration = letterbox_animation_duration
-            
-        letterbox_active = False
-        
-        # Hide the letterbox overlay screen
-        if renpy.get_screen("letterbox_overlay"):
-            renpy.hide_screen("letterbox_overlay")
-            
-        return
+    def hide_letterbox(duration=None, wait_for_animation=True):
+        try:
+            return renpy.store.hide_letterbox_shader(duration=duration, wait_for_animation=wait_for_animation)
+        except Exception:
+            return None
 
     def toggle_letterbox():
-        """Toggle letterbox on/off"""
-        if letterbox_active:
-            hide_letterbox()
-        else:
-            show_letterbox()
+        try:
+            return renpy.store.toggle_letterbox_shader()
+        except Exception:
+            return None
 
     def set_letterbox_height(height):
-        """Set custom letterbox bar height"""
-        global letterbox_bar_height
-        letterbox_bar_height = height
-        
-        # Refresh the screen if letterbox is active
-        if letterbox_active and renpy.get_screen("letterbox_overlay"):
-            renpy.restart_interaction()
+        try:
+            return renpy.store.set_letterbox_shader_params(height=height)
+        except Exception:
+            return None
 
 ## Initialize letterbox overlay screen
 init python:
-    config.overlay_screens.append("letterbox_overlay")
-    
-    # Add developer controls if in developer mode
-    if config.developer:
-        config.overlay_screens.append("letterbox_controls")
+    # COMPLETELY DISABLED: GUI-based letterbox overlay is replaced by shader-based letterbox
+    # The old screen is no longer registered to prevent UI conflicts
+    pass
 
 ################################################################################
 ## Letterbox Transforms and Animations
@@ -146,6 +109,26 @@ transform letterbox_appear:
         linear letterbox_animation_duration ysize letterbox_bar_height
     on hide:
         linear letterbox_animation_duration ysize 0
+
+## Top letterbox bar slide down animation
+transform letterbox_top_bar:
+    yoffset -letterbox_bar_height
+    
+    on show:
+        ease letterbox_animation_duration yoffset 0
+    
+    on hide:
+        ease letterbox_animation_duration yoffset -letterbox_bar_height
+
+## Bottom letterbox bar slide up animation
+transform letterbox_bottom_bar:
+    yoffset letterbox_bar_height
+    
+    on show:
+        ease letterbox_animation_duration yoffset 0
+    
+    on hide:
+        ease letterbox_animation_duration yoffset letterbox_bar_height
 
 
 ################################################################################

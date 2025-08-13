@@ -33,6 +33,13 @@ init -2 python:
         - on_object_interact(room_id, obj_name, action_id)
         """
         GAME_LOGIC_HANDLERS[room_id] = handler
+    
+    def get_room_logic(room_id: str):
+        """Get the room logic handler for a specific room.
+        
+        Returns the handler if found, None otherwise.
+        """
+        return GAME_LOGIC_HANDLERS.get(room_id)
 
     # -------------------- Global Hooks (override here if desired) --------------------
     def on_game_start() -> None:
@@ -57,11 +64,8 @@ init -2 python:
                 chroma=store.crt_chroma,
                 scanline_size=store.crt_scanline_size,
             )
-            # Ensure cinematic letterbox overlay is active by default.
-            try:
-                show_letterbox()
-            except Exception:
-                pass
+            # Letterbox is now disabled by default and only shown during dialogue/cutscenes
+            # No need to show letterbox during normal gameplay
         except Exception:
             pass
 

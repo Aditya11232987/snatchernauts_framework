@@ -8,7 +8,7 @@
 
 <p align="center" style="margin: 8px 0 0;">
   <!-- Upload marketing/itchio/snatchernauts-overview.gif and paste its hosted URL below -->
-  <img src="{{OVERVIEW_GIF_URL}}" alt="Animated overview of room exploration, context menu, and CRT/bloom effects" style="max-width: 900px; width: 100%; height: auto; image-rendering: -webkit-optimize-contrast; border-radius: 3px;" />
+  <img src="https://gitlab.com/grahfmusic/snatchernauts_framework/-/raw/main/marketing/itchio/snatchernauts-overview.gif?ref_type=heads" alt="Animated overview of room exploration, context menu, and CRT/bloom effects" style="max-width: 900px; width: 100%; height: auto; image-rendering: -webkit-optimize-contrast; border-radius: 3px;" />
 </p>
 
 <hr/>
@@ -78,11 +78,6 @@ Developers who want their visual novels to feel more tactile and exploratory wit
 MIT licensed. See repository for details.
 </p>
 
-<hr/>
 
-<h3>Notes for itch.io</h3>
-<ul>
-  <li>Upload images (banner/logo, screenshots) to this page and copy their hosted URLs into the placeholders above.</li>
-  <li>If your account has Custom CSS enabled, you can paste theme.css (from this repo) into the Theme editor for a compact, monospace look matching the project’s style.</li>
-</ul>
+
 
