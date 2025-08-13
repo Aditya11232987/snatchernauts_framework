@@ -21,6 +21,26 @@ Data flow
 - Hover/selection changes trigger hooks; handlers may override default behavior.
 - on_object_interact returns bool: True to signal the action has been fully handled.
 
+## Project Layout
+```
+project/
+├─ game/
+│  ├─ logic/                 # global + per-room gameplay hooks
+│  │  ├─ game_logic.rpy
+│  │  └─ rooms/              # register_room_logic('<room>', Handler())
+│  ├─ api/                   # public helper APIs
+│  │  ├─ room_api.rpy        # room/object helpers
+│  │  ├─ ui_api.rpy          # UI helpers
+│  │  ├─ interactions_api.rpy# action routing
+│  │  └─ display_api.rpy     # effects toggles
+│  ├─ ui/                    # composition screens, transforms
+│  ├─ overlays/              # letterbox, info, debug, fades
+│  ├─ shaders/               # CRT and bloom shader code
+│  └─ core/                  # options, logging, room config, utilities
+├─ scripts/                  # push mirroring, wiki sync, etc.
+└─ Wiki/                     # documentation (mirrored to GitHub wiki)
+```
+
 ## Sequence (Mermaid)
 ```mermaid
 sequenceDiagram

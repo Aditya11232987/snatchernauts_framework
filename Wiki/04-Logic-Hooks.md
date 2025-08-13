@@ -1,6 +1,23 @@
 # Logic Hooks
 
 Global hooks (in `game/logic/game_logic.rpy`)
+
+```renpy
+# Implement these in game/logic/game_logic.rpy (or per-room handlers)
+def on_game_start():
+    ...
+
+def on_room_enter(room_id):
+    ...
+
+def on_object_hover(room_id, obj):
+    ...
+
+def on_object_interact(room_id, obj, action) -> bool:
+    # Return True when you fully handle an action
+    ...
+```
+
 - `on_game_start()` — called once after the startup overlay.
 - `on_room_enter(room_id)` — called after `load_room(room)`.
 - `on_object_hover(room_id, obj)` — selection or hover changed.
