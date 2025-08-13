@@ -4,7 +4,7 @@
 
 <i>Retro‑cinematic, interactive visual novels — powered by Ren'Py 8.4</i>
 
-[![version](https://img.shields.io/badge/version-0.5.1-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.5.2-blue)](CHANGELOG.md)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub mirror](https://img.shields.io/badge/github-mirror-blue?logo=github)](https://github.com/grahfmusic/snatchernauts_framework)
 [![gitlab pipeline](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/pipeline.svg)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/pipelines)
@@ -25,7 +25,8 @@ Visual novels are great at storytelling, but many lack the interactive texture t
 - 🎯 Room‑based exploration with <b>pixel‑accurate hotspots</b>
 - 🧭 Contextual <b>interaction menus</b> and hover descriptions
 - 🧩 Game‑like <b>lifecycle hooks</b> for writing logic in one place
-- 🕶️ Tasteful <b>CRT/Bloom/Letterbox</b> effects for retro‑cinematic feel
+- 🎬 **Shader‑based effects** (letterbox, film grain, fog, lighting) for retro‑cinematic feel
+- 🕶️ **CRT/Bloom/Vignette** with live tuning and animation controls
 
 <b>Result:</b> a VN that plays and feels like a classic adventure, with modern ergonomics.
 
@@ -40,7 +41,8 @@ Visual novels are great at storytelling, but many lack the interactive texture t
 | 🧩 Centralized hooks | on_game_start, on_room_enter, on_object_* events |
 | 🛠️ Debug overlay | Live logging toggles, FPS/memory hints |
 | 🕶️ CRT + vignette | Warp/scan/chroma + horizontal vignette, live tuning |
-| 🌸 Bloom + letterbox | Cinematic overlays with helpers |
+| 🎬 Shader system | Film grain, fog, lighting, letterbox via GLSL shaders |
+| 🌸 Bloom effects | Cinematic overlays with color correlation |
 | 🧰 Clean APIs | room/display/ui/interactions modules |
 
 
@@ -129,17 +131,22 @@ If you’re new, start with:
 - Wiki/02-Getting-Started.md
 
 ## 🛠️ Debug & Effects
-- i: toggle info overlay
-- c: toggle CRT • a: toggle scanline animation
-- 1–4: scanline size presets
-- [ / ]: vignette strength • - / =: vignette width • 0: reset
-- Cmd+Shift+F12 / Ctrl+Shift+F12: cycle debug overlay
+- **i**: toggle info overlay
+- **c**: toggle CRT • **a**: toggle scanline animation
+- **1–4**: scanline size presets
+- **[ / ]**: vignette strength • **- / =**: vignette width • **0**: reset
+- **l**: toggle letterbox (shader‑based)
+- **Shift+G/F/V/L/W**: cycle shader effects (grain/fog/vintage/lighting/weather)
+- **Alt+A/I**: atmosphere presets / investigation modes
+- **R**: reset all shader effects • **H**: shader help
+- **Cmd+Shift+F12 / Ctrl+Shift+F12**: cycle debug overlay
 
 
 ## 🧭 Roadmap (Short‑term)
+- Enhanced detective atmospheric shaders and presets
 - More built‑in actions (Use item, Combine)
-- Optional inventory system module
-- Room scripting examples beyond room1
+- Optional inventory system module  
+- Additional room examples with shader integration
 - CI recipes for packaging on multiple platforms
 
 

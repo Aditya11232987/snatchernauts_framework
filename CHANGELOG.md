@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.5.2 — 2025-08-13
+
+### Major Features
+- **Shader-Based Letterbox System**: Complete rewrite from GUI bars to GLSL shader rendering
+  - Proper Ren'Py shader registration using variables string and 300-stage pipeline
+  - Smooth fade in/out animations via shader uniforms (height + alpha)
+  - Letterbox disabled during normal gameplay, smoothly activates for detective conversations
+  - Backward compatibility maintained for existing `show_letterbox()`/`hide_letterbox()` calls
+- **Comprehensive Shader Infrastructure**: 15+ atmospheric shaders for detective ambiance
+  - Film grain, fog, lighting, vintage/sepia, rain, depth-of-field, edge detection
+  - Mystery reveal, flashlight, color grading with detective-specific presets
+  - Hotkey system: `Shift+G/F/V/L/W` for individual effects, `Alt+A/I` for presets
+  - `R` to reset all shaders, `H` for help overlay
+- **Detective Interaction System**: Enhanced conversation system with proper UI clearing
+  - Fixed ui.interact stack error by simplifying dialogue approach
+  - Room-specific logic with dynamic interaction options
+  - Character definitions and conversation state tracking
+
+### Technical Improvements
+- **Room System Restructuring**: Organized assets under modular `game/rooms/` structure
+  - Room-specific sprites moved to proper directories (`game/rooms/roomN/sprites/`)
+  - Enhanced configuration system with `scripts/` subdirectories
+  - 3 rooms with complete logic and asset separation
+- **UI Stack Management**: Comprehensive layer clearing before dialogue scenes
+  - Clear transient and screens layers to prevent conflicts
+  - Proper interaction menu and object state cleanup
+- **Shader Integration**: All shaders work seamlessly with existing CRT and bloom systems
+  - Proper mesh True transforms for coordinate computation
+  - Developer controls for testing different parameters
+
+### Assets & Documentation
+- **New High-Resolution Backgrounds**: itch.io marketing assets (1920x1080, 2560x1440)
+- **Detective Assets**: Character sprites, interaction graphics, room backgrounds
+- **Comprehensive Shader Documentation**: `SETUP_GUIDE.md` and `HOTKEY_MAPPING.md`
+- **Updated README**: Version 0.5.2 with shader system features and enhanced controls
+
+### Fixed
+- Detective dialogue no longer causes ui.interact stack errors
+- Letterbox effects now use proper shader rendering instead of GUI overlays
+- Room exploration returns cleanly to interaction mode after conversations
+- All shader effects properly clear and don't interfere with each other
+
 ## 0.5.1 — 2025-08-13
 
 ### Changed
