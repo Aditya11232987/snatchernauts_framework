@@ -234,16 +234,46 @@ screen debug_overlay_body():
                     background "#111111aa"
                     padding (6, 6)
                     vbox:
-                        spacing 4
+                        spacing 6
                         text "Logging toggles:" color "#ffaa00" size 14 substitute False
                         hbox:
                             spacing 10
                             textbutton ("enabled: " + ("on" if sn_log_enabled else "off")) action ToggleVariable("sn_log_enabled")
                             textbutton ("color: " + ("on" if sn_log_color else "off")) action ToggleVariable("sn_log_color")
                             textbutton ("intercept: " + ("on" if sn_log_intercept_prints else "off")) action ToggleVariable("sn_log_intercept_prints")
+                        null height 6
+                        text "Testing helpers:" color "#ffaa00" size 14 substitute False
+                        hbox:
+                            spacing 10
+                            textbutton "Reset room1 patreon":
+                                action Function(reset_room1_patreon_state)
+                                tooltip "Clear persistent flag and reshow item in room1"
 
 init python:
     # Ensure the debug overlay is an overlay screen so it renders above gameplay
     # and above the letterbox overlay (which is added at init offset -1).
     if "debug_overlay" not in config.overlay_screens:
         config.overlay_screens.append("debug_overlay")
+
+    # Debug utility: reset persistent state for room1 'patreon' item and reshow it if in room1.
+    def reset_room1_patreon_state():
+        try:
+            if hasattr(persistent, 'room1_patreon_taken'):
+                del persistent.room1_patreon_taken
+            # If we're currently in room1, show the object again if present.
+            try:
+                if getattr(store, 'current_room_id', None) == 'room1':
+                    show_object('patreon')
+            except Exception:
+                pass
+            try:
+                renpy.save_persistent()
+            except Exception:
+                pass
+            try:
+                renpy.notify("Reset: room1 patreon item state cleared")
+            except Exception:
+                pass
+            renpy.restart_interaction()
+        except Exception as e:
+            print(f"[DebugOverlay] reset_room1_patreon_state error: {e}")

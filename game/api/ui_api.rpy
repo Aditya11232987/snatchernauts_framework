@@ -33,7 +33,16 @@ init python:
         return hotspots
     
     def get_room_exit_action():
-        """Get the action for exiting the room"""
+        """Get the action for exiting the room with a confirmation prompt"""
+        try:
+            from renpy.display.behavior import Show
+            from renpy.display.behavior import NullAction
+        except Exception:
+            Show = None
+            NullAction = None
+        if Show and NullAction:
+            return Show("confirm", message="Return to main menu?", yes_action=Return(), no_action=NullAction())
+        # Fallback if Show isn't available for some reason
         return Return()
     
     def get_editor_mode_action():

@@ -27,6 +27,7 @@ define INTERACTION_ACTIONS = {
     "character": [
         {"label": "Talk", "action": "talk"},
         {"label": "Ask About", "action": "ask_about"}, 
+        {"label": "Examine", "action": "examine"},
         {"label": "Leave", "action": "leave"}
     ],
     "item": [

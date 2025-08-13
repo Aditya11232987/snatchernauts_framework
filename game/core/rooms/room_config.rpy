@@ -66,7 +66,7 @@ define ROOM_DEFINITIONS = {
                 "width": 364,   # calc_size("patreon", 100)[0] = 364 pixels
                 "height": 450,  # calc_size("patreon", 100)[1] = 450 pixels
                 "image": "images/patreon.png",
-                "description": "Another down on his luck fool drinking his last drink before contemplating his existence.",
+                "description": "I'm not sure if this man is human or an object.",
                 "box_position": "right+40",
                 "float_intensity": 0.5,
                 # Object type

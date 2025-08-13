@@ -37,17 +37,18 @@ init python:
 screen object_hotspots():
     # Interactive hotspots for objects
     for obj_name, obj_data in room_objects.items():
-        button:
-            xpos obj_data["x"]
-            ypos obj_data["y"]
-            xsize obj_data["width"]
-            ysize obj_data["height"]
-            background None
-            if get_object_focus_mask(obj_data):
-                focus_mask get_object_focus_mask(obj_data)
-            action Function(show_interaction_menu, obj_name)
-            hovered Function(handle_object_hover, obj_name)
-            unhovered Function(handle_object_unhover)
+        if not is_object_hidden(obj_data):
+            button:
+                xpos obj_data["x"]
+                ypos obj_data["y"]
+                xsize obj_data["width"]
+                ysize obj_data["height"]
+                background None
+                if get_object_focus_mask(obj_data):
+                    focus_mask get_object_focus_mask(obj_data)
+                action Function(show_interaction_menu, obj_name)
+                hovered Function(handle_object_hover, obj_name)
+                unhovered Function(handle_object_unhover)
 
 # Screen fragment for UI buttons
 screen room_ui_buttons():
@@ -56,11 +57,12 @@ screen room_ui_buttons():
     if letterbox_active:
         $ letterbox_offset = letterbox_bar_height
     
-    # Exit button in top right
+    # Exit button in top right, with confirmation prompt
     textbutton ROOM_BUTTON_CONFIG["exit"]["text"]:
         xpos ROOM_BUTTON_CONFIG["exit"]["xpos"]
         ypos letterbox_offset + ROOM_BUTTON_CONFIG["exit"]["ypos"]
         action get_room_exit_action()
+        tooltip "Return to the main menu"
         text_color ROOM_BUTTON_CONFIG["exit"]["text_color"]
         text_hover_color ROOM_BUTTON_CONFIG["exit"]["text_hover_color"]
         background ROOM_BUTTON_CONFIG["exit"]["background"]

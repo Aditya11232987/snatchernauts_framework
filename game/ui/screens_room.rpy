@@ -132,6 +132,11 @@ screen room_exploration():
         key "K_RETURN" action Function(execute_selected_action)
         key "K_ESCAPE" action Function(keyboard_cancel_action)
 
+    # Prevent accidental entry into the game menu (right click / Esc) during exploration
+    # Use dedicated cancel in interaction menu instead.
+    if not input_locked:
+        key "game_menu" action NullAction()
+
     # Gamepad controls
     if (not input_locked) and gamepad_navigation_enabled:
         if interaction_menu_active:

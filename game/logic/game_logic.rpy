@@ -17,7 +17,7 @@
 # 3) All hooks are optional: no-ops by default. Handlers may implement any.
 #
 
-init -1 python:
+init -2 python:
     # Type aliases for clarity (informal in Ren'Py runtime)
     from typing import Callable, Dict, Any
 
@@ -35,7 +35,6 @@ init -1 python:
         GAME_LOGIC_HANDLERS[room_id] = handler
 
     # -------------------- Global Hooks (override here if desired) --------------------
-
     def on_game_start() -> None:
         """Called once at game start (after info overlay flow).
 
@@ -64,6 +63,19 @@ init -1 python:
             except Exception:
                 pass
         except Exception:
+            pass
+
+        # Log registered room handlers at startup for visibility
+        try:
+            keys = sorted(list(GAME_LOGIC_HANDLERS.keys()))
+            msg = "Registered room handlers: " + (", ".join(keys) if keys else "(none)")
+            print("[GameLogic] " + msg)
+            try:
+                renpy.notify(msg)
+            except Exception:
+                pass
+        except Exception as e:
+            print(f"[GameLogic] Error listing handlers: {e}")
             pass
 
     def on_room_enter(room_id: str) -> None:
@@ -101,20 +113,26 @@ init -1 python:
         #     # Subtle hint without blocking flow
         #     show_hint("They've seen things...")
 
-    def on_object_interact(room_id: str, obj_name: str, action_id: str) -> None:
+    def on_object_interact(room_id: str, obj_name: str, action_id: str) -> bool:
         """Called when the player triggers an interaction for an object.
 
         Parameters
         - room_id: current room
         - obj_name: object id (e.g., "lamp")
-        - action_id: action identifier from your interaction menu (e.g., "look")
+        - action_id: action identifier from your interaction menu (e.g., "examine")
+
+        Returns True if the interaction was fully handled and default behavior
+        should be skipped; otherwise returns False.
         """
         handler = GAME_LOGIC_HANDLERS.get(room_id)
         if handler and hasattr(handler, 'on_object_interact'):
             try:
-                handler.on_object_interact(room_id, obj_name, action_id)
+                rv = handler.on_object_interact(room_id, obj_name, action_id)
+                return bool(rv)
             except Exception as e:
                 print(f"GameLogic error in on_object_interact: {e}")
+        # Not handled by room-specific logic
+        return False
         # EXAMPLES: Branch gameplay without touching UI code
         # if room_id == 'room1' and obj_name == 'detective' and action_id == 'examine':
         #     narrate("A seasoned detective with a thousand-yard stare.")

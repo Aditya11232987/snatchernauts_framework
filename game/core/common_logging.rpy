@@ -41,10 +41,33 @@ init 900 python:
             return s[: max(0, line_limit - 1) ] + '…'
         return s
 
+    def _get_orig_print():
+        """Resolve the original print function safely, avoiding recursion.
+        Tries module ORIG_PRINT, then attribute on _sn_print, then builtins.print
+        only if it isn't already our wrapper.
+        """
+        try:
+            orig = globals().get('ORIG_PRINT', None)
+        except Exception:
+            orig = None
+        if orig is None:
+            try:
+                orig = getattr(_sn_print, '_orig_print', None)
+            except Exception:
+                orig = None
+        try:
+            bp = getattr(_builtins, 'print', None)
+        except Exception:
+            bp = None
+        if orig is None and bp is not None and bp is not globals().get('_sn_print', None):
+            orig = bp
+        return orig
+
     def _out(s):
         try:
-            if ORIG_PRINT:
-                ORIG_PRINT(s)
+            orig = _get_orig_print()
+            if orig:
+                orig(s)
         except Exception:
             pass
 
@@ -110,7 +133,8 @@ init 900 python:
             intercept = getattr(renpy.store, 'sn_log_intercept_prints', True)
         except Exception:
             intercept = True
-        if not ORIG_PRINT:
+        orig = _get_orig_print()
+        if not orig:
             return
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
@@ -128,10 +152,10 @@ init 900 python:
                         pline = f"{C['gray']}::{C['reset']} " + pline
                     else:
                         pline = ":: " + pline
-                ORIG_PRINT(pline, end=(end if i == len(lines)-1 else '\n'))
+                orig(pline, end=(end if i == len(lines)-1 else '\n'))
         else:
             # Pass through untouched
-            ORIG_PRINT(text, end=end)
+            orig(text, end=end)
 
     try:
         if ORIG_PRINT and getattr(_builtins.print, '_sn_wrapped', False) is False:
@@ -141,8 +165,17 @@ init 900 python:
     try:
         # Replace built-in print with our wrapper (idempotent)
         if not getattr(_builtins.print, '_sn_wrapped', False):
+            # Capture whatever print currently is as the original and store it on the wrapper
+            try:
+                ORIG_PRINT = getattr(_builtins, 'print', None)
+            except Exception:
+                ORIG_PRINT = None
+            try:
+                _sn_print._orig_print = ORIG_PRINT  # type: ignore[attr-defined]
+            except Exception:
+                pass
             _builtins.print = _sn_print
-            _builtins.print._sn_wrapped = True  # type: ignore
+            _builtins.print._sn_wrapped = True  # type: ignore[attr-defined]
     except Exception:
         pass
 

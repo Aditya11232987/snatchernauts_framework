@@ -105,18 +105,21 @@ init python:
         if interaction_selected_action < len(actions):
             action = actions[interaction_selected_action]
             execute_object_action(interaction_target_object, action["action"])
-    
     def execute_object_action(obj_name, action_type):
         """Execute a specific action on an object"""
         previous_object = obj_name
         hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
         obj = store.room_objects[obj_name]
-        obj_type = obj.get("object_type", "item")
+        obj_type = obj.get("object_type", "item") 
         # Notify game logic hooks before executing side effects
+        handled = False
         try:
-            on_object_interact(store.current_room_id, obj_name, action_type)
+            result = on_object_interact(store.current_room_id, obj_name, action_type)
+            handled = bool(result)
         except Exception:
-            pass
+            handled = False
+        if handled:
+            return
         if action_type == "talk":
             handle_talk_action(obj_name)
         elif action_type == "ask_about":
@@ -136,6 +139,7 @@ init python:
         elif action_type == "leave":
             renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
         else:
+            renpy.notify(f"Unknown action: {action_type}")
             renpy.notify(f"Unknown action: {action_type}")
     
     def handle_talk_action(obj_name):

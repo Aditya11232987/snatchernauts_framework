@@ -317,7 +317,7 @@ screen navigation():
 
         elif not main_menu:
 
-            textbutton _("Main Menu") action MainMenu()
+            textbutton _("Main Menu") action Show("confirm", message="Return to main menu?", yes_action=MainMenu(), no_action=Return())
 
         textbutton _("About") action ShowMenu("about")
 
