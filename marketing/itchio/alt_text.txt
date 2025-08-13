@@ -1,0 +1,5 @@
+shot1.png: "Main room exploration view with pixel-accurate hotspot hover highlighting on a futuristic room scene."
+shot2.png: "Contextual action menu open over an in-room object, showing options like Examine and Use."
+shot3.png: "CRT and bloom visual effects active, with subtle scanlines and vignette framing the scene."
+shot4.png: "Hover description tooltip and selection navigation indicators visible across multiple objects."
+shot5.png: "Debug/info overlay enabled, displaying frame stats and logging at the top of the screen."

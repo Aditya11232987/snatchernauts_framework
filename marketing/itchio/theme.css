@@ -1,0 +1,78 @@
+/* itch.io custom theme for Snatchernauts Framework
+   - Compact, monospace, light theme (no dark mode per rules)
+   - Small type (around 10px) and tight spacing
+   - Designed to be pasted into itch.io → Edit theme → Custom CSS
+   - Some selectors may be namespaced by itch.io and can change. Keep minimal.
+*/
+
+:root {
+  --sn-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --sn-fs: 10px;
+  --sn-fs-small: 10px;
+  --sn-text: #111;
+  --sn-subtext: #444;
+  --sn-bg: #fafafa;
+  --sn-card: #ffffff;
+  --sn-accent: #0b5fff;
+  --sn-border: #e5e5e5;
+}
+
+body, .inner_column, .formatted_description, .game_info_panel_widget {
+  font-family: var(--sn-mono) !important;
+  font-size: var(--sn-fs) !important;
+  line-height: 1.35 !important;
+  color: var(--sn-text) !important;
+  background: var(--sn-bg) !important;
+}
+
+.game_page .header .game_title, .game_title {
+  font-family: var(--sn-mono) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  margin: 4px 0 !important;
+}
+
+.buy_row, .purchase_form, .donate_row, .preorder_widget, .bundle_row, .uploads {
+  border: 1px solid var(--sn-border) !important;
+  background: var(--sn-card) !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+}
+
+/* Tighten spacing in description */
+.formatted_description h2, .formatted_description h3, .formatted_description p,
+.formatted_description ul, .formatted_description ol {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+.formatted_description code, .formatted_description pre {
+  font-family: var(--sn-mono) !important;
+  font-size: var(--sn-fs-small) !important;
+}
+
+/* Buttons */
+.button, .buy_btn, .download_btn, .purchase_button, .action_btn {
+  font-family: var(--sn-mono) !important;
+  font-size: var(--sn-fs) !important;
+  padding: 6px 10px !important;
+  border-radius: 3px !important;
+}
+
+/* Media */
+.screenshots .screenshot_list img, .formatted_description img {
+  image-rendering: -webkit-optimize-contrast;
+  border-radius: 3px !important;
+}
+
+/* Hide left header logo if present (rule preference) */
+.header .inner_column .logo, .header .logo_left, .site_logo {
+  display: none !important;
+}
+
+/* Keep page narrow/compact, avoid overly tall layouts */
+.layout .right_col, .layout .left_col, .inner_column {
+  max-width: 900px !important;
+}
+
