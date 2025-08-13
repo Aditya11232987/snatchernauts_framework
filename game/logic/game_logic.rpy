@@ -58,6 +58,11 @@ init -1 python:
                 chroma=store.crt_chroma,
                 scanline_size=store.crt_scanline_size,
             )
+            # Ensure cinematic letterbox overlay is active by default.
+            try:
+                show_letterbox()
+            except Exception:
+                pass
         except Exception:
             pass
 
