@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.1 — 2025-08-13
+
+### Changed
+- Logging: guard ORIG_PRINT resolution on reload using fallback `_get_orig_print` to avoid `NameError`.
+- Interactions: `on_object_interact` now returns `bool`; default handlers short-circuit when handled.
+- UI: add confirmations for Exit/Main Menu; disable accidental game_menu during exploration.
+- Room1: custom examines and patreon take handling; return `True` when handled.
+- Minor: tooltip tweaks and logging cosmetics.
+
+### Chore
+- Save local edits; add `game/core/common_init.rpy`.
+
 ## 0.5 — 2025-08-13
 
 ### Added
