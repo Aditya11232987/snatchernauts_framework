@@ -39,12 +39,27 @@ init -1 python:
     def on_game_start() -> None:
         """Called once at game start (after info overlay flow).
 
-        Use to set global defaults, feature toggles, or analytics/logging.
+        Set global defaults, feature toggles, or analytics/logging here.
+        Centralize CRT defaults so script.rpy stays a flow coordinator only.
         """
-        # Example (toggle features or defaults):
-        # store.crt_enabled = True
-        # store.sn_log_enabled = True
-        pass
+        try:
+            store.crt_enabled = True
+            store.crt_warp = 0.2
+            store.crt_scan = 0.5
+            store.crt_chroma = 0.9
+            store.crt_scanline_size = 1.0
+            store.crt_animated = True
+            store.crt_vignette_strength = 0.95
+            store.crt_vignette_width = 0.14
+            # Apply parameters once so initial render uses the configured values.
+            set_crt_parameters(
+                warp=store.crt_warp,
+                scan=store.crt_scan,
+                chroma=store.crt_chroma,
+                scanline_size=store.crt_scanline_size,
+            )
+        except Exception:
+            pass
 
     def on_room_enter(room_id: str) -> None:
         """Called after a room is loaded (before entering exploration screen).

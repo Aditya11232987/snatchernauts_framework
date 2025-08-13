@@ -27,16 +27,7 @@ label play_room(room=None, music=None):
     # Reset visual state
     $ store.room_faded_in = False
 
-    # Ensure CRT parameters are set to defaults
-    $ store.crt_enabled = True
-    $ store.crt_warp = 0.2
-    $ store.crt_scan = 0.5
-    $ store.crt_chroma = 0.9
-    $ store.crt_scanline_size = 1.0
-    $ store.crt_animated = True
-    $ store.crt_vignette_strength = 0.95
-    $ store.crt_vignette_width = 0.14
-    $ set_crt_parameters(warp=store.crt_warp, scan=store.crt_scan, chroma=store.crt_chroma, scanline_size=store.crt_scanline_size)
+    # CRT defaults and parameters are centralized in on_game_start()
 
     # Resolve room and music
     if room is None:
