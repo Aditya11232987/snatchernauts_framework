@@ -9,6 +9,8 @@
 [![GitHub mirror](https://img.shields.io/badge/github-mirror-blue?logo=github)](https://github.com/grahfmusic/snatchernauts_framework)
 [![gitlab pipeline](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/pipeline.svg)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/pipelines)
 
+<img src="Wiki/snatcher-logo.png" alt="Snatchernauts Logo" width="600" />
+
 </div>
 
 > Bold goal: <b>make visual novels feel as tactile and alive as Kojima‑era classics</b> — <i>Snatcher</i>, <i>Policenauts</i> — while embracing Ren'Py’s portability and scriptability.
