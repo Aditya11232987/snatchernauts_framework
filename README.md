@@ -70,33 +70,51 @@ See the Wiki for a deep dive, code walkthroughs, and examples.
 - Arrow keys / WASD: navigate objects
 - Esc/B: cancel
 - Mouse: hover/click objects
-- c: toggle CRT • a: toggle scanline animation
-- 1–4: scanline size presets
-- [ / ]: vignette strength • - / =: vignette width • 0: reset
-- i: toggle info overlay
-- Cmd+Shift+F12 / Ctrl+Shift+F12: cycle debug overlay
 
 
 ## 🧠 Core Concepts
 - Hooks: write gameplay as Python/renpy functions responding to events:
-  - on_game_start() — run once after startup overlay
-  - on_room_enter(room_id) — after load_room(room)
-  - on_object_hover(room_id, obj)
-  - on_object_interact(room_id, obj, action) → bool to mark handled
+
+```renpy
+# Implement these in game/logic/game_logic.rpy (or per-room handlers)
+def on_game_start():
+    ...
+
+def on_room_enter(room_id):
+    ...
+
+def on_object_hover(room_id, obj):
+    ...
+
+def on_object_interact(room_id, obj, action) -> bool:
+    # Return True when you fully handle an action
+    ...
+```
+
 - Per‑room Logic: implement `register_room_logic('<room>', Handler())` with your own methods.
 - APIs: use `room_api`, `ui_api`, `interactions_api`, `display_api` instead of scattering logic in screens.
 - Logging: centralized logging interception with color and truncation; toggles available at runtime.
 
 
 ## 🗺️ Project Layout
-- game/logic/ — global and per‑room gameplay hooks
-- game/api/ — public helper APIs (room/display/ui/interactions)
-- game/ui/ — composition screens, transforms
-- game/overlays/ — letterbox, info, debug, fades
-- game/shaders/ — CRT and bloom shader code
-- game/core/ — options, logging, room config, utilities
-- scripts/ — helper scripts (push mirroring, wiki sync)
-- Wiki/ — documentation
+```
+project/
+├─ game/
+│  ├─ logic/                 # global + per-room gameplay hooks
+│  │  ├─ game_logic.rpy
+│  │  └─ rooms/              # register_room_logic('<room>', Handler())
+│  ├─ api/                   # public helper APIs
+│  │  ├─ room_api.rpy        # room/object helpers
+│  │  ├─ ui_api.rpy          # UI helpers
+│  │  ├─ interactions_api.rpy# action routing
+│  │  └─ display_api.rpy     # effects toggles
+│  ├─ ui/                    # composition screens, transforms
+│  ├─ overlays/              # letterbox, info, debug, fades
+│  ├─ shaders/               # CRT and bloom shader code
+│  └─ core/                  # options, logging, room config, utilities
+├─ scripts/                  # push mirroring, wiki sync, etc.
+└─ Wiki/                     # documentation (mirrored to GitHub wiki)
+```
 
 
 ## 📚 Documentation
@@ -107,6 +125,13 @@ The Wiki covers everything from getting started to APIs and internals:
 If you’re new, start with:
 - Wiki/01-Overview.md
 - Wiki/02-Getting-Started.md
+
+## 🛠️ Debug & Effects
+- i: toggle info overlay
+- c: toggle CRT • a: toggle scanline animation
+- 1–4: scanline size presets
+- [ / ]: vignette strength • - / =: vignette width • 0: reset
+- Cmd+Shift+F12 / Ctrl+Shift+F12: cycle debug overlay
 
 
 ## 🧭 Roadmap (Short‑term)
