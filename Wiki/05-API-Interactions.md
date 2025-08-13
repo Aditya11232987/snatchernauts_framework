@@ -10,11 +10,22 @@ Responsibilities
 Behavior
 - `on_object_interact` returns bool. If True, defaults are skipped (you handled it).
 
-Example
+Menu example
 ```renpy
-# In per-room logic
-if obj == 'terminal' and action == 'Use':
-    renpy.say(None, "You access the terminal.")
-    return True
+# Screen (simplified):
+screen object_actions(obj):
+    vbox:
+        for action in get_actions_for(obj):
+            textbutton action action Function(execute_object_action, obj, action)
+```
+
+Hook routing
+```renpy
+init python:
+    def execute_object_action(obj, action):
+        room = current_room()
+        handled = on_object_interact(room, obj, action)
+        if not handled:
+            default_handle(room, obj, action)
 ```
 

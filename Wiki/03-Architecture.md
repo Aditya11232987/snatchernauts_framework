@@ -21,3 +21,54 @@ Data flow
 - Hover/selection changes trigger hooks; handlers may override default behavior.
 - on_object_interact returns bool: True to signal the action has been fully handled.
 
+## Sequence (Mermaid)
+```mermaid
+sequenceDiagram
+  participant Launcher as Ren'Py Launcher
+  participant Script as script.rpy
+  participant Logic as game_logic.rpy
+  participant Screen as room_exploration
+  participant APIs as api/*.rpy
+
+  Launcher->>Script: run project
+  Script->>Script: show info overlay
+  Script->>Logic: on_game_start()
+  Script->>APIs: load_room(default_room)
+  Script->>Screen: call screen room_exploration
+  Screen->>APIs: query objects/actions
+  Screen->>Logic: on_object_hover(room, obj)
+  Screen->>Logic: on_object_interact(room, obj, action)
+  Logic-->>Screen: bool (handled?)
+```
+
+## Components (Mermaid)
+```mermaid
+flowchart LR
+  subgraph Core
+    Options[core/options.rpy]
+    Logging[core/common_logging.rpy]
+  end
+  subgraph APIs
+    RoomAPI[api/room_api.rpy]
+    UIAPI[api/ui_api.rpy]
+    InteractAPI[api/interactions_api.rpy]
+    DisplayAPI[api/display_api.rpy]
+  end
+  subgraph UI
+    Screens[game/ui/*]
+    Overlays[game/overlays/*]
+    Shaders[game/shaders/*]
+  end
+  Logic[logic/game_logic.rpy]
+  Rooms[logic/rooms/*]
+
+  Options --> Logging
+  Core --> APIs
+  RoomAPI --> Screens
+  UIAPI --> Screens
+  InteractAPI --> Screens
+  DisplayAPI --> Overlays
+  Logic --> APIs
+  Rooms --> Logic
+```
+

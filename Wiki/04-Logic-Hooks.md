@@ -14,14 +14,29 @@ Example
 ```renpy
 init python:
     class Room1Logic:
+        def on_game_start(self):
+            # One-time setup
+            renpy.notify("Game start — defaults applied")
         def on_room_enter(self, room):
             renpy.notify(f"Entered {room}")
+        def on_object_hover(self, room, obj):
+            # Update a description label or state, if desired
+            pass
         def on_object_interact(self, room, obj, action):
             if obj == 'poster' and action == 'Examine':
                 renpy.say(None, "It's a retro poster.")
                 return True  # prevent default
+            if obj == 'door' and action == 'Open':
+                renpy.play('audio/door.wav')
+                renpy.say(None, "It budges slightly — locked from the other side.")
+                return True
             return False
 
     register_room_logic('room1', Room1Logic())
 ```
+
+Tips
+- Always return True when you fully handle an interaction to bypass fallback behavior.
+- Use `on_object_hover` to prefetch text or change cursor/tooltip.
+- Keep heavy logic out of screens; call functions from hooks instead.
 
