@@ -54,6 +54,11 @@ init python:
         if not interaction_menu_active:
             store.current_hover_object = obj_name
             try:
+                # Input: mouse hover
+                log_main_event("INPUT", f"hover {obj_name}", scope="mouse")
+            except Exception:
+                pass
+            try:
                 on_object_hover(store.current_room_id, obj_name)
             except Exception:
                 pass

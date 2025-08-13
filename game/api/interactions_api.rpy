@@ -62,6 +62,12 @@ init python:
         interaction_target_object = obj_name
         interaction_selected_action = 0
         store.current_hover_object = obj_name
+        try:
+            actions = INTERACTION_ACTIONS.get(obj_type, [])
+            labels = ", ".join(a.get("label", "?") for a in actions)
+            log_main_event("INTERACTION", f"show defs for {obj_name} type={obj_type} actions=[{labels}]", scope="global")
+        except Exception:
+            pass
         renpy.restart_interaction()
     
     def hide_interaction_menu(keep_object_selected=False, target_object=None):
@@ -104,6 +110,10 @@ init python:
         actions = INTERACTION_ACTIONS.get(obj_type, [])
         if interaction_selected_action < len(actions):
             action = actions[interaction_selected_action]
+            try:
+                log_main_event("INPUT", f"execute action {action['action']} on {interaction_target_object}", scope="keyboard")
+            except Exception:
+                pass
             execute_object_action(interaction_target_object, action["action"])
     def execute_object_action(obj_name, action_type):
         """Execute a specific action on an object"""
@@ -119,6 +129,10 @@ init python:
         except Exception:
             handled = False
         if handled:
+            try:
+                log_main_event("INTERACT", f"{action_type} on {obj_name} handled by room logic", scope="local")
+            except Exception:
+                pass
             return
         if action_type == "talk":
             handle_talk_action(obj_name)
@@ -138,6 +152,10 @@ init python:
             handle_search_action(obj_name)
         elif action_type == "leave":
             renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
+            try:
+                log_main_event("INTERACT", f"leave menu on {obj_name}")
+            except Exception:
+                pass
         else:
             renpy.notify(f"Unknown action: {action_type}")
             renpy.notify(f"Unknown action: {action_type}")
@@ -195,9 +213,21 @@ init python:
         """Confirm selected action (A button when menu is active)"""
         if interaction_menu_active:
             renpy.sound.play("audio/ui/confirm.wav", channel="menu_nav")
+            try:
+                if interaction_target_object:
+                    actions = INTERACTION_ACTIONS.get(store.room_objects[interaction_target_object].get("object_type", "item"), [])
+                    if actions and 0 <= interaction_selected_action < len(actions):
+                        log_main_event("INPUT", f"execute action {actions[interaction_selected_action]['action']} on {interaction_target_object}", scope="controller")
+            except Exception:
+                pass
             execute_selected_action()
         else:
             renpy.sound.play("audio/ui/confirm.wav", channel="menu_nav")
+            try:
+                if store.gamepad_selected_object:
+                    log_main_event("INPUT", f"select {store.gamepad_selected_object}", scope="controller")
+            except Exception:
+                pass
             gamepad_activate_object()
     
     def gamepad_cancel_action():
@@ -217,10 +247,22 @@ init python:
         previous_object = obj_name
         hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
         renpy.sound.play("audio/ui/cancel.wav", channel="menu_nav")
+        try:
+            log_main_event("INTERACT", f"leave menu on {obj_name}", scope="mouse")
+        except Exception:
+            pass
     
+    def execute_object_action_from_mouse(obj_name, action_type):
+        """Mouse-initiated action execution wrapper to tag input source"""
+        try:
+            log_main_event("INPUT", f"execute action {action_type} on {obj_name}", scope="mouse")
+        except Exception:
+            pass
+        execute_object_action(obj_name, action_type)
+
     def get_button_action(obj_name, action_data):
         """Get the appropriate action function for a button based on action type"""
         if action_data["action"] == "leave":
             return Function(mouse_leave_action, obj_name, action_data["action"])
         else:
-            return Function(execute_object_action, obj_name, action_data["action"])
+            return Function(execute_object_action_from_mouse, obj_name, action_data["action"])

@@ -166,7 +166,6 @@ screen room_exploration():
         key "c" action Function(toggle_crt_effect)
         key "f" action Function(fade_out_room_audio)
         key "l" action Function(toggle_letterbox)
-        key "r" action Function(renpy.restart_interaction)
         key "i" action ToggleVariable("show_info_overlay")
         # Toggle CRT scanline animation
         key "a" action Function(toggle_crt_animation)

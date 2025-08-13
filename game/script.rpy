@@ -59,6 +59,11 @@ label go(room, music=None):
 
 # Main entry point - calls the room exploration system
 label start:
+    # Remove R-Reload/Reset and R-Restart shortcuts globally to avoid accidental exits.
+    $ renpy.config.developer = renpy.config.developer  # no-op to ensure config is initialized
+    $ renpy.config.keymap["reload_game"] = []
+    $ renpy.config.keymap["utter_restart"] = []
+
     # Show the info overlay with continue button
     $ show_info_overlay = True
     $ show_continue_button = True

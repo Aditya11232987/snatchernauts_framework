@@ -17,6 +17,13 @@ init 900 python:
         except Exception:
             return True
 
+    def _main_logic_only():
+        """Check if we should only show main game logic events (not verbose function traces)"""
+        try:
+            return bool(getattr(renpy.store, 'sn_log_main_logic_only', True))
+        except Exception:
+            return True
+
     C = {
         'reset': "\033[0m",
         'dim': "\033[2m",
@@ -63,13 +70,35 @@ init 900 python:
             orig = bp
         return orig
 
+    def _direct_print_text(text):
+        try:
+            import sys
+            stream = getattr(sys, '__stdout__', None) or getattr(sys, 'stdout', None)
+            if stream:
+                stream.write(text + "\n")
+                try:
+                    stream.flush()
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
     def _out(s):
         try:
             orig = _get_orig_print()
-            if orig:
+            # If orig resolves to Ren'Py's minstore.print (which routes back to builtins.print),
+            # write directly to the real stdout to avoid recursion.
+            if orig and getattr(orig, '__module__', '').startswith('renpy.'):
+                _direct_print_text(str(s))
+            elif orig:
                 orig(s)
+            else:
+                _direct_print_text(str(s))
         except Exception:
-            pass
+            try:
+                _direct_print_text(str(s))
+            except Exception:
+                pass
 
     def log(msg, line_limit=200):
         if not _enabled():
@@ -96,9 +125,25 @@ init 900 python:
         except Exception:
             pass
 
+    def log_main_event(category, message, scope=None, line_limit=200):
+        """Log main game logic events only (bypasses main_logic_only filter)"""
+        if not _enabled():
+            return
+        try:
+            scope_str = f" ({scope})" if scope else ""
+            prefix = f"[{category}]{scope_str}"
+            line = _truncate_line(f"{prefix} {message}", line_limit)
+            if _use_color():
+                _out(f"{C['yellow']}{prefix}{C['reset']} {message}")
+            else:
+                _out(line)
+        except Exception:
+            pass
+
     def _wrap(name, fn):
         def wrapped(*args, **kwargs):
-            if _enabled():
+            emit_traces = _enabled() and not _main_logic_only()
+            if emit_traces:
                 try:
                     args_s = ', '.join(_short_repr(a, 80) for a in args)
                     kwargs_s = ', '.join(f"{k}={_short_repr(v, 80)}" for k, v in kwargs.items())
@@ -114,13 +159,13 @@ init 900 python:
                 except Exception:
                     pass
             rv = fn(*args, **kwargs)
-            if _enabled():
+            if emit_traces:
                 try:
                     rv_s = _short_repr(rv, 120)
                     if _use_color():
-                        msg = f"{C['magenta']}EXIT{C['reset']} {C['yellow']}{name}{C['reset']} -> {C['dim']}{rv_s}{C['reset']}"
+                        msg = f"{C['magenta']}EXIT{C['reset']} {C['yellow']}{name}{C['reset']} -\u003e {C['dim']}{rv_s}{C['reset']}"
                     else:
-                        msg = f"EXIT {name} -> {rv_s}"
+                        msg = f"EXIT {name} -\u003e {rv_s}"
                     log(msg)
                 except Exception:
                     pass
@@ -133,17 +178,40 @@ init 900 python:
             intercept = getattr(renpy.store, 'sn_log_intercept_prints', True)
         except Exception:
             intercept = True
-        orig = _get_orig_print()
+        # During Ren'Py reloads, _get_orig_print may not yet be defined in this module's globals.
+        # Guard against that by resolving safely and falling back to builtins.print.
+        try:
+            orig = _get_orig_print()  # type: ignore[name-defined]
+        except Exception:
+            orig = None
         if not orig:
-            return
+            try:
+                orig = globals().get('ORIG_PRINT', None)
+            except Exception:
+                orig = None
+        if not orig:
+            try:
+                orig = getattr(_builtins, 'print', None)
+            except Exception:
+                orig = None
+        # If orig is Ren'Py's minstore.print or loops back to our wrapper, use direct stdout writer.
+        use_direct = False
+        if not orig or orig is globals().get('_sn_print', None):
+            use_direct = True
+        elif getattr(orig, '__module__', '').startswith('renpy.'):
+            use_direct = True
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
         text = sep.join(str(a) for a in args)
         if '\n' in text:
-            lines = text.splitlines()
+            # Use tuple instead of list to avoid Ren'Py __renpy__list__ bootstrap issues
+            lines = tuple(text.split('\n'))
         else:
-            lines = [text]
-        use_color = _use_color()
+            lines = (text,)
+        try:
+            use_color = bool(getattr(renpy.store, 'sn_log_color', True))
+        except Exception:
+            use_color = False
         if intercept and _enabled():
             for i, line in enumerate(lines):
                 pline = _truncate_line(line, 200)
@@ -152,10 +220,16 @@ init 900 python:
                         pline = f"{C['gray']}::{C['reset']} " + pline
                     else:
                         pline = ":: " + pline
-                orig(pline, end=(end if i == len(lines)-1 else '\n'))
+                if use_direct:
+                    _direct_print_text(pline if (i == len(lines)-1) else pline)
+                else:
+                    orig(pline, end=(end if i == len(lines)-1 else '\n'))
         else:
             # Pass through untouched
-            orig(text, end=end)
+            if use_direct:
+                _direct_print_text(text)
+            else:
+                orig(text, end=end)
 
     try:
         if ORIG_PRINT and getattr(_builtins.print, '_sn_wrapped', False) is False:
@@ -167,8 +241,13 @@ init 900 python:
         if not getattr(_builtins.print, '_sn_wrapped', False):
             # Capture whatever print currently is as the original and store it on the wrapper
             try:
-                ORIG_PRINT = getattr(_builtins, 'print', None)
+                prev_print = getattr(_builtins, 'print', None)
             except Exception:
+                prev_print = None
+            # If previous print is Ren'Py's minstore.print, don't treat it as a safe sink to avoid recursion
+            if prev_print and not getattr(prev_print, '__module__', '').startswith('renpy.'):
+                ORIG_PRINT = prev_print
+            else:
                 ORIG_PRINT = None
             try:
                 _sn_print._orig_print = ORIG_PRINT  # type: ignore[attr-defined]

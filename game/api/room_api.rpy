@@ -256,6 +256,10 @@ init python:
     def load_room(room_id):
         if room_id in ROOM_DEFINITIONS:
             store.current_room_id = room_id
+            try:
+                log_main_event("ROOM", f"enter {room_id}")
+            except Exception:
+                pass
             import copy
             store.room_objects = copy.deepcopy(ROOM_DEFINITIONS[room_id]["objects"])
             store.room_background = ROOM_DEFINITIONS[room_id]["background"]
@@ -279,6 +283,10 @@ init python:
     def play_room_audio(room_id):
         try:
             audio_file = f"audio/{room_id}.mp3"
+            try:
+                log_main_event("AUDIO", f"play music {audio_file}")
+            except Exception:
+                pass
             print(f"Attempting to play audio for room {room_id}: {audio_file}")
         except Exception as e:
             print(f"No audio file found for room {room_id} or error playing audio: {str(e)}")
@@ -286,6 +294,10 @@ init python:
     
     def fade_out_room_audio(duration=2.0):
         try:
+            try:
+                log_main_event("AUDIO", f"fade out music {duration:.2f}s")
+            except Exception:
+                pass
             renpy.music.stop(channel="music", fadeout=duration)
             print(f"Fading out room audio over {duration} seconds")
         except Exception as e:
@@ -296,6 +308,10 @@ init python:
         if not hasattr(store, 'crt_enabled'):
             store.crt_enabled = False
         store.crt_enabled = not store.crt_enabled
+        try:
+            log_main_event("VAR", f"crt_enabled={'on' if store.crt_enabled else 'off'}")
+        except Exception:
+            pass
         renpy.notify(f"CRT effect {'enabled' if store.crt_enabled else 'disabled'}")
         renpy.restart_interaction()
     
@@ -304,6 +320,10 @@ init python:
         store.crt_scan = scan
         store.crt_chroma = chroma
         store.crt_scanline_size = scanline_size
+        try:
+            log_main_event("ANIM", f"crt params warp={warp}, scan={scan}, chroma={chroma}, scanline_size={scanline_size}")
+        except Exception:
+            pass
         renpy.notify(f"CRT parameters updated: warp={warp}, scan={scan}, chroma={chroma}, scanline_size={scanline_size}")
         if hasattr(store, 'crt_enabled') and store.crt_enabled:
             renpy.restart_interaction()
@@ -312,6 +332,10 @@ init python:
         if not hasattr(store, 'crt_animated'):
             store.crt_animated = False
         store.crt_animated = not store.crt_animated
+        try:
+            log_main_event("ANIM", f"crt_animation={'on' if store.crt_animated else 'off'}")
+        except Exception:
+            pass
         renpy.notify(f"CRT animation {'enabled' if store.crt_animated else 'disabled'}")
         if hasattr(store, 'crt_enabled') and store.crt_enabled:
             renpy.restart_interaction()
@@ -345,6 +369,10 @@ init python:
 
         store.crt_vignette_strength = strength
         store.crt_vignette_width = width
+        try:
+            log_main_event("ANIM", f"vignette strength={strength:.2f}, width={width:.2f}")
+        except Exception:
+            pass
         renpy.notify(f"Vignette: strength={strength:.2f}, width={width:.2f}")
         if hasattr(store, 'crt_enabled') and store.crt_enabled:
             renpy.restart_interaction()
@@ -421,12 +449,20 @@ init python:
         if not store.gamepad_selected_object or store.gamepad_selected_object not in store.room_objects:
             store.gamepad_selected_object = obj_list[0]
             store.current_hover_object = store.gamepad_selected_object
+            try:
+                log_main_event("INPUT", f"hover {store.gamepad_selected_object}", scope="controller")
+            except Exception:
+                pass
             renpy.restart_interaction()
             return
         next_obj = find_nearest_object(store.gamepad_selected_object, direction)
         if next_obj:
             store.gamepad_selected_object = next_obj
             store.current_hover_object = next_obj
+            try:
+                log_main_event("INPUT", f"hover {next_obj}", scope="controller")
+            except Exception:
+                pass
             renpy.restart_interaction()
     
     def gamepad_select_first_object():
@@ -434,10 +470,18 @@ init python:
         if obj_list:
             store.gamepad_selected_object = obj_list[0]
             store.current_hover_object = obj_list[0]
+            try:
+                log_main_event("INPUT", f"hover {obj_list[0]}", scope="controller")
+            except Exception:
+                pass
             renpy.restart_interaction()
     
     def toggle_gamepad_navigation():
         store.gamepad_navigation_enabled = not store.gamepad_navigation_enabled
+        try:
+            log_main_event("VAR", f"gamepad_navigation={'on' if store.gamepad_navigation_enabled else 'off'}")
+        except Exception:
+            pass
         if not store.gamepad_navigation_enabled:
             store.gamepad_selected_object = None
             if store.current_hover_object == store.gamepad_selected_object:

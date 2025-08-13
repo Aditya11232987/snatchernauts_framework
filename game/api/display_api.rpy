@@ -52,11 +52,19 @@ init python:
         """Temporarily hide an object from display"""
         if obj_name in store.room_objects:
             store.room_objects[obj_name]["_hidden"] = True
+            try:
+                log_main_event("VAR", f"hide {obj_name}")
+            except Exception:
+                pass
     
     def show_object(obj_name):
         """Show a previously hidden object"""
         if obj_name in store.room_objects:
             store.room_objects[obj_name]["_hidden"] = False
+            try:
+                log_main_event("VAR", f"show {obj_name}")
+            except Exception:
+                pass
     
     def is_object_hidden(obj_data):
         """Check if an object is hidden"""
