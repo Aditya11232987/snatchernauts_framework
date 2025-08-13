@@ -1,4 +1,7 @@
 {
+  "name": "snatchernauts_framework",
+  "version": "0.5.2",
+  "description": "Retro-cinematic interactive visual novel framework with shader effects and detective exploration",
   "build_update": false,
   "packages": [
     "mac",
