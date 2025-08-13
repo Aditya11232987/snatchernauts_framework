@@ -211,3 +211,7 @@ init python:
 ## by a slash.
 
 # define build.itch_project = "renpytom/test-project"
+# Snatchernauts logging controls (can be toggled at runtime)
+default sn_log_enabled = True
+default sn_log_color = True
+default sn_log_intercept_prints = True
