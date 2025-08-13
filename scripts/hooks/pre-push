@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Non-blocking pre-push reminder for wiki sync. Auto-sync if AUTO_SYNC_WIKI=1
+set -euo pipefail
+
+RED="\033[31m"; YEL="\033[33m"; NC="\033[0m"
+
+warn() { printf "${YEL}[pre-push] %s${NC}\n" "$*"; }
+info() { printf "[pre-push] %s\n" "$*"; }
+
+# Detect recent changes in Wiki/ among the last 20 commits on the current branch.
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD || echo "")
+if [[ -n "$CURRENT_BRANCH" ]]; then
+  if git log -n 20 --name-only --pretty=format: | grep -qE '^Wiki/'; then
+    if [[ "${AUTO_SYNC_WIKI:-0}" == "1" ]]; then
+      info "Wiki changes detected. AUTO_SYNC_WIKI=1 → syncing to GitHub wiki before push..."
+      if bash scripts/sync-github-wiki.sh; then
+        info "Wiki sync completed."
+      else
+        warn "Wiki sync failed; continuing with code push."
+      fi
+    else
+      warn "Wiki changes detected. Run 'make wiki-sync' (or set AUTO_SYNC_WIKI=1 to auto-sync)."
+    fi
+  fi
+fi
+
+# Always exit 0 so we don't block pushes
+exit 0

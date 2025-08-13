@@ -1,0 +1,41 @@
+name: Wiki Sync
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Prepare wiki content
+        run: |
+          set -euo pipefail
+          if [ ! -d Wiki ]; then
+            echo "No Wiki/ directory present; skipping." && exit 0
+          fi
+          rsync -a --delete Wiki/ wiki-tmp/
+
+      - name: Push to GitHub Wiki
+        if: ${{ hashFiles('Wiki/**') != '' }}
+        env:
+          GH_WIKI_TOKEN: ${{ secrets.GH_WIKI_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_WIKI_TOKEN:-}" ]; then
+            echo "GH_WIKI_TOKEN is not set. Create a repo secret with a PAT that has 'repo' scope (or 'wiki' access) and re-run." && exit 1
+          fi
+          cd wiki-tmp
+          git init -q
+          git checkout -q -b master
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" commit -q -m "chore(wiki): sync from repo Wiki/"
+          # Use token auth over HTTPS to push to the wiki repo
+          GITHUB_WIKI_URL="https://x-access-token:${GH_WIKI_TOKEN}@github.com/grahfmusic/snatchernauts_framework.wiki.git"
+          git push -f "$GITHUB_WIKI_URL" master
