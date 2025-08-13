@@ -1,5 +1,8 @@
 # Snatchernauts Framework
 
+[![version](https://img.shields.io/badge/version-0.5-blue)](CHANGELOG.md)
+[![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 Modern Ren'Py 8.4.x framework for point‑and‑click room exploration with floating descriptions, interaction menus, and configurable CRT/Bloom effects. Centralized hooks make gameplay logic easy to add and test.
 
 Version: 0.5 • License: MIT
