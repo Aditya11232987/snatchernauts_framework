@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="snatcher-logo.png" alt="Snatchernauts Logo" style="max-width: 480px; width: 100%;" />
+</div>
+
 # Build 6 Distribute
 
 Local
