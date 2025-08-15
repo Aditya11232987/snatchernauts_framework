@@ -190,23 +190,103 @@ def on_object_interact(room_id, obj, action) -> bool:
 ### 🗺️ Project Layout
 
 ```
-project/
-├─ game/
-│  ├─ logic/                 # global + per-room gameplay hooks
-│  │  ├─ game_logic.rpy
-│  │  └─ rooms/              # register_room_logic('<room>', Handler())
-│  ├─ api/                   # public helper APIs
-│  │  ├─ room_api.rpy        # room/object helpers
-│  │  ├─ ui_api.rpy          # UI helpers
-│  │  ├─ interactions_api.rpy# action routing
-│  │  └─ display_api.rpy     # effects toggles
-│  ├─ ui/                    # composition screens, transforms
-│  ├─ overlays/              # letterbox, info, debug, fades
-│  ├─ shaders/               # CRT and bloom shader code
-│  └─ core/                  # options, logging, room config, utilities
-├─ scripts/                  # push mirroring, wiki sync, etc.
-└─ Wiki/                     # documentation (mirrored to GitHub wiki)
+snatchernauts-framework/
+├── game/                          # Main game directory
+│   ├── script.rpy                # Main entry point and game flow
+│   ├── api/                       # Framework APIs
+│   │   ├── room_api.rpy          # Room management functions
+│   │   ├── display_api.rpy       # Display and visual functions
+│   │   ├── interactions_api.rpy  # Player interaction handling
+│   │   └── ui_api.rpy            # UI and screen management
+│   ├── core/                      # Core framework functionality
+│   │   ├── options.rpy           # Game configuration and settings
+│   │   ├── common_utils.rpy      # Shared utility functions
+│   │   ├── common_logging.rpy    # Logging and debug functions
+│   │   ├── room_utils.rpy        # Room-specific utilities
+│   │   └── rooms/                # Room configuration system
+│   │       └── room_config.rpy   # Room definitions and editor
+│   ├── logic/                     # Game logic implementation
+│   │   └── game_logic.rpy        # Global game logic hooks
+│   ├── ui/                        # User interface screens
+│   │   ├── screens_room.rpy      # Room exploration screens
+│   │   ├── screens_interactions.rpy # Interaction menu screens
+│   │   └── room_descriptions.rpy # Description box management
+│   ├── overlays/                  # Screen overlays
+│   │   ├── info_overlay.rpy      # Information and help overlay
+│   │   ├── debug_overlay.rpy     # Development debug overlay
+│   │   ├── letterbox_gui.rpy     # Letterbox effect overlay
+│   │   └── fade_overlay.rpy      # Screen transition overlays
+│   ├── shaders/                   # Visual effect shaders
+│   │   ├── crt_shader.rpy        # CRT monitor effect
+│   │   ├── letterbox_shader_v2.rpy # Enhanced letterbox shader
+│   │   └── neo_noir_*.rpy        # Neo-noir atmosphere effects
+│   ├── rooms/                     # Room definitions and assets
+│   │   ├── room1/                # Example room with assets and scripts
+│   │   ├── room2/                # Additional example rooms
+│   │   └── room3/                # Room-specific configurations
+│   ├── images/                    # Game images and sprites
+│   │   ├── backgrounds/          # Room background images
+│   │   ├── objects/              # Interactive object sprites
+│   │   └── ui/                   # UI element graphics
+│   ├── audio/                     # Game audio files
+│   │   ├── music/                # Background music tracks
+│   │   └── sounds/               # Sound effects
+│   ├── fonts/                     # Custom font files
+│   └── gui/                       # Ren'Py GUI system files
+├── scripts/                       # Development and automation tools
+│   ├── run-game.sh               # 🎮 Unified game launcher (lint + debug options)
+│   ├── lint.sh                   # 🔍 Ren'Py code linting
+│   ├── push-both.sh              # 🚀 Push to GitLab + GitHub simultaneously
+│   ├── sync-github-wiki.sh       # 📚 Manual wiki synchronization to GitHub
+│   ├── github-init.sh            # 🔗 Initialize GitHub remote repository
+│   └── hooks/                    # Git hooks for automation
+│       └── pre-push             # ⚠️  Auto-sync wiki on push (if enabled)
+├── Wiki/                          # Documentation (auto-synced to wikis)
+│   ├── 01-Overview.md            # Framework introduction and concepts
+│   ├── 02-Getting-Started.md     # Zero-to-hero tutorial
+│   ├── 03-Architecture.md        # System design and best practices
+│   ├── 04-Logic-Hooks.md         # Game logic system documentation
+│   ├── 05-API-*.md               # Complete API reference library
+│   ├── 06-Screens-and-UI.md     # UI system documentation
+│   ├── 07-Effects-and-Shaders.md # Visual effects manual
+│   ├── 08-Build-and-Distribute.md # Production deployment guide
+│   ├── 09-Examples.md            # Extensive code examples
+│   ├── 10-Troubleshooting.md     # Problem-solving guide
+│   └── DeveloperManual.md        # Complete developer manual
+├── .gitlab-ci.yml                # CI/CD pipeline (auto-wiki sync)
+├── CHANGELOG.md                  # Version history and release notes
+├── README.md                     # This comprehensive guide
+├── LICENSE                       # MIT license
+└── project.json                  # Ren'Py project configuration
 ```
+
+### 🛠️ **Development Scripts Explained**
+
+**🎮 `run-game.sh`** — **Your main development launcher**  
+    • `--lint` — Run code checks before launching  
+    • `--debug` — Launch with debug console visible  
+    • `--compile` — Force recompilation before launch  
+    • Auto-detects Ren'Py SDK path and validates setup
+
+**🚀 `push-both.sh`** — **Synchronized repository management**  
+    • Pushes to both GitLab (primary) and GitHub (mirror) simultaneously  
+    • Handles branches and tags across both platforms  
+    • Supports `all` branches or specific branch targeting
+
+**📚 `sync-github-wiki.sh`** — **Manual wiki synchronization**  
+    • Syncs local `Wiki/` directory to GitHub wiki repository  
+    • Creates clean snapshot with force-push to wiki repo  
+    • Includes `dry-run` mode for testing
+
+**🔗 `github-init.sh`** — **Repository setup automation**  
+    • Converts any GitHub URL format to SSH  
+    • Sets up origin remote with proper branch naming  
+    • Handles initial repository connection and push
+
+**⚠️ `pre-push` hook** — **Automatic wiki sync**  
+    • Detects wiki changes in recent commits  
+    • Auto-syncs wiki if `AUTO_SYNC_WIKI=1` environment variable set  
+    • Non-blocking — never prevents code pushes
 
 ---
 

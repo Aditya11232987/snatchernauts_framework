@@ -125,25 +125,19 @@ snatchernauts-framework/
 │   │   ├── options.rpy           # Game configuration and settings
 │   │   ├── common_utils.rpy      # Shared utility functions
 │   │   ├── common_logging.rpy    # Logging and debug functions
-│   │   ├── config_builders.rpy   # Configuration building helpers
-│   │   ├── object_factory.rpy    # Object creation utilities
-│   │   ├── bloom_utils.rpy       # Bloom effect utilities
-│   │   ├── bloom_colors.rpy      # Bloom color presets
 │   │   ├── room_utils.rpy        # Room-specific utilities
-│   │   └── rooms/                # Room configuration
+│   │   └── rooms/                # Room configuration system
 │   │       └── room_config.rpy   # Room definitions and editor
 │   ├── logic/                     # Game logic implementation
-│   │   ├── game_logic.rpy        # Global game logic hooks
-│   │   └── rooms/                # Room-specific logic
-│   │       └── room1_logic.rpy   # Example room logic
-│   ├── ui/                        # User interface components
+│   │   └── game_logic.rpy        # Global game logic hooks
+│   ├── rooms/                     # Room definitions and assets
+│   │   ├── room1/                # Example room with assets and scripts
+│   │   ├── room2/                # Additional example rooms
+│   │   └── room3/                # Room-specific configurations
+│   ├── ui/                        # User interface screens
 │   │   ├── screens_room.rpy      # Room exploration screens
 │   │   ├── screens_interactions.rpy # Interaction menu screens
-│   │   ├── screens_bloom.rpy     # Bloom effect screens
-│   │   ├── room_descriptions.rpy # Description box management
-│   │   ├── room_ui.rpy           # Additional UI components
-│   │   ├── room_transforms.rpy   # UI animations and transforms
-│   │   └── screens.rpy           # General screen definitions
+│   │   └── room_descriptions.rpy # Description box management
 │   ├── overlays/                  # Screen overlays
 │   │   ├── info_overlay.rpy      # Information and help overlay
 │   │   ├── debug_overlay.rpy     # Development debug overlay
@@ -151,43 +145,41 @@ snatchernauts-framework/
 │   │   └── fade_overlay.rpy      # Screen transition overlays
 │   ├── shaders/                   # Visual effect shaders
 │   │   ├── crt_shader.rpy        # CRT monitor effect
-│   │   └── bloom_shader.rpy      # Bloom lighting effect
+│   │   ├── letterbox_shader_v2.rpy # Enhanced letterbox shader
+│   │   └── neo_noir_*.rpy        # Neo-noir atmosphere effects
 │   ├── images/                    # Game images and sprites
 │   │   ├── backgrounds/          # Room background images
 │   │   ├── objects/              # Interactive object sprites
-│   │   ├── ui/                   # UI element graphics
-│   │   └── effects/              # Visual effect assets
+│   │   └── ui/                   # UI element graphics
 │   ├── audio/                     # Game audio files
 │   │   ├── music/                # Background music tracks
-│   │   ├── sounds/               # Sound effects
-│   │   └── voice/                # Voice acting files
-│   └── fonts/                     # Custom font files
-├── Wiki/                          # Documentation
-│   ├── 01-Overview.md            # Framework overview
-│   ├── 02-Getting-Started.md     # Getting started guide
-│   ├── 03-Architecture.md        # Architecture documentation
-│   ├── 04-Logic-Hooks.md         # Logic system documentation
-│   ├── 05-API-*.md               # API reference documentation
+│   │   └── sounds/               # Sound effects
+│   ├── fonts/                     # Custom font files
+│   └── gui/                       # Ren'Py GUI system files
+├── scripts/                       # Development and automation tools
+│   ├── run-game.sh               # 🎮 Unified game launcher with options
+│   ├── lint.sh                   # 🔍 Ren'Py code linting
+│   ├── push-both.sh              # 🚀 Push to GitLab + GitHub simultaneously
+│   ├── sync-github-wiki.sh       # 📚 Manual wiki synchronization to GitHub
+│   ├── github-init.sh            # 🔗 Initialize GitHub remote repository
+│   └── hooks/                    # Git hooks for automation
+│       └── pre-push             # ⚠️ Auto-sync wiki on push (if enabled)
+├── Wiki/                          # Documentation (auto-synced to wikis)
+│   ├── 01-Overview.md            # Framework introduction and concepts
+│   ├── 02-Getting-Started.md     # Zero-to-hero tutorial
+│   ├── 03-Architecture.md        # System design and best practices
+│   ├── 04-Logic-Hooks.md         # Game logic system documentation
+│   ├── 05-API-*.md               # Complete API reference library
 │   ├── 06-Screens-and-UI.md     # UI system documentation
-│   ├── 07-Effects-and-Shaders.md # Visual effects documentation
-│   ├── 08-Build-and-Distribute.md # Build and deployment guide
-│   ├── 09-Examples.md            # Usage examples
-│   ├── 10-Troubleshooting.md     # Troubleshooting guide
+│   ├── 07-Effects-and-Shaders.md # Visual effects manual
+│   ├── 08-Build-and-Distribute.md # Production deployment guide
+│   ├── 09-Examples.md            # Extensive code examples
+│   ├── 10-Troubleshooting.md     # Problem-solving guide
 │   └── DeveloperManual.md        # This document
-├── scripts/                       # Development and build scripts
-│   ├── build.py                  # Automated build script
-│   ├── setup_ci.py              # CI environment setup
-│   └── optimize_assets.py       # Asset optimization
-├── tools/                         # Development tools
-│   └── room_editor/              # Visual room editor (if available)
-├── tests/                         # Test files
-│   ├── unit/                     # Unit tests
-│   └── integration/              # Integration tests
-├── .gitignore                     # Git ignore rules
-├── .gitlab-ci.yml                # GitLab CI/CD configuration
-├── CHANGELOG.md                  # Version history
-├── README.md                     # Project overview
-├── LICENSE                       # Project license
+├── .gitlab-ci.yml                # GitLab CI/CD configuration (auto-wiki sync)
+├── CHANGELOG.md                  # Version history and release notes
+├── README.md                     # Comprehensive framework guide
+├── LICENSE                       # MIT license
 └── project.json                  # Ren'Py project configuration
 ```
 
