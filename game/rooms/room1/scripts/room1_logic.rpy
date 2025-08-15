@@ -25,6 +25,29 @@ init -1 python:
             except Exception:
                 pass
 
+            # Per-room shader defaults (Room1): bright neon grade + street lamp lighting + moderate grain
+            try:
+                from renpy.store import shader_states
+                def _set(shader_name: str, preset_id: str):
+                    state = shader_states.get(shader_name)
+                    if not state:
+                        return
+                    presets = state.get("presets", [])
+                    if preset_id in presets:
+                        state["current"] = presets.index(preset_id)
+                _set('color_grading', 'detective_office')
+                _set('lighting', 'car_headlights')
+                _set('film_grain', 'moderate')
+                store.lighting_strength = 1.0
+                store.lighting_animated = True
+                store.lighting_anim_speed = 0.6
+                
+                # Room-specific visual setup complete
+                
+                renpy.restart_interaction()
+            except Exception:
+                pass
+
             # If 'patreon' was already taken, keep it hidden when re-entering.
             try:
                 if getattr(persistent, 'room1_patreon_taken', False):

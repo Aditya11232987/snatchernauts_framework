@@ -59,6 +59,9 @@ init python:
                 ),
             ])
 
+        # Basic shader info (CRT and bloom only)
+        info.append("Shaders: CRT and Bloom available")
+
         # Hovered object details + bloom color
         hov = getattr(store, 'current_hover_object', None)
         objs = getattr(store, 'room_objects', {}) or {}
@@ -71,20 +74,18 @@ init python:
                 "  desc len={} float_intensity={} box_pos={}".format(
                     len(o.get('description', '') or ''), o.get('float_intensity', 1.0), o.get('box_position', 'auto')
                 ),
-                "  bloom: en={} int={:.2f} rad={:.2f} soft={:.2f} a=({:.2f}-{:.2f}) speed={:.2f}".format(
-                    o.get('bloom_enabled', True),
-                    float(o.get('bloom_intensity', 0.5)),
-                    float(o.get('bloom_radius', 8.0)),
-                    float(o.get('bloom_softness', 0.7)),
-                    float(o.get('bloom_alpha_min', 0.2)),
-                    float(o.get('bloom_alpha_max', 0.6)),
-                    float(o.get('bloom_pulse_speed', 1.0))
+                "  desat: en={} int={:.2f} a=({:.2f}-{:.2f}) speed={:.2f} fade={:.2f}".format(
+                    o.get('desaturation_enabled', o.get('bloom_enabled', True)),
+                    float(o.get('desaturation_intensity', o.get('bloom_intensity', 0.5))),
+                    float(o.get('desaturation_alpha_min', o.get('bloom_alpha_min', 0.2))),
+                    float(o.get('desaturation_alpha_max', o.get('bloom_alpha_max', 0.6))),
+                    float(o.get('desaturation_pulse_speed', o.get('bloom_pulse_speed', 1.0))),
+                    float(o.get('desaturation_fade_duration', 0.3))
                 ),
             ])
             try:
-                fallback_color = o.get("bloom_color", "#ffffff")
-                bloom_color = get_bloom_color(o["image"], fallback_color)
-                info.append("  bloom color={}".format(bloom_color))
+                # Note: Bloom color extraction removed - desaturation used instead
+                info.append("  highlighting: desaturation-based (bloom deprecated)")
             except Exception:
                 pass
 
@@ -140,8 +141,9 @@ define DEBUG_TEXT_STYLE = {
 
 default debug_overlay_visible = False
 default debug_verbose_level = 0
-default debug_ui_x = 10
-default debug_ui_y = 10
+# Position in lower-right corner by default
+default debug_ui_x = config.screen_width - 390
+default debug_ui_y = config.screen_height - 230
 
 init python:
     def _snap_debug_overlay(corner):
@@ -183,6 +185,9 @@ screen debug_overlay():
     # Put debug info on a high z-order to appear above letterbox
     zorder 200
 
+    # F9 toggle for quick debug access (works in any mode)
+    key "K_F9" action ToggleVariable("debug_overlay_visible")
+
     if is_developer_mode():
         # Verbosity bump: Cmd+Shift+F12 (mac) or Ctrl+Shift+F12
         key "meta_shift_K_F12" action Function(bump_debug_verbosity)
@@ -193,8 +198,8 @@ screen debug_overlay():
         key "K_F3" action Function(_snap_debug_overlay, 'bl')
         key "K_F4" action Function(_snap_debug_overlay, 'br')
 
-        if debug_overlay_visible:
-            use debug_overlay_body
+    if debug_overlay_visible:
+        use debug_overlay_body
 
 screen debug_overlay_body():
     # Compute info lines for current verbosity and add perf line

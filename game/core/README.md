@@ -1,7 +1,7 @@
 Core utilities and configuration modules.
 
 - common_utils.rpy, room_utils.rpy: helpers.
-- bloom_utils.rpy, bloom_colors.rpy: bloom logic.
+- desaturation_utils.rpy, bloom_colors.rpy: desaturation highlighting logic.
 - config_builders.rpy, object_factory.rpy: config + factory.
 - font_config.rpy: font configuration.
 - options.rpy: Ren'Py project options.

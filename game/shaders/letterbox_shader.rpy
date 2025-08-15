@@ -38,236 +38,54 @@ init python:
         """
     )
 
-# Letterbox animation transforms
-transform letterbox_fade_in(duration=0.8):
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_alpha 0.0
-    parallel:
-        ease duration u_letterbox_alpha 1.0
+# OLD LETTERBOX TRANSFORMS REMOVED - NOW USING letterbox_shader_v2.rpy
 
-transform letterbox_fade_out(duration=0.8):
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_alpha 1.0
-    parallel:
-        ease duration u_letterbox_alpha 0.0
-
-transform letterbox_instant_on():
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_alpha 1.0
-
-transform letterbox_instant_off():
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_alpha 0.0
-
-# Dynamic letterbox transforms with configurable parameters
-transform letterbox_dynamic_fade_in(duration=0.8, height=80, color=(0.0, 0.0, 0.0)):
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_color color
-    u_letterbox_height 0.0
-    u_letterbox_alpha 0.0
-    parallel:
-        ease duration u_letterbox_height height
-    parallel:
-        ease duration u_letterbox_alpha 1.0
-
-transform letterbox_dynamic_fade_out(duration=0.8, height=80, color=(0.0, 0.0, 0.0)):
-    mesh True
-    shader "letterbox_shader"
-    u_model_size (config.screen_width, config.screen_height)
-    u_letterbox_color color
-    u_letterbox_height height
-    u_letterbox_alpha 1.0
-    parallel:
-        ease duration u_letterbox_height 0.0
-    parallel:
-        ease duration u_letterbox_alpha 0.0
-
-# Letterbox control variables
-default letterbox_shader_active = False
-default letterbox_shader_height = 80.0
-default letterbox_shader_color = (0.0, 0.0, 0.0)
-default letterbox_shader_duration = 0.8
-
-# Framework integration functions
-init python:
-    def show_letterbox_shader(duration=None, height=None, color=None, wait_for_animation=False):
-        """Show letterbox effect using shader system.
-        
-        Args:
-            duration: Animation duration in seconds (default: 0.8)
-            height: Height of letterbox bars in pixels (default: 80.0)
-            color: RGB color tuple for bars (default: (0.0, 0.0, 0.0))
-            wait_for_animation: Whether to pause execution during animation
-        """
-        global letterbox_shader_active, letterbox_shader_height, letterbox_shader_color, letterbox_shader_duration
-        
-        if duration is None:
-            duration = letterbox_shader_duration
-        if height is None:
-            height = letterbox_shader_height
-        if color is None:
-            color = letterbox_shader_color
-            
-        letterbox_shader_active = True
-        letterbox_shader_height = height
-        letterbox_shader_color = color
-        letterbox_shader_duration = duration
-        
-        # Show the letterbox overlay screen if not already shown
-        if not renpy.get_screen("letterbox_shader_overlay"):
-            renpy.show_screen("letterbox_shader_overlay")
-        
-        # Restart interaction to trigger animations
-        renpy.restart_interaction()
-        
-        # Wait for animation to complete if requested
-        if wait_for_animation:
-            renpy.pause(duration, hard=True)
-            
-        return
-    
-    def hide_letterbox_shader(duration=None, wait_for_animation=False):
-        """Hide letterbox effect using shader system.
-        
-        Args:
-            duration: Animation duration in seconds (default: 0.8)
-            wait_for_animation: Whether to pause execution during animation
-        """
-        global letterbox_shader_active, letterbox_shader_duration
-        
-        if duration is None:
-            duration = letterbox_shader_duration
-            
-        if not letterbox_shader_active:
-            return
-            
-        letterbox_shader_active = False
-        letterbox_shader_duration = duration
-        
-        # Trigger hide animations by restarting interaction
-        if renpy.get_screen("letterbox_shader_overlay"):
-            renpy.restart_interaction()
-            
-            # Wait for the fade-out animation to complete
-            if wait_for_animation:
-                renpy.pause(duration, hard=True)
-            
-            # Schedule screen removal after animation
-            renpy.call_in_new_context("letterbox_shader_cleanup", duration)
-        
-        return
-    
-    def toggle_letterbox_shader():
-        """Toggle letterbox shader on/off"""
-        if letterbox_shader_active:
-            hide_letterbox_shader()
-        else:
-            show_letterbox_shader()
-    
-    def set_letterbox_shader_params(height=None, color=None, duration=None):
-        """Set letterbox shader parameters
-        
-        Args:
-            height: Height of letterbox bars in pixels
-            color: RGB color tuple for bars
-            duration: Default animation duration
-        """
-        global letterbox_shader_height, letterbox_shader_color, letterbox_shader_duration
-        
-        if height is not None:
-            letterbox_shader_height = height
-        if color is not None:
-            letterbox_shader_color = color  
-        if duration is not None:
-            letterbox_shader_duration = duration
-        
-        # Refresh the screen if letterbox is active
-        if letterbox_shader_active and renpy.get_screen("letterbox_shader_overlay"):
-            renpy.restart_interaction()
-
-# Letterbox shader overlay screen (renders above content, below UI)
-screen letterbox_shader_overlay():
-    # High z-order to appear above room content but below UI (which is typically 100+)
-    zorder 95
-    
-    # Full screen overlay with letterbox shader
-    if letterbox_shader_active:
-        add Solid("#0000") at letterbox_dynamic_fade_in(
-            letterbox_shader_duration, 
-            letterbox_shader_height, 
-            letterbox_shader_color
-        ):
-            xsize config.screen_width
-            ysize config.screen_height
-    else:
-        add Solid("#0000") at letterbox_dynamic_fade_out(
-            letterbox_shader_duration, 
-            letterbox_shader_height, 
-            letterbox_shader_color
-        ):
-            xsize config.screen_width
-            ysize config.screen_height
-
-# Cleanup label for removing letterbox screen after fade-out
-label letterbox_shader_cleanup(duration):
-    $ renpy.pause(duration, hard=True)
-    $ renpy.hide_screen("letterbox_shader_overlay")
-    return
-
-# Developer controls for testing letterbox shader
-screen letterbox_shader_controls():
-    if config.developer:
-        zorder 200
-        
-        frame:
-            xalign 0.98
-            yalign 0.02
-            padding (10, 5)
-            background "#000000dd"
-            
-            vbox:
-                text "Letterbox Shader" size 14 color "#ffffff"
-                null height 5
-                
-                textbutton "Toggle" action Function(toggle_letterbox_shader) text_size 12
-                
-                hbox:
-                    text "Height:" size 10 color "#cccccc"
-                    textbutton "60" action Function(set_letterbox_shader_params, height=60.0) text_size 10
-                    textbutton "80" action Function(set_letterbox_shader_params, height=80.0) text_size 10  
-                    textbutton "100" action Function(set_letterbox_shader_params, height=100.0) text_size 10
-                
-                hbox:
-                    text "Color:" size 10 color "#cccccc"
-                    textbutton "Black" action Function(set_letterbox_shader_params, color=(0.0, 0.0, 0.0)) text_size 10
-                    textbutton "Red" action Function(set_letterbox_shader_params, color=(0.5, 0.0, 0.0)) text_size 10
-
-# Auto-add developer controls if in developer mode
-init python:
-    if config.developer:
-        config.overlay_screens.append("letterbox_shader_controls")
+# OLD LETTERBOX SYSTEM REMOVED - NOW USING letterbox_shader_v2.rpy
 
 # Integration with existing letterbox functions (backward compatibility)
 init python:
-    # Replace the existing letterbox functions with shader versions for seamless integration
+    # Redirect old letterbox functions to new V2 system
     def show_letterbox(duration=None, wait_for_animation=True):
-        """Backward compatibility wrapper for existing letterbox calls"""
-        return show_letterbox_shader(duration=duration, wait_for_animation=wait_for_animation)
+        """Backward compatibility wrapper - uses new letterbox V2 system"""
+        # Set speed based on duration if provided
+        if duration is not None:
+            if duration >= 2.0:
+                set_letterbox_speed(0)  # Very Slow
+            elif duration >= 1.2:
+                set_letterbox_speed(1)  # Slow  
+            elif duration >= 0.6:
+                set_letterbox_speed(2)  # Normal
+            elif duration >= 0.3:
+                set_letterbox_speed(3)  # Fast
+            else:
+                set_letterbox_speed(4)  # Very Fast
+        
+        # Turn on letterbox
+        if not store.letterbox_enabled:
+            store.letterbox_enabled = True
+            renpy.restart_interaction()
+        
+        # Wait if requested
+        if wait_for_animation:
+            actual_duration = get_letterbox_duration() if hasattr(store, 'get_letterbox_duration') else 0.8
+            renpy.pause(actual_duration, hard=True)
     
     def hide_letterbox(duration=None, wait_for_animation=True):
-        """Backward compatibility wrapper for existing letterbox calls"""
-        return hide_letterbox_shader(duration=duration, wait_for_animation=wait_for_animation)
+        """Backward compatibility wrapper - uses new letterbox V2 system"""
+        if store.letterbox_enabled:
+            store.letterbox_enabled = False
+            renpy.restart_interaction()
+            
+            if wait_for_animation:
+                actual_duration = get_letterbox_duration() if hasattr(store, 'get_letterbox_duration') else 0.8
+                renpy.pause(actual_duration, hard=True)
     
     def toggle_letterbox():
-        """Backward compatibility wrapper for existing letterbox calls"""
-        return toggle_letterbox_shader()
+        """Backward compatibility wrapper - uses new letterbox V2 system"""
+        if hasattr(store, 'toggle_letterbox') and callable(store.toggle_letterbox):
+            # Use new V2 toggle function if available
+            return store.toggle_letterbox()
+        else:
+            # Fallback toggle
+            store.letterbox_enabled = not store.letterbox_enabled
+            renpy.restart_interaction()

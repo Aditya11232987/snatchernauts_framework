@@ -52,6 +52,8 @@ init python:
     def handle_object_hover(obj_name):
         """Handle object hover - only update if interaction menu is not active"""
         if not interaction_menu_active:
+            # Store previous hover for graceful fade transitions
+            store.previous_hover_object = getattr(store, 'current_hover_object', None)
             store.current_hover_object = obj_name
             try:
                 # Input: mouse hover
@@ -67,6 +69,8 @@ init python:
     def handle_object_unhover():
         """Handle object unhover - only update if interaction menu is not active"""
         if not interaction_menu_active:
+            # Store previous hover for graceful fade transitions
+            store.previous_hover_object = getattr(store, 'current_hover_object', None) 
             store.current_hover_object = None
             renpy.restart_interaction()
 

@@ -1,17 +1,209 @@
 # Snatchernauts Framework — Developer Manual
 
-This manual gives a high-level map of the codebase, lifecycle, and how to add gameplay using the new Game Logic hooks. It complements inline headers at the top of each module.
+## Overview
 
-Contents
-- Directory layout overview
-- Load and runtime lifecycle
-- Game Logic hooks (global and per-room)
-- Public APIs and expected contracts
-- UI composition and interactions
-- Effects (CRT, Bloom, Letterbox)
-- Debugging and logging
+This comprehensive developer manual provides detailed guidance for working with the Snatchernauts Framework. It covers the complete development lifecycle, from initial setup through deployment, and serves as both a reference guide and tutorial for building point-and-click adventure games with the framework.
 
-## Directory Layout
+## Table of Contents
+
+1. [Framework Architecture](#framework-architecture)
+2. [Development Environment Setup](#development-environment-setup)
+3. [Directory Structure and Organization](#directory-structure-and-organization)
+4. [Game Lifecycle and Flow](#game-lifecycle-and-flow)
+5. [Game Logic System](#game-logic-system)
+6. [API Reference and Contracts](#api-reference-and-contracts)
+7. [UI System and Screen Management](#ui-system-and-screen-management)
+8. [Visual Effects and Shaders](#visual-effects-and-shaders)
+9. [Asset Management](#asset-management)
+10. [Testing and Quality Assurance](#testing-and-quality-assurance)
+11. [Debugging and Development Tools](#debugging-and-development-tools)
+12. [Performance Optimization](#performance-optimization)
+13. [Best Practices and Conventions](#best-practices-and-conventions)
+14. [Deployment and Distribution](#deployment-and-distribution)
+15. [Troubleshooting Guide](#troubleshooting-guide)
+
+## Framework Architecture
+
+### Design Philosophy
+
+The Snatchernauts Framework follows several key design principles:
+
+**Modular Architecture**: The framework is built with clearly separated concerns, allowing developers to modify or extend specific functionality without affecting other systems.
+
+**Hook-Based Logic**: Game logic is implemented through a system of hooks that allow for both global and room-specific behavior while maintaining clean separation between UI and logic.
+
+**API-Driven Development**: All framework functionality is exposed through well-defined APIs that provide clear contracts and consistent behavior.
+
+**Developer Experience Focus**: The framework prioritizes ease of use, comprehensive documentation, and robust debugging tools to enhance the development experience.
+
+### Core Systems Overview
+
+**Room Management System**: Handles room loading, object management, and navigation between different game areas.
+
+**Interaction System**: Manages player input, object interactions, and action menus across multiple input methods (mouse, keyboard, gamepad).
+
+**Display System**: Controls visual presentation, background rendering, object visibility, and visual effects coordination.
+
+**UI Framework**: Provides screen composition, overlay management, and user interface components.
+
+**Effect System**: Implements visual effects including CRT shaders, bloom effects, and letterboxing.
+
+**Logic Hook System**: Enables custom game behavior through a structured hook system that supports both global and room-specific logic.
+
+## Development Environment Setup
+
+### Prerequisites
+
+**Required Software**:
+- Ren'Py SDK 8.1.0 or later
+- Python 3.9+ (included with Ren'Py SDK)
+- Git for version control
+- Text editor with Python/Ren'Py syntax support (VS Code recommended)
+
+**Recommended Extensions** (VS Code):
+- Ren'Py Language Support
+- Python extension
+- GitLens for Git integration
+- Material Icon Theme for file recognition
+
+### Initial Setup Process
+
+**1. Clone the Framework**:
+```bash
+git clone https://gitlab.com/yourusername/snatchernauts-framework.git
+cd snatchernauts-framework
+```
+
+**2. Environment Configuration**:
+```bash
+# Set up Ren'Py SDK path
+export RENPY_SDK="/path/to/renpy-sdk"
+
+# Add to shell profile for persistence
+echo 'export RENPY_SDK="/path/to/renpy-sdk"' >> ~/.bashrc
+
+# Verify setup
+$RENPY_SDK/renpy.sh --version
+```
+
+**3. Project Initialization**:
+```bash
+# Test the framework
+$RENPY_SDK/renpy.sh .
+
+# Run linting to verify setup
+$RENPY_SDK/renpy.sh . lint
+```
+
+### Development Workflow
+
+**Daily Development Routine**:
+1. Pull latest changes: `git pull origin main`
+2. Run linting: `$RENPY_SDK/renpy.sh . lint`
+3. Test game functionality: `$RENPY_SDK/renpy.sh .`
+4. Make changes to game logic/assets
+5. Test changes thoroughly
+6. Commit changes: `git commit -am "Description of changes"`
+7. Push changes: `git push origin feature-branch`
+
+## Directory Structure and Organization
+
+### Complete Directory Structure
+
+The framework follows a structured organization that separates concerns and promotes maintainability:
+
+```
+snatchernauts-framework/
+├── game/                          # Main game directory
+│   ├── script.rpy                # Main entry point and game flow
+│   ├── api/                       # Framework APIs
+│   │   ├── room_api.rpy          # Room management functions
+│   │   ├── display_api.rpy       # Display and visual functions
+│   │   ├── interactions_api.rpy  # Player interaction handling
+│   │   └── ui_api.rpy            # UI and screen management
+│   ├── core/                      # Core framework functionality
+│   │   ├── options.rpy           # Game configuration and settings
+│   │   ├── common_utils.rpy      # Shared utility functions
+│   │   ├── common_logging.rpy    # Logging and debug functions
+│   │   ├── config_builders.rpy   # Configuration building helpers
+│   │   ├── object_factory.rpy    # Object creation utilities
+│   │   ├── bloom_utils.rpy       # Bloom effect utilities
+│   │   ├── bloom_colors.rpy      # Bloom color presets
+│   │   ├── room_utils.rpy        # Room-specific utilities
+│   │   └── rooms/                # Room configuration
+│   │       └── room_config.rpy   # Room definitions and editor
+│   ├── logic/                     # Game logic implementation
+│   │   ├── game_logic.rpy        # Global game logic hooks
+│   │   └── rooms/                # Room-specific logic
+│   │       └── room1_logic.rpy   # Example room logic
+│   ├── ui/                        # User interface components
+│   │   ├── screens_room.rpy      # Room exploration screens
+│   │   ├── screens_interactions.rpy # Interaction menu screens
+│   │   ├── screens_bloom.rpy     # Bloom effect screens
+│   │   ├── room_descriptions.rpy # Description box management
+│   │   ├── room_ui.rpy           # Additional UI components
+│   │   ├── room_transforms.rpy   # UI animations and transforms
+│   │   └── screens.rpy           # General screen definitions
+│   ├── overlays/                  # Screen overlays
+│   │   ├── info_overlay.rpy      # Information and help overlay
+│   │   ├── debug_overlay.rpy     # Development debug overlay
+│   │   ├── letterbox_gui.rpy     # Letterbox effect overlay
+│   │   └── fade_overlay.rpy      # Screen transition overlays
+│   ├── shaders/                   # Visual effect shaders
+│   │   ├── crt_shader.rpy        # CRT monitor effect
+│   │   └── bloom_shader.rpy      # Bloom lighting effect
+│   ├── images/                    # Game images and sprites
+│   │   ├── backgrounds/          # Room background images
+│   │   ├── objects/              # Interactive object sprites
+│   │   ├── ui/                   # UI element graphics
+│   │   └── effects/              # Visual effect assets
+│   ├── audio/                     # Game audio files
+│   │   ├── music/                # Background music tracks
+│   │   ├── sounds/               # Sound effects
+│   │   └── voice/                # Voice acting files
+│   └── fonts/                     # Custom font files
+├── Wiki/                          # Documentation
+│   ├── 01-Overview.md            # Framework overview
+│   ├── 02-Getting-Started.md     # Getting started guide
+│   ├── 03-Architecture.md        # Architecture documentation
+│   ├── 04-Logic-Hooks.md         # Logic system documentation
+│   ├── 05-API-*.md               # API reference documentation
+│   ├── 06-Screens-and-UI.md     # UI system documentation
+│   ├── 07-Effects-and-Shaders.md # Visual effects documentation
+│   ├── 08-Build-and-Distribute.md # Build and deployment guide
+│   ├── 09-Examples.md            # Usage examples
+│   ├── 10-Troubleshooting.md     # Troubleshooting guide
+│   └── DeveloperManual.md        # This document
+├── scripts/                       # Development and build scripts
+│   ├── build.py                  # Automated build script
+│   ├── setup_ci.py              # CI environment setup
+│   └── optimize_assets.py       # Asset optimization
+├── tools/                         # Development tools
+│   └── room_editor/              # Visual room editor (if available)
+├── tests/                         # Test files
+│   ├── unit/                     # Unit tests
+│   └── integration/              # Integration tests
+├── .gitignore                     # Git ignore rules
+├── .gitlab-ci.yml                # GitLab CI/CD configuration
+├── CHANGELOG.md                  # Version history
+├── README.md                     # Project overview
+├── LICENSE                       # Project license
+└── project.json                  # Ren'Py project configuration
+```
+
+### File Organization Principles
+
+**API Layer (`game/api/`)**: Contains all public-facing functions that game developers should use. These files define the contract between the framework and game-specific code.
+
+**Core Layer (`game/core/`)**: Internal framework functionality that supports the APIs. Game developers typically shouldn't need to modify these files directly.
+
+**Logic Layer (`game/logic/`)**: Where game-specific behavior is implemented using the framework's hook system.
+
+**Presentation Layer (`game/ui/`, `game/overlays/`)**: Handles all visual presentation and user interface concerns.
+
+**Assets (`game/images/`, `game/audio/`)**: Organized by type and usage context for easy management.
+
+### Directory Layout
 
 - `game/script.rpy`: Entry points (`label start`, `label play_room`). Calls `load_room(room)` then `on_room_enter(room)`.
 - `game/logic/`

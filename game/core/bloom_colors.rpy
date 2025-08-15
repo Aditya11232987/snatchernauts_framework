@@ -58,9 +58,23 @@ init python:
             # Convert to HSV for better control
             h, s, v = colorsys.rgb_to_hsv(r/255.0, g/255.0, b/255.0)
             
-            # Boost saturation and brightness
-            s = min(1.0, s * 1.5)  # Increase saturation
-            v = min(1.0, v * 1.2)  # Increase brightness
+            # Create a highlighting color that contrasts nicely with the object
+            # Keep similar hue but adjust saturation and brightness for visibility
+            
+            # For edge highlighting, we want similar but brighter/more saturated colors
+            if v < 0.5:  # Dark objects - make highlight brighter
+                v = min(1.0, v + 0.4)  # Significant brightness increase
+                s = min(1.0, s * 1.3)  # Boost saturation for visibility
+            else:  # Light objects - adjust for contrast
+                if s < 0.3:  # Desaturated objects - add some color
+                    s = min(1.0, s + 0.3)
+                    v = min(1.0, v * 1.1)  # Slight brightness boost
+                else:  # Saturated objects - enhance existing color
+                    s = min(1.0, s * 1.1)  # Slight saturation boost
+                    v = min(0.95, max(0.7, v))  # Ensure good visibility range
+            
+            # Subtle hue shift for better edge definition (complementary-ish colors)
+            h = (h + 0.08) % 1.0  # Small hue shift for distinction
             
             # Convert back to RGB
             r, g, b = colorsys.hsv_to_rgb(h, s, v)
@@ -72,7 +86,7 @@ init python:
             # Silent fallback to white
             return "#ffffff"
     
-    def get_bloom_color(image_path, fallback_color="#ffffff"):
+    def get_bloom_color(image_path, fallback_color="#ffcc88"):
         """Get bloom color for an image, with caching"""
         # Cache colors to avoid recalculating
         if not hasattr(store, '_bloom_color_cache'):
@@ -82,6 +96,7 @@ init python:
             store._bloom_color_cache[image_path] = extract_dominant_color(image_path)
         
         extracted_color = store._bloom_color_cache[image_path]
+        # Use warm golden fallback color if extraction failed
         return extracted_color if extracted_color != "#ffffff" else fallback_color
 
 # Initialize bloom color cache globally

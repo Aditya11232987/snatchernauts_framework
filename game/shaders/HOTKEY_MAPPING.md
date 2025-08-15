@@ -1,178 +1,160 @@
-# Complete Hotkey Mapping for Detective Game Shaders
+# Snatchernauts Framework - Control Keys (Simplified System)
 
-This document outlines the comprehensive solution for managing shader hotkeys without conflicts.
+This document outlines the essential controls for the simplified CRT, Bloom, and Letterbox shader system.
 
-## The Problem
-- Limited single keys available for hotkeys
-- Existing game already uses many keys (c, f, l, i, a, 1-4, [, ], -, =, 0)
-- Need to control 10+ different shader effects plus presets
+## Core System Controls
 
-## The Solution: Multi-Level Hotkey System
+| Key | Function | Description |
+|-----|----------|-------------|
+| **i** | Info Overlay | Toggle room/object/performance info display |
+| **F9** | Debug Overlay | Cycle debug verbosity (hidden → compact → detailed) |
+| **Cmd+Shift+F12**<br/>**Ctrl+Shift+F12** | Debug Verbosity | Cycle debug overlay levels |
+| **F1-F4** | Debug Position | Snap debug overlay to screen corners (TL/TR/BL/BR) |
 
-### Level 1: Core Controls (Single Keys)
-```
-S - Shader Menu (main interface)
-H - Quick Help Toggle
-R - Reset All Shaders
-```
+## Audio Controls
 
-### Level 2: Individual Shader Cycling (Shift + Key)
-```
-Shift+G - Film Grain        (off → subtle → moderate → heavy)
-Shift+F - Fog Effects       (off → light → moderate → heavy → mysterious)  
-Shift+V - Vintage/Sepia     (off → light → moderate → heavy → noir)
-Shift+L - Lighting          (off → candlelight → streetlight → moonlight)
-Shift+W - Weather/Rain       (off → drizzle → moderate → heavy → storm)
-Shift+D - Depth of Field    (off → center → left → right → close)
-Shift+C - Color Grading     (off → cool → warm → noir → vintage)
-Shift+E - Edge Detection    (off → subtle → evidence → danger)
-Shift+M - Mystery Reveal    (off → slow → fast)
-Shift+T - Flashlight/Torch  (off → narrow → wide → police → detective)
-```
+| Key | Function | Description |
+|-----|----------|-------------|
+| **f** | Fade Audio | Toggle audio fade in/out effect |
 
-### Level 3: Reverse Cycling (Ctrl+Shift + Key)
-```
-All same keys as Level 2, but cycles backwards through presets
-```
+## Visual Effects - CRT
 
-### Level 4: Atmosphere & Investigation (Alt + Key)
-```
-Alt+A - Cycle Atmosphere Presets
-Alt+I - Cycle Investigation Modes
-```
+| Key | Function | Description |
+|-----|----------|-------------|
+| **c** | CRT Toggle | Enable/disable CRT screen effect |
+| **a** | CRT Animation | Toggle scanline animation on/off |
+| **1-4** | Scanline Size | Set CRT scanline thickness (1=thin → 4=thick) |
+| **[** / **]** | Vignette Strength | Decrease/increase CRT vignette darkness |
+| **-** / **=** | Vignette Width | Decrease/increase CRT vignette spread |
+| **0** | Reset CRT | Reset all CRT settings to defaults |
 
-### Level 5: Reverse Atmosphere (Ctrl+Alt + Key)  
-```
-Ctrl+Alt+A - Reverse Atmosphere Cycling
-Ctrl+Alt+I - Reverse Investigation Mode Cycling
-```
+## Visual Effects - Fog
 
-## Atmosphere Presets (Alt+A cycles through)
-1. None
-2. Crime Scene
-3. Abandoned Building  
-4. Nighttime Street
-5. Laboratory
-6. Interrogation Room
-7. Warehouse
-8. Office
-9. Alley
-10. Stormy Night
-11. Misty Morning
-12. Sunset
+| Key | Function | Description |
+|-----|----------|-------------|
+| **g** | Fog Toggle | Cycle fog effects (off → light → moderate → heavy → mysterious) |
 
-## Investigation Modes (Alt+I cycles through)
-1. None
-2. Evidence Analysis
-3. Suspect Tracking
-4. Memory Flashback
-5. Revelation Moment
+## Visual Effects - Letterbox
 
-## Existing Keys (Preserved)
-```
-C → Shift+C - CRT Toggle (moved to avoid conflict)
-F - Audio Fade (kept)
-L - Letterbox Toggle (kept) 
-I - Info Overlay (kept)
-A - CRT Animation (kept)
-1-4 - Scanline Size (kept)
-[,] - Vignette Strength (kept)
--,= - Vignette Width (kept)
-0 - Reset Vignette (kept)
-```
+| Key | Function | Description |
+|-----|----------|-------------|
+| **l** | Letterbox Cycle | Toggle letterbox ON or cycle through 5 speeds |
+| **Shift+X** | Force Letterbox Off | Turn off letterbox regardless of current state |
 
-## Visual Interface Components
+### Letterbox Speed Options:
+- **Very Slow** - 2.5 second animation
+- **Slow** - 1.5 second animation  
+- **Normal** - 0.8 second animation (default)
+- **Fast** - 0.4 second animation
+- **Very Fast** - 0.2 second animation
 
-### 1. Shader Menu (S key)
-- Full graphical interface with buttons
-- Shows current state of all effects
-- Click to adjust individual settings
-- Quick preset buttons
+## Navigation & Interaction
 
-### 2. Quick Help (H key)
-- Small overlay showing key mappings
-- Always accessible
-- Non-intrusive
+| Key | Function | Description |
+|-----|----------|-------------|
+| **Arrow Keys** | Navigate | Move between interactive objects |
+| **Enter**<br/>**Space** | Select | Interact with highlighted object |
+| **Escape** | Cancel | Close menus, return to exploration |
+| **Tab** | Gamepad Mode | Toggle gamepad-style navigation |
 
-### 3. Notifications
-- Brief popup when effects change
-- Shows: "Effect Name: Preset"
-- Auto-disappears after 2 seconds
+## Room Controls
 
-## Usage Examples
+| Key | Function | Description |
+|-----|----------|-------------|
+| **Mouse Hover** | Object Highlight | Show object info and bloom effects |
+| **Mouse Click** | Object Interact | Open interaction menu for clicked object |
 
-### Quick Access Patterns
-```
-# Enable film grain
-Shift+G → cycles: off → subtle → moderate → heavy → back to off
+## Developer/Testing
 
-# Set up noir atmosphere  
-Alt+A → cycles through presets until "Alley" (noir style)
+| Key | Function | Description |
+|-----|----------|-------------|
+| **F5** | Quick Save | Save current game state (if enabled) |
+| **F9** | Quick Load | Load last saved state (if enabled) |
+| **~** | Console | Open Ren'Py developer console |
+| **Shift+O** | Console Alt | Alternative console access |
+| **Shift+R** | Reload | Reload current script/room |
 
-# Investigation mode
-Alt+I → Evidence Analysis Mode
+### Command Line Tools
+| Command | Function | Description |
+|---------|----------|-------------|
+| `scripts/run-game.sh` | Launch Game | Normal game launch |
+| `scripts/run-game.sh --debug` | Debug Launch | Launch with console output |
+| `scripts/run-game.sh --lint` | Lint + Launch | Check code quality then launch |
+| `scripts/run-game.sh --help` | Show Help | Display all launcher options |
 
-# Fine-tune individual effects
-Shift+L → Enable lighting
-Shift+V → Add vintage feel
-Shift+G → Add film grain
-```
+*See `DEVELOPMENT_TOOLS.md` for complete launcher documentation*
 
-### Power User Workflow
-```
-1. S - Open shader menu
-2. Click preset buttons for base atmosphere
-3. Use individual sliders for fine-tuning
-4. Close menu and test
-5. Use Shift+Key for quick adjustments
-```
+## Context-Sensitive Keys
 
-## Benefits of This System
+### During Interaction Menu
+| Key | Function | Description |
+|-----|----------|-------------|
+| **Arrow Keys** | Menu Navigate | Move through interaction options |
+| **Enter/Space** | Execute Action | Perform selected action |
+| **Escape** | Close Menu | Return to room exploration |
 
-### 🎯 Solves Hotkey Conflicts
-- Uses modifier keys to multiply available combinations
-- Existing keys preserved and functional
-- Logical grouping prevents confusion
+### During Dialogue
+| Key | Function | Description |
+|-----|----------|-------------|
+| **Space**<br/>**Enter**<br/>**Mouse Click** | Continue | Advance dialogue text |
+| **Escape** | Skip | Fast-forward through dialogue |
+| **Ctrl** | Skip Mode | Hold to skip dialogue quickly |
+| **l** | Letterbox | Shows during dialogue scenes |
 
-### 🔄 Flexible Control Levels
-- **Casual**: Use S menu and click presets
-- **Advanced**: Use cycling hotkeys for quick adjustments  
-- **Power User**: Combine both approaches
+## Mouse & Gamepad Controls
 
-### 🎮 Intuitive Design
-- Related keys grouped (Shift+ for individual effects)
-- Mnemonic mappings where possible (W=Weather, T=Torch)
-- Visual feedback through notifications
+| Action | Function | Description |
+|--------|----------|-------------|
+| **Mouse Hover** | Object Highlight | Show bloom effect and description |
+| **Left Click** | Primary Interact | Open interaction menu or select |
+| **D-Pad/Left Stick** | Navigate | Move cursor between objects |
+| **A/Cross** | Select | Interact with highlighted object |
+| **B/Circle** | Cancel | Close menus, go back |
 
-### ⚡ Performance Friendly  
-- Minimal UI overhead when not in use
-- Efficient state management
-- Smart preset combinations
+## Essential Visual Effects
 
-## Implementation Notes
+| Effect | Purpose | Control |
+|--------|---------|----------|
+| **CRT Shader** | Retro computer aesthetic | **c** key |
+| **Fog Effects** | Atmospheric fog overlay | **g** key |
+| **Bloom Effects** | Object highlighting | Automatic on hover |
+| **Letterbox** | Cinematic dialogue | **l** key or automatic |
 
-### Integration Points
-1. **Room Exploration Screen**: Add `use shader_enhanced_controls`
-2. **Room Background**: Use `room_background_and_objects_with_shaders`  
-3. **Auto-Context**: Call `auto_apply_room_shaders()` on room entry
+## Performance Notes
 
-### Memory Management
-- Shader states persist between rooms
-- Reset functionality prevents accumulation
-- Notification system prevents memory leaks
+| Setting | Performance Impact | Recommendation |
+|---------|-------------------|----------------|
+| CRT Off | +15-20 FPS | Disable on slower hardware |
+| Debug Off | +5-10 FPS | Keep off in production |
+| Bloom | Minimal impact | Safe to keep enabled |
 
-### Compatibility
-- Works with existing CRT system
-- Preserves bloom effects
-- Maintains gamepad controls
+## Quick Reference
 
-## Future Expandability
+**Essential Keys:**
+- **i** = Info, **c** = CRT, **a** = Animation, **g** = Fog, **l** = Letterbox
+- **f** = Fade Audio, **0** = Reset CRT, **F9** = Debug
 
-The system easily supports:
-- More shader effects (add to cycling lists)
-- Custom user presets (extend atmosphere_presets)
-- Save/load shader configurations
-- Per-room shader profiles
-- Dynamic context switching
+**CRT Tuning:**
+- **1-4** = Scanline size, **[ ]** = Vignette strength, **- =** = Vignette width
 
-This comprehensive solution transforms the limited hotkey problem into a powerful, flexible control system that enhances rather than hinders the detective game experience.
+**Navigation:**  
+- **Arrows** = Move, **Enter** = Select, **Escape** = Cancel
+
+## What Was Removed
+
+This simplified system removed most complex atmospheric shader effects but retains essential ones:
+
+**Kept:**
+- **Fog Effects** - Essential atmospheric shader with G key
+- **CRT Effects** - Core retro aesthetic
+- **Bloom Effects** - Object highlighting
+- **Letterbox Effects** - Cinematic dialogue
+
+**Removed:**
+- Film Grain, Vintage/Sepia effects
+- Lighting, Rain, Depth of Field effects  
+- Edge Detection, Mystery Reveal effects
+- Atmosphere Presets and Investigation Modes
+- Complex hotkey combinations (Shift+, Alt+, Ctrl+ modifiers)
+
+The system now focuses on the four essential shader effects: **CRT**, **Fog**, **Bloom**, and **Letterbox**.

@@ -13,9 +13,13 @@ init python:
             config.update(overrides)
         return config
     
+    def create_desaturation_config(overrides=None):
+        """Create desaturation configuration with optional overrides"""
+        return create_object_config(DEFAULT_DESATURATION_CONFIG, overrides)
+    
     def create_bloom_config(overrides=None):
-        """Create bloom configuration with optional overrides"""
-        return create_object_config(DEFAULT_BLOOM_CONFIG, overrides)
+        """Create bloom configuration with optional overrides (deprecated - use create_desaturation_config)"""
+        return create_object_config(DEFAULT_DESATURATION_CONFIG, overrides)
     
     def create_animation_config(overrides=None):
         """Create animation configuration with optional overrides"""

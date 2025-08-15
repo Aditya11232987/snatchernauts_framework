@@ -104,7 +104,7 @@ define ROOM4_OBJECTS = {
             "open": ROOM4_SFX_PATH + "door_creak.ogg"
         }
     },
-    create_bloom_config(BLOOM_PRESETS["neon_intense"]),
+    create_desaturation_config(DESATURATION_PRESETS["neon_intense"]),
     create_animation_config({"hover_scale_boost": 1.05}))
 }
 ```

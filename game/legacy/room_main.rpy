@@ -15,6 +15,14 @@
     
 # Label to start room exploration
 label explore_room:
-    # Backward-compatible entry; prefer calling play_room from script.rpy
-    call play_room("room1", "audio/room1.mp3") from _call_play_room_1
+    # Backward-compatible entry; loads room1 and shows the room exploration screen
+    $ load_room("room1")
+    $ on_room_enter("room1")
+    
+    # Start room1 music
+    play music "audio/room1.mp3" loop
+    
+    # Show room exploration screen
+    show screen room_exploration_shaders
+    $ renpy.pause(hard=True)
     return

@@ -1,5 +1,61 @@
 # Changelog
 
+## 0.5.3 — 2025-08-15
+
+### Major Features
+- **Development Tools Integration**: Complete development workflow enhancement
+  - Unified game launcher script (`scripts/run-game.sh`) with debugging, linting, and compilation options
+  - Comprehensive development documentation in `DEVELOPMENT_TOOLS.md`
+  - Custom SDK path support via `RENPY_SDK` environment variable
+  - Debug mode with console output retention for troubleshooting
+- **Desaturation Effects System**: Advanced replacement for bloom highlighting
+  - New `game/core/desaturation_utils.rpy` with comprehensive preset system
+  - 24 different desaturation presets (subtle, explosive, whisper, heartbeat, flicker, ethereal variants)
+  - Backward compatibility with existing bloom configurations
+  - Performance optimizations and cleaner effect calculations
+- **Debug System Overhaul**: Centralized debugging infrastructure
+  - New `game/debug/bloom_debug.rpy` with categorized debug output
+  - Shader debug configuration system (`game/shader_debug_config.rpy`)
+  - Toggle-based debug controls for different system components
+  - Verbose positioning and property debugging for object interactions
+
+### Technical Improvements
+- **Shader System Refinements**: Enhanced Neo-Noir shader integration
+  - Updated `letterbox_shader_v2.rpy`, `neo_noir_color_grading.rpy`, `neo_noir_lighting.rpy`
+  - Improved shader layer management in `neo_noir_shader_layers.rpy`
+  - Better hotkey mapping and setup documentation
+- **Room System Enhancement**: Improved object interaction and configuration
+  - Enhanced room logic handlers for all three example rooms
+  - Better object property debugging and display calculations
+  - Improved gamepad navigation integration
+- **API Improvements**: Cleaner interaction and display APIs
+  - Updated `interactions_api.rpy`, `room_api.rpy`, and `ui_api.rpy`
+  - Better error handling and parameter validation
+  - Enhanced logging integration across all API modules
+
+### New Documentation
+- **Development Workflow Guide**: Complete `DEVELOPMENT_TOOLS.md` documentation
+- **Shader Setup Updates**: Enhanced shader documentation and troubleshooting
+- **Room Structure Guide**: Updated `ROOM_STRUCTURE_GUIDE.md` with latest patterns
+- **Wiki Improvements**: Enhanced technical documentation across all wiki pages
+
+### Developer Experience
+- **Streamlined Launch Process**: Single script handles all common development tasks
+- **Better Error Messages**: Clear validation and troubleshooting guidance
+- **Debug Output Control**: Fine-grained control over debug verbosity levels
+- **SDK Flexibility**: Easy switching between different Ren'Py SDK versions
+
+### Removed/Deprecated
+- Consolidated shader files: removed redundant/experimental shader implementations
+- Cleaned up bloom system files in favor of desaturation approach
+- Removed deprecated screen files (`screens_bloom.rpy`)
+
+### Fixed
+- Room interaction timing and state management
+- Shader effect stacking and performance issues
+- Debug output formatting and categorization
+- Development workflow reliability across different environments
+
 ## 0.5.2 — 2025-08-13
 
 ### Major Features

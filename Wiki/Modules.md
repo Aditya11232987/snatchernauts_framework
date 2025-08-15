@@ -11,7 +11,7 @@ API
 Core
 - game/core/common_utils.rpy: Shared helpers (fonts, dev mode, mouse).
 - game/core/common_logging.rpy: Color-coded, truncating logs; function wrappers; print interception.
-- game/core/bloom_utils.rpy: Bloom parameters, dimensions, presets.
+- game/core/desaturation_utils.rpy: Desaturation parameters and presets for object highlighting.
 - game/core/bloom_colors.rpy: Color extraction for bloom.
 - game/core/config_builders.rpy: Build configs for rooms/objects.
 - game/core/object_factory.rpy: Instantiate objects from configs.

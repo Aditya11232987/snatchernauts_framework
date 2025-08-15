@@ -19,6 +19,24 @@ init -1 python:
                 store.crt_vignette_strength = 1.0
                 store.crt_vignette_width = 0.1
                 
+                # Per-room shader defaults (Room3): midnight chase grade + car headlights lighting + subtle grain
+                try:
+                    from renpy.store import shader_states
+                    def _set(shader_name: str, preset_id: str):
+                        state = shader_states.get(shader_name)
+                        if not state:
+                            return
+                        presets = state.get("presets", [])
+                        if preset_id in presets:
+                            state["current"] = presets.index(preset_id)
+                    _set('color_grading', 'midnight_chase')
+                    _set('lighting', 'car_headlights')
+                    _set('film_grain', 'subtle')
+                    store.suppress_room_fade_once = True
+                    renpy.restart_interaction()
+                except Exception:
+                    pass
+                
                 # Mark room as visited
                 store.room3_visited = True
                 

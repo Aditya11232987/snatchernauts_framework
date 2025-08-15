@@ -8,16 +8,17 @@
 # Utility modules loaded by Ren'Py script loader
 
 # Object configuration templates to eliminate duplication
-define DEFAULT_BLOOM_CONFIG = {
-    "bloom_enabled": True,
-    "bloom_intensity": 0.5,
-    "bloom_radius": 8.0,
-    "bloom_threshold": 0.03,
-    "bloom_softness": 0.8,
-    "bloom_alpha_min": 0.3,
-    "bloom_alpha_max": 0.7,
-    "bloom_pulse_speed": 1.0
+define DEFAULT_DESATURATION_CONFIG = {
+    "desaturation_enabled": True,
+    "desaturation_intensity": 0.5,
+    "desaturation_alpha_min": 0.3,
+    "desaturation_alpha_max": 0.7,
+    "desaturation_pulse_speed": 1.0,
+    "desaturation_fade_duration": 0.3
 }
+
+# Legacy bloom config (kept for compatibility)
+define DEFAULT_BLOOM_CONFIG = DEFAULT_DESATURATION_CONFIG
 
 define DEFAULT_ANIMATION_CONFIG = {
     "hover_animation_type": "breathe",
@@ -84,6 +85,7 @@ init 2 python:
 # Global room interaction variables
 default current_room_id = "room1"  # Currently active room
 default current_hover_object = None
+default previous_hover_object = None  # For tracking hover state transitions
 default speech_bubble_offset = 0.0
 
 # Current room objects (dynamically set based on current_room_id)

@@ -110,8 +110,8 @@ define ROOM1_OBJECTS = {
         "investigation_progress": 0,
         "trust_level": 0
     },
-    # Bloom configuration
-    create_bloom_config(BLOOM_PRESETS["neon_normal"]),
+    # Desaturation configuration
+    create_desaturation_config(DESATURATION_PRESETS["neon_normal"]),
     # Animation configuration
     create_animation_config({
         "hover_scale_boost": 1.00,
@@ -149,8 +149,8 @@ define ROOM1_OBJECTS = {
         ],
         "clue_index": 0
     },
-    # Bloom configuration
-    create_bloom_config(BLOOM_PRESETS["neon_subtle"]),
+    # Desaturation configuration
+    create_desaturation_config(DESATURATION_PRESETS["neon_subtle"]),
     # Animation configuration
     create_animation_config({
         "hover_scale_boost": 1.00,
@@ -211,9 +211,8 @@ init python:
             renpy.music.register_channel("room1_effects", "sfx", False)
             renpy.music.register_channel("room1_speech", "voice", False)
             
-            # Preload frequently used sounds
-            renpy.cache.preload(ROOM1_DETECTIVE_FOOTSTEPS)
-            renpy.cache.preload(ROOM1_PAPER_RUSTLE)
+            # Cache is not needed for preloading in Ren'Py 8.x
+            # Sound files are loaded on demand
             
             print("[Room1] Audio system initialized")
             
@@ -233,7 +232,8 @@ init python:
             if atmosphere["weather"] == "overcast":
                 store.crt_vignette_strength = 0.95  # Stronger vignette for overcast
                 
-            if atmosphere["flickering_lights"]:
+            lighting_config = ROOM1_LIGHTING
+            if lighting_config["flickering_lights"]:
                 # Enable subtle screen flicker effect
                 store.crt_animated = True
                 

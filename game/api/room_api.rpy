@@ -277,6 +277,12 @@ init python:
                 store.selected_object = list(store.room_objects.keys())[0]
             else:
                 store.selected_object = None
+            
+            # Clear gamepad selection and hover so no objects are initially highlighted
+            store.gamepad_selected_object = None
+            store.current_hover_object = None
+            store.previous_hover_object = None
+            
             return True
         return False
     
@@ -409,6 +415,42 @@ init python:
         objects.sort(key=lambda obj: (obj[1]["y"], obj[1]["x"]))
         return [obj[0] for obj in objects]
     
+    def find_nearest_object_from_screen_center(direction):
+        """Find the nearest object in a specific direction from screen center"""
+        if not store.room_objects:
+            return None
+            
+        # Get screen center coordinates
+        screen_center_x = config.screen_width // 2
+        screen_center_y = config.screen_height // 2
+        
+        best_obj = None
+        best_distance = float('inf')
+        
+        for obj_name, obj_data in store.room_objects.items():
+            obj_center_x = obj_data["x"] + obj_data["width"] // 2
+            obj_center_y = obj_data["y"] + obj_data["height"] // 2
+            
+            valid_direction = False
+            if direction == "left" and obj_center_x < screen_center_x:
+                valid_direction = True
+            elif direction == "right" and obj_center_x > screen_center_x:
+                valid_direction = True
+            elif direction == "up" and obj_center_y < screen_center_y:
+                valid_direction = True
+            elif direction == "down" and obj_center_y > screen_center_y:
+                valid_direction = True
+            
+            if valid_direction:
+                dx = obj_center_x - screen_center_x
+                dy = obj_center_y - screen_center_y
+                distance = (dx * dx + dy * dy) ** 0.5
+                if distance < best_distance:
+                    best_distance = distance
+                    best_obj = obj_name
+        
+        return best_obj
+    
     def find_nearest_object(current_obj, direction):
         if not current_obj or current_obj not in store.room_objects:
             return None
@@ -446,15 +488,21 @@ init python:
         obj_list = get_object_list_for_navigation()
         if not obj_list:
             return
+        
+        # If no object is currently selected, start navigation from screen center
         if not store.gamepad_selected_object or store.gamepad_selected_object not in store.room_objects:
-            store.gamepad_selected_object = obj_list[0]
-            store.current_hover_object = store.gamepad_selected_object
-            try:
-                log_main_event("INPUT", f"hover {store.gamepad_selected_object}", scope="controller")
-            except Exception:
-                pass
-            renpy.restart_interaction()
+            next_obj = find_nearest_object_from_screen_center(direction)
+            if next_obj:
+                store.gamepad_selected_object = next_obj
+                store.current_hover_object = next_obj
+                try:
+                    log_main_event("INPUT", f"hover {next_obj} (from screen center)", scope="controller")
+                except Exception:
+                    pass
+                renpy.restart_interaction()
             return
+        
+        # If an object is already selected, find next object from current position
         next_obj = find_nearest_object(store.gamepad_selected_object, direction)
         if next_obj:
             store.gamepad_selected_object = next_obj

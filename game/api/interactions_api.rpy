@@ -23,7 +23,14 @@ init python:
         obj = store.room_objects[obj_name]
         image_path = obj.get("image", "")
         if image_path:
-            return get_bloom_color(image_path, "#ffffff")
+            # Since bloom is deprecated, use a simple color based on object type
+            obj_type = obj.get("object_type", "item")
+            if obj_type == "character":
+                return "#4a90e2"  # Blue for characters
+            elif obj_type == "item":
+                return "#e2a04a"  # Orange for items
+            else:
+                return "#ffffff"  # White fallback
         return "#ffffff"
     
     def create_gradient_background(base_color, alpha=0.7):
@@ -136,7 +143,14 @@ init python:
     def execute_object_action(obj_name, action_type):
         """Execute a specific action on an object"""
         previous_object = obj_name
-        hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
+        
+        # For the "leave" action, keep object selected to maintain description box
+        # For other actions, clear the hover object to hide description box after execution
+        if action_type == "leave":
+            hide_interaction_menu(keep_object_selected=True, target_object=obj_name)
+        else:
+            hide_interaction_menu(keep_object_selected=False, target_object=None)
+        
         obj = store.room_objects[obj_name]
         obj_type = obj.get("object_type", "item") 
         # Notify game logic hooks before executing side effects

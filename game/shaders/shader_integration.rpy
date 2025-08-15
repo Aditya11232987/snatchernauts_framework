@@ -1,333 +1,284 @@
-# Shader Integration with Bloom Support
-# Core functions for integrating shaders with existing room and bloom system
-#
-# Overview
-# - Provides functions to apply shaders to rooms and objects
-# - Maintains compatibility with bloom and CRT systems
-# - Works directly with existing room_background_and_objects screen
+# Shader Integration System
+# Core system for managing all shader effects and hotkeys
 
 init python:
-    # Store for shader states
+    # Shader state management - only includes actively used shaders
     shader_states = {
-        "film_grain": {"enabled": False, "preset": 0, "presets": ["off", "subtle", "moderate", "heavy"]},
-        "fog": {"enabled": False, "preset": 0, "presets": ["off", "light", "moderate", "heavy", "mysterious"]},
-        "vintage": {"enabled": False, "preset": 0, "presets": ["off", "light", "moderate", "heavy", "noir"]},
-        "lighting": {"enabled": False, "preset": 0, "presets": ["off", "candlelight", "streetlight", "moonlight"]},
-        "rain": {"enabled": False, "preset": 0, "presets": ["off", "drizzle", "moderate", "heavy", "storm"]},
-        "depth_of_field": {"enabled": False, "preset": 0, "presets": ["off", "center", "left", "right", "close"]},
-        "color_grading": {"enabled": False, "preset": 0, "presets": ["off", "cool", "warm", "noir", "vintage"]},
-        "edge_detection": {"enabled": False, "preset": 0, "presets": ["off", "subtle", "evidence", "danger"]},
-        "mystery_reveal": {"enabled": False, "preset": 0, "presets": ["off", "slow", "fast"]},
-        "flashlight": {"enabled": False, "preset": 0, "presets": ["off", "narrow", "wide", "police", "detective"]}
+        "film_grain": {"current": 0, "presets": ["off", "subtle", "moderate", "heavy"]},
+        "lighting": {"current": 0, "presets": [
+            "off",
+            "street_lamp", "neon_signs", "window_blinds", "police_lights", "desk_lamp",
+            "car_headlights", "interrogation", "sunset_window", "dark_alley", "tv_glow"
+        ]},
+        "color_grading": {"current": 0, "presets": [
+            "off",
+            "classic_noir", "neon_night", "rain_streets", "smoky_bar", "miami_vice",
+            "detective_office", "crime_scene", "blade_runner", "evidence_room", "midnight_chase"
+        ]}
     }
     
-    # Atmosphere presets
+    # Atmosphere presets list
     atmosphere_presets = [
-        "none",
-        "crime_scene_atmosphere",
-        "abandoned_building_atmosphere", 
-        "nighttime_street_atmosphere",
-        "laboratory_atmosphere",
-        "interrogation_room_atmosphere",
-        "warehouse_atmosphere",
-        "office_atmosphere",
-        "alley_atmosphere",
-        "stormy_night_atmosphere",
-        "misty_morning_atmosphere",
-        "sunset_atmosphere"
+        "none", "crime_scene", "abandoned_building", "nighttime_street", 
+        "laboratory", "interrogation_room", "warehouse", "office", 
+        "alley", "stormy_night", "misty_morning", "sunset"
     ]
     
-    # Investigation modes
+    # Investigation modes list  
     investigation_modes = [
-        "none",
-        "evidence_analysis_mode",
-        "suspect_tracking_mode", 
-        "memory_flashback_mode",
-        "revelation_moment_mode"
+        "none", "evidence_analysis", "suspect_tracking", 
+        "memory_flashback", "revelation_moment"
     ]
     
-    # Current states
+    # Current preset indices
     current_atmosphere_preset = 0
     current_investigation_mode = 0
     
-    # Transform mapping from shader presets to actual transform names
-    shader_transform_mapping = {
-        # Film Grain mappings (use real film grain transforms)
-        "film_grain_subtle": "subtle_grain",
-        "film_grain_moderate": "moderate_grain",
-        "film_grain_heavy": "heavy_grain",
-        
-        # Fog mappings (use real fog shaders)
-        "fog_light": "light_fog",
-        "fog_moderate": "atmospheric_fog_effect",
-        "fog_heavy": "heavy_fog",
-        "fog_mysterious": "mysterious_fog",
-        
-        # Edge detection mappings (use real edge shaders)
-        "edge_detection_subtle": "subtle_edges",
-        "edge_detection_evidence": "evidence_highlight",
-        "edge_detection_danger": "danger_highlight",
-        
-        # Vintage/Sepia mappings (use real sepia shaders)
-        "vintage_light": "light_sepia",
-        "vintage_moderate": "vintage_sepia_effect", 
-        "vintage_heavy": "heavy_sepia",
-        "vintage_noir": "noir_vintage",
-        
-        # Lighting mappings (use dynamic lighting shaders)
-        "lighting_candlelight": "candlelight_effect",
-        "lighting_streetlight": "streetlight_effect",
-        "lighting_moonlight": "moonlight_effect",
-        
-        # Rain mappings (enable weather controls)
-        "rain_drizzle": "light_drizzle",
-        "rain_moderate": "rain_effect",
-        "rain_heavy": "heavy_rain",
-        "rain_storm": "storm_rain",
-    }
-
-    def _resolve_transform(name_or_obj):
-        """Return a callable transform object for a given name or object; None if not found."""
-        try:
-            # Already a transform-like object
-            if name_or_obj is None:
-                return None
-            if not isinstance(name_or_obj, str):
-                return name_or_obj
-            # Lookup in renpy.store
-            if hasattr(renpy.store, name_or_obj):
-                return getattr(renpy.store, name_or_obj)
-        except Exception as e:
-            try:
-                renpy.log(f"[ShaderIntegration] Resolve transform error for {name_or_obj}: {e}")
-            except Exception:
-                pass
-        return None
+    # Shader help overlay state
+    shader_help_visible = False
+    shader_menu_visible = False
     
-    def apply_room_shader_effects():
-        """Apply shader effects to the current room background, returning a transform object."""
-        # Check for atmosphere preset first
-        if current_atmosphere_preset > 0:
-            preset_name = atmosphere_presets[current_atmosphere_preset]
-            if preset_name != "none":
-                return _resolve_transform(preset_name)
-                
-        # Check for investigation mode
-        if current_investigation_mode > 0:
-            mode_name = investigation_modes[current_investigation_mode] 
-            if mode_name != "none":
-                return _resolve_transform(mode_name)
-                
-        # Check individual shaders
-        active_shaders = []
-        for shader_name, state in shader_states.items():
-            if state["enabled"] and state["preset"] > 0:
-                preset_name = state["presets"][state["preset"]]
-                mapping_key = f"{shader_name}_{preset_name}"
-                
-                # Look up the actual transform object
-                if mapping_key in shader_transform_mapping:
-                    return _resolve_transform(shader_transform_mapping[mapping_key])
-                    
-                # Fallback to old naming convention
-                transform_name = f"{shader_name}_{preset_name}_effect"
-                obj = _resolve_transform(transform_name)
-                if obj:
-                    return obj
-                
-                active_shaders.append((shader_name, preset_name))
-                
-        # Return first valid shader transform
-        if active_shaders:
-            shader_name, preset_name = active_shaders[0]
-            mapping_key = f"{shader_name}_{preset_name}"
-            if mapping_key in shader_transform_mapping:
-                return _resolve_transform(shader_transform_mapping[mapping_key])
-            
-        return None
+    # When True, the room_exploration_shaders screen should not re-run fade in
+    suppress_room_fade_once = False
+
+# Debug function for shader hotkeys
+init python:
+    shader_debug_enabled = False  # Set True to emit shader debug prints
+    def debug_shader_key(key_name):
+        """Debug function to log shader key presses"""
+        if shader_debug_enabled:
+            print(f"[SHADER DEBUG] Hotkey pressed: {key_name}")
+
+# Functions for shader management
+init python:
+    def cycle_shader_effect(shader_name, reverse=False):
+        """Cycle through presets for a specific shader effect"""
+        global shader_states
         
-    def get_shader_transform_for_object(obj_name, obj_data):
-        """Get appropriate shader transform for a specific object"""
-        # Special cases for investigation modes
-        if current_investigation_mode == 1:  # evidence_analysis_mode
-            if obj_name in ["evidence", "clue", "document", "photo"]:
-                return "evidence_highlight_mode"
-        elif current_investigation_mode == 2:  # suspect_tracking_mode
-            if obj_name in ["suspect_photo", "person", "character"]:
-                return "suspect_tracking_mode"
-        elif current_investigation_mode == 4:  # revelation_moment_mode
-            if "important" in obj_data.get("tags", []):
-                return "revelation_moment_mode"
+        if shader_debug_enabled:
+            print(f"[SHADER DEBUG] cycle_shader_effect called: {shader_name}, reverse={reverse}")
         
-        # Default to same as room
-        return apply_room_shader_effects()
-        
-    def cycle_shader_preset(shader_name, direction=1):
-        """Cycle through presets for a specific shader"""
         if shader_name not in shader_states:
+            if shader_debug_enabled:
+                print(f"[SHADER DEBUG] ERROR: {shader_name} not found in shader_states")
             return
             
         state = shader_states[shader_name]
-        state["preset"] = (state["preset"] + direction) % len(state["presets"])
+        presets = state["presets"]
+        old_current = state["current"]
         
-        # Enable/disable based on preset
-        if direction > 0 and state["preset"] == 1:
-            state["enabled"] = True
-        elif state["preset"] == 0:
-            state["enabled"] = False
+        if reverse:
+            state["current"] = (state["current"] - 1) % len(presets)
         else:
-            state["enabled"] = True
+            state["current"] = (state["current"] + 1) % len(presets)
             
-        # Reset atmosphere and investigation modes when using individual shaders
-        global current_atmosphere_preset, current_investigation_mode
-        current_atmosphere_preset = 0
-        current_investigation_mode = 0
+        current_preset = presets[state["current"]]
+        
+        if shader_debug_enabled:
+            print(f"[SHADER DEBUG] {shader_name}: {old_current} -> {state['current']} ({current_preset})")
         
         # Show notification
-        show_shader_notification(shader_name, state["presets"][state["preset"]])
+        renpy.show_screen("shader_notification", 
+                         message=f"{shader_name.replace('_', ' ').title()}: {current_preset.title()}",
+                         duration=2.0)
+        
+        # Prevent room fade re-trigger and refresh screen
+        global suppress_room_fade_once
+        suppress_room_fade_once = True
         renpy.restart_interaction()
-        
-    def cycle_atmosphere_preset(direction=1):
+    
+    def cycle_atmosphere_preset(reverse=False):
         """Cycle through atmosphere presets"""
-        global current_atmosphere_preset, current_investigation_mode
+        global current_atmosphere_preset, atmosphere_presets
         
-        # Reset individual shaders when using atmosphere preset
-        for shader_name in shader_states:
-            shader_states[shader_name]["enabled"] = False
-            shader_states[shader_name]["preset"] = 0
+        old_preset = current_atmosphere_preset
+        
+        if reverse:
+            current_atmosphere_preset = (current_atmosphere_preset - 1) % len(atmosphere_presets)
+        else:
+            current_atmosphere_preset = (current_atmosphere_preset + 1) % len(atmosphere_presets)
             
-        # Reset investigation mode
-        current_investigation_mode = 0
-        
-        # Cycle atmosphere preset
-        current_atmosphere_preset = (current_atmosphere_preset + direction) % len(atmosphere_presets)
         preset_name = atmosphere_presets[current_atmosphere_preset]
         
-        show_shader_notification("Atmosphere", preset_name)
-        renpy.restart_interaction()
+        if shader_debug_enabled:
+            print(f"[SHADER DEBUG] Atmosphere preset: {old_preset} -> {current_atmosphere_preset} ({preset_name})")
+            print(f"[SHADER DEBUG] get_current_atmosphere_transform() returns: {get_current_atmosphere_transform()}")
         
-    def cycle_investigation_mode(direction=1):
+        # Show notification
+        renpy.show_screen("shader_notification",
+                         message=f"Atmosphere: {preset_name.replace('_', ' ').title()}",
+                         duration=2.0)
+    
+    def cycle_investigation_mode(reverse=False):
         """Cycle through investigation modes"""
-        global current_investigation_mode, current_atmosphere_preset
+        global current_investigation_mode, investigation_modes
         
-        # Reset individual shaders when using investigation mode
-        for shader_name in shader_states:
-            shader_states[shader_name]["enabled"] = False
-            shader_states[shader_name]["preset"] = 0
+        if reverse:
+            current_investigation_mode = (current_investigation_mode - 1) % len(investigation_modes)
+        else:
+            current_investigation_mode = (current_investigation_mode + 1) % len(investigation_modes)
             
-        # Reset atmosphere preset
-        current_atmosphere_preset = 0
-        
-        # Cycle investigation mode
-        current_investigation_mode = (current_investigation_mode + direction) % len(investigation_modes)
         mode_name = investigation_modes[current_investigation_mode]
         
-        show_shader_notification("Investigation", mode_name)
-        renpy.restart_interaction()
-        
+        # Show notification  
+        renpy.show_screen("shader_notification",
+                         message=f"Investigation: {mode_name.replace('_', ' ').title()}",
+                         duration=2.0)
+    
     def reset_all_shaders():
-        """Reset all shaders to default state"""
-        global current_atmosphere_preset, current_investigation_mode
+        """Reset all shader effects to off state and refresh rendering"""
+        global shader_states, current_atmosphere_preset, current_investigation_mode, suppress_room_fade_once, shader_debug_enabled
         
+        # Zero out all shader states
         for shader_name in shader_states:
-            shader_states[shader_name]["enabled"] = False
-            shader_states[shader_name]["preset"] = 0
-            
+            try:
+                old = shader_states[shader_name]["current"]
+                shader_states[shader_name]["current"] = 0
+                if shader_debug_enabled:
+                    print(f"[SHADER RESET] {shader_name}: {old} -> 0")
+            except Exception as e:
+                print(f"[SHADER RESET] Failed to reset {shader_name}: {e}")
+        
+        # Reset atmosphere/investigation presets
         current_atmosphere_preset = 0
         current_investigation_mode = 0
         
-        show_shader_notification("All Shaders", "Reset")
-        renpy.restart_interaction()
+        # Ensure CRT and related flags are disabled
+        try:
+            store.crt_enabled = False
+            store.crt_animated = False
+            # Reset vignette to defaults
+            store.crt_vignette_strength = 0.35
+            store.crt_vignette_width = 0.25
+        except Exception:
+            pass
         
-    def show_shader_notification(shader_name, preset_name):
-        """Show a brief notification about shader changes"""
-        notification_text = f"{shader_name}: {preset_name}"
-        renpy.show_screen("shader_notification", notification_text)
+        # Prevent room fade from re-triggering and force an interaction refresh
+        suppress_room_fade_once = True
+        
+        # Show notification
+        renpy.show_screen("shader_notification",
+                         message="All Shaders Reset",
+                         duration=2.0)
+        
+        # Refresh the scene so transforms are re-evaluated immediately
+        renpy.restart_interaction()
+    
+    def get_current_shader_transform(shader_name):
+        """Get the current transform for a shader effect"""
+        if shader_name not in shader_states:
+            return f"{shader_name}_off"
+            
+        state = shader_states[shader_name]
+        current_preset = state["presets"][state["current"]]
+        return f"{shader_name}_{current_preset}"
+    
+    def get_current_atmosphere_transform():
+        """Get the current atmosphere preset transform"""
+        preset_name = atmosphere_presets[current_atmosphere_preset]
+        return f"{preset_name}_atmosphere"
+    
+    def get_current_investigation_transform():
+        """Get the current investigation mode transform"""
+        mode_name = investigation_modes[current_investigation_mode]
+        return f"{mode_name}_investigation"
+    
+    def install_shader_system():
+        """Initialize the shader system - call this at game start"""
+        # Reset all states
+        reset_all_shaders()
+        
+        # Log installation
+        print("[SHADER] Shader system installed and ready")
+
+# Hotkey definitions for shader controls
+screen shader_hotkeys():
+    # Core controls - using K_ prefix for proper Ren'Py key handling
+    key "K_s" action [Function(debug_shader_key, "s"), ToggleScreen("shader_menu")]
+    # Toggle shader debug prints quickly
+    key "K_y" action ToggleVariable("shader_debug_enabled")
+    key "K_h" action [Function(debug_shader_key, "h"), ToggleVariable("shader_help_visible")]  
+    key "K_r" action [Function(debug_shader_key, "r"), Function(reset_all_shaders)]
+    
+    # Individual shader cycling (Shift+Key) - only for active shaders
+    key ["K_LSHIFT", "K_g"] action [Function(debug_shader_key, "shift+g"), Function(cycle_shader_effect, "film_grain", False)]
+    key ["K_LSHIFT", "K_l"] action [Function(debug_shader_key, "shift+l"), Function(cycle_shader_effect, "lighting", False)]
+    key ["K_LSHIFT", "K_c"] action [Function(debug_shader_key, "shift+c"), Function(cycle_shader_effect, "color_grading", False)]
+    
+    # Reverse cycling (Ctrl+Shift+Key) - only for active shaders
+    key ["K_LCTRL", "K_LSHIFT", "K_g"] action Function(cycle_shader_effect, "film_grain", True)
+    key ["K_LCTRL", "K_LSHIFT", "K_l"] action Function(cycle_shader_effect, "lighting", True)
+    key ["K_LCTRL", "K_LSHIFT", "K_c"] action Function(cycle_shader_effect, "color_grading", True)
+    
+    # Atmosphere and investigation presets
+    key ["K_LALT", "K_a"] action [Function(debug_shader_key, "alt+a"), Function(cycle_atmosphere_preset, False)]
+    key ["K_LALT", "K_i"] action [Function(debug_shader_key, "alt+i"), Function(cycle_investigation_mode, False)]
+    key ["K_LCTRL", "K_LALT", "K_a"] action Function(cycle_atmosphere_preset, True)
+    key ["K_LCTRL", "K_LALT", "K_i"] action Function(cycle_investigation_mode, True)
 
 # Notification screen for shader changes
-screen shader_notification(text):
-    zorder 200
-    timer 2.0 action Hide("shader_notification")
+screen shader_notification(message, duration=2.0):
+    timer duration action Hide("shader_notification")
     
     frame:
-        xalign 0.5
-        yalign 0.1
+        background "#000080cc"
         padding (20, 10)
-        background "#000000cc"
+        xalign 0.5 yalign 0.1
         
-        text text:
+        text message:
             color "#ffffff"
             size 24
             text_align 0.5
 
-# Quick help screen
-screen shader_quick_help():
-    zorder 100
-    modal False
-    
-    frame:
-        xalign 0.02
-        yalign 0.02
-        padding (15, 10)
-        background "#000000dd"
+# Quick help overlay
+screen shader_help():
+    if shader_help_visible:
+        modal True
         
-        vbox:
-            text "Shader Controls" size 18 color "#ffff00"
-            null height 5
+        frame:
+            background "#000000cc"
+            padding (30, 30)
+            xalign 0.5 yalign 0.5
             
-            text "Shift+G - Film Grain" size 12 color "#cccccc"
-            text "Shift+F - Fog Effects" size 12 color "#cccccc"
-            text "Shift+V - Vintage/Sepia" size 12 color "#cccccc"
-            text "Shift+L - Lighting" size 12 color "#cccccc"
-            text "Shift+W - Weather/Rain" size 12 color "#cccccc"
-            
-            null height 5
-            text "Alt+A - Atmosphere Presets" size 12 color "#cccccc"
-            text "Alt+I - Investigation Modes" size 12 color "#cccccc"
-            
-            null height 5
-            text "R - Reset All Effects" size 12 color "#cccccc"
-            text "H - Toggle This Help" size 12 color "#cccccc"
-            
-            textbutton "Close" action Hide("shader_quick_help") text_size 12
-
-# Enhanced shader controls integration
-screen shader_enhanced_controls():
-    if not hasattr(store, 'input_locked') or not input_locked:
-        # Help toggle
-        key "h" action [ToggleScreen("shader_quick_help"), renpy.curry(renpy.play)(["audio/ui/menu_toggle.wav"])]
-        
-        # Reset all shaders
-        key "r" action Function(reset_all_shaders)
-        
-        # Individual shader cycling (Shift + Key)
-        key "shift_K_g" action Function(cycle_shader_preset, "film_grain", 1)
-        key "shift_K_f" action Function(cycle_shader_preset, "fog", 1)
-        key "shift_K_v" action Function(cycle_shader_preset, "vintage", 1)
-        key "shift_K_l" action Function(cycle_shader_preset, "lighting", 1)
-        key "shift_K_w" action Function(cycle_shader_preset, "rain", 1)
-        key "shift_K_d" action Function(cycle_shader_preset, "depth_of_field", 1)
-        key "shift_K_c" action Function(cycle_shader_preset, "color_grading", 1)
-        key "shift_K_e" action Function(cycle_shader_preset, "edge_detection", 1)
-        key "shift_K_m" action Function(cycle_shader_preset, "mystery_reveal", 1)
-        key "shift_K_t" action Function(cycle_shader_preset, "flashlight", 1)
-        
-        # Reverse cycling (Ctrl + Shift + Key)
-        key "ctrl_shift_K_g" action Function(cycle_shader_preset, "film_grain", -1)
-        key "ctrl_shift_K_f" action Function(cycle_shader_preset, "fog", -1)
-        key "ctrl_shift_K_v" action Function(cycle_shader_preset, "vintage", -1)
-        key "ctrl_shift_K_l" action Function(cycle_shader_preset, "lighting", -1)
-        key "ctrl_shift_K_w" action Function(cycle_shader_preset, "rain", -1)
-        key "ctrl_shift_K_d" action Function(cycle_shader_preset, "depth_of_field", -1)
-        key "ctrl_shift_K_c" action Function(cycle_shader_preset, "color_grading", -1)
-        key "ctrl_shift_K_e" action Function(cycle_shader_preset, "edge_detection", -1)
-        key "ctrl_shift_K_m" action Function(cycle_shader_preset, "mystery_reveal", -1)
-        key "ctrl_shift_K_t" action Function(cycle_shader_preset, "flashlight", -1)
-        
-        # Atmosphere and investigation mode cycling (Alt + Key)
-        key "alt_K_a" action Function(cycle_atmosphere_preset, 1)
-        key "alt_K_i" action Function(cycle_investigation_mode, 1)
-        
-        # Reverse atmosphere/investigation cycling
-        key "ctrl_alt_K_a" action Function(cycle_atmosphere_preset, -1)
-        key "ctrl_alt_K_i" action Function(cycle_investigation_mode, -1)
+            vbox:
+                spacing 10
+                
+                text "Shader System Hotkeys" size 32 color "#ffffff" text_align 0.5
+                null height 10
+                
+                hbox:
+                    spacing 50
+                    
+                    vbox:
+                        spacing 5
+                        text "Core Controls:" size 24 color "#ffff00"
+                        text "S - Shader Menu" size 18 color "#ffffff"
+                        text "H - This Help" size 18 color "#ffffff"
+                        text "R - Reset All" size 18 color "#ffffff"
+                        
+                        null height 10
+                        
+                        text "Active Effects (Shift+):" size 24 color "#ffff00"
+                        text "G - Film Grain" size 18 color "#ffffff"
+                        text "L - Lighting" size 18 color "#ffffff"
+                        text "C - Color Grading" size 18 color "#ffffff"
+                    
+                    vbox:
+                        spacing 5
+                        text "Additional Controls:" size 24 color "#ffff00"
+                        text "Y - Toggle Debug Output" size 18 color "#ffffff"
+                        
+                        null height 10
+                        
+                        text "Presets:" size 24 color "#ffff00"
+                        text "Alt+A - Atmosphere" size 18 color "#ffffff"
+                        text "Alt+I - Investigation" size 18 color "#ffffff"
+                        
+                        null height 10
+                        
+                        text "Reverse: Ctrl+Shift/Alt" size 18 color "#cccccc"
+                
+                null height 20
+                
+                textbutton "Close (H)" action ToggleVariable("shader_help_visible"):
+                    xalign 0.5

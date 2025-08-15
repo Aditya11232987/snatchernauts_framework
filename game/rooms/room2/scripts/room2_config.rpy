@@ -75,7 +75,7 @@ define ROOM2_OBJECTS = {
             "investigate": ROOM2_MACHINE_HUM
         }
     },
-    create_bloom_config(BLOOM_PRESETS["neon_subtle"]),
+    create_desaturation_config(DESATURATION_PRESETS["neon_subtle"]),
     create_animation_config({
         "hover_scale_boost": 1.02,
         "hover_brightness_boost": 0.1

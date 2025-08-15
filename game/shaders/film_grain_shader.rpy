@@ -1,94 +1,86 @@
 # Film Grain Shader
-# Adds texture and vintage feel to the detective game
-#
-# Overview
-# - Procedural film grain effect
-# - Adjustable strength and contrast
-# - Animated grain pattern
+# Adds procedural film grain texture with various intensity levels
 
-init python hide:
-    # Film Grain Effect - adds texture and vintage feel
-    renpy.register_shader(
-        "film_grain",
-        fragment_functions="""
-        float random(vec2 co) {
-            return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
-        }
-        
-        float grain(vec2 uv, float time, float strength) {
-            float noise = random(uv + vec2(time, time * 0.3));
-            return mix(1.0, noise, strength);
-        }
-        """,
-        variables="""
-        uniform float u_grain_strength;
-        uniform float u_grain_time;
-        uniform float u_grain_contrast;
+init python:
+    from renpy.uguu import GL_CLAMP_TO_EDGE
+
+init python:
+    # Film grain shader registration (uses built-in u_time uniform from Ren'Py)
+    renpy.register_shader("film_grain_shader", variables="""
+        uniform float u_lod_bias;
+        uniform float u_time;
+        uniform float u_grain_intensity;
+        uniform float u_grain_size;
+        uniform float u_grain_downscale; // 2.0 means 1280x720 -> 640x360 sampling grid
         uniform vec2 u_model_size;
-        uniform sampler2D tex0;
         attribute vec2 a_tex_coord;
-        attribute vec4 a_position;
         varying vec2 v_tex_coord;
-        """,
-        vertex_300="""
-        v_tex_coord = a_position.xy/u_model_size;
-        """,
-        fragment_300="""
-        vec4 color = texture2D(tex0, v_tex_coord);
+    """, vertex_300="""
+        v_tex_coord = a_tex_coord;
+    """, fragment_300="""
+        vec2 uv = v_tex_coord;
+        float time = u_time * 0.1;
         
-        // Generate grain in [-1, 1] with larger grain pattern and slower animation
-        float n = grain(v_tex_coord * 300.0, u_grain_time * 0.4, 1.0) * 2.0 - 1.0;
+        // Downscale sampling grid to make grain chunkier (e.g., 2.0 => 640x360 on 1280x720)
+        vec2 grid = max(vec2(1.0), u_model_size / max(u_grain_downscale, 1.0));
+        vec2 uv_ds = floor(uv * grid) / grid;
         
-        // Apply additive grain so midtones don't crush
-        color.rgb += n * u_grain_strength;
+        // Generate procedural noise at reduced resolution, then apply to full-res color
+        vec2 grain_uv = uv_ds * u_grain_size + time;
+        float noise = fract(sin(dot(grain_uv, vec2(12.9898, 78.233))) * 43758.5453);
+        noise = (noise - 0.5) * 2.0;
         
-        // Apply contrast around mid-gray without darkening
-        color.rgb = (color.rgb - 0.5) * (1.0 + u_grain_contrast) + 0.5;
+        // Sample base color with configured LOD bias
+        vec4 color = texture2D(tex0, uv, u_lod_bias);
         
-        // Clamp to valid range
-        color.rgb = clamp(color.rgb, 0.0, 1.0);
+        // Fade noise out on transparent/edge pixels to avoid visible rectangles
+        // Use a softstep on alpha so noise ramps in only where there is content
+        float fade = smoothstep(0.0, 0.02, color.a);
+        
+        // Apply grain based on intensity and alpha fade
+        color.rgb += noise * u_grain_intensity * fade;
         
         gl_FragColor = color;
-        """
-    )
+    """)
 
-# Transform definitions for film grain
-transform film_grain_effect(strength=0.1, contrast=0.2):
+# Film grain effect transforms
+transform film_grain_effect(intensity=0.0, size=100.0, downscale=2.0):
     mesh True
-    shader "film_grain"
-    u_grain_strength strength
-    u_grain_contrast contrast
-    block:
-        u_grain_time 0.0
-        linear 60.0 u_grain_time 60.0
-        repeat
+    # Clamp texture edges to avoid sampling outside and remove outlines
+    gl_texture_wrap (GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    # Prefer neutral LOD bias to avoid sampling lower mip levels on edges
+    u_lod_bias 0.0
+    gl_mipmap True
 
-transform subtle_grain():
-    mesh True
-    shader "film_grain"
-    u_grain_strength 0.08
-    u_grain_contrast 0.15
-    block:
-        u_grain_time 0.0
-        linear 60.0 u_grain_time 60.0
-        repeat
+    shader "film_grain_shader"
+    u_grain_intensity intensity
+    u_grain_size size
+    u_grain_downscale downscale
+    
+    # Ensure time advances by invoking a no-op timepump so u_time updates continuously
+    function film_grain_timepump
 
-transform moderate_grain():
-    mesh True
-    shader "film_grain"
-    u_grain_strength 0.16
-    u_grain_contrast 0.22
-    block:
-        u_grain_time 0.0
-        linear 60.0 u_grain_time 60.0
-        repeat
+# Provide a timepump function to keep film grain animated
+init python:
+    if not hasattr(store, 'film_grain_last_timepump'):
+        store.film_grain_last_timepump = 0.0
 
-transform heavy_grain():
-    mesh True
-    shader "film_grain"
-    u_grain_strength 0.25
-    u_grain_contrast 0.35
-    block:
-        u_grain_time 0.0
-        linear 60.0 u_grain_time 60.0
-        repeat
+    def film_grain_timepump(trans, st, at):
+        """Return a small non-zero so Ren'Py keeps calling and u_time advances."""
+        # st is used by the shader system to feed u_time; just keep re-scheduling
+        return 0
+
+    # Hotkeys can toggle film grain via shader menu; nothing else needed here.
+
+# Preset transforms for different grain levels
+transform film_grain_off():
+    film_grain_effect(0.0, 100.0)
+
+transform film_grain_subtle():
+    film_grain_effect(0.02, 120.0)
+
+transform film_grain_moderate():
+    film_grain_effect(0.05, 100.0)
+
+transform film_grain_heavy():
+    film_grain_effect(0.1, 80.0)

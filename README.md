@@ -4,7 +4,7 @@
 
 <i>Retro‑cinematic, interactive visual novels — powered by Ren'Py 8.4</i>
 
-[![version](https://img.shields.io/badge/version-0.5.2-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.5.3-blue)](CHANGELOG.md)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub mirror](https://img.shields.io/badge/github-mirror-blue?logo=github)](https://github.com/grahfmusic/snatchernauts_framework)
 [![gitlab pipeline](https://gitlab.com/grahfmusic/snatchernauts_framework/badges/main/pipeline.svg)](https://gitlab.com/grahfmusic/snatchernauts_framework/-/pipelines)
@@ -63,10 +63,15 @@ See the Wiki for a deep dive, code walkthroughs, and examples.
 1) Install Ren'Py 8.4.x and set your SDK path. Example:
    - export RENPY_SDK=~/renpy-8.4.1-sdk
 2) Run the project:
-   - $RENPY_SDK/renpy.sh .
-3) Lint (optional):
-   - make lint  or  $RENPY_SDK/renpy.sh . lint
-4) Build distributions via Ren’Py Launcher → Build & Distribute.
+   - **Recommended**: `scripts/run-game.sh` (unified launcher with linting)
+   - **Direct**: `$RENPY_SDK/renpy.sh .`
+3) Development workflow:
+   - `scripts/run-game.sh --lint` (lint then launch)
+   - `scripts/run-game.sh --debug` (launch with console output)
+   - `scripts/run-game.sh --help` (show all options)
+4) Build distributions via Ren'Py Launcher → Build & Distribute.
+
+*See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation*
 
 
 ## 🎮 Controls (Default)
@@ -126,7 +131,12 @@ The Wiki covers everything from getting started to APIs and internals:
 - Wiki/index.md — table of contents
 - Architecture, Hooks, APIs, Screens, Effects, Examples
 
-If you’re new, start with:
+Quick References:
+- `DEVELOPMENT_TOOLS.md` — game launcher and linting tools
+- `SHADER_REFERENCE.md` — Ren'Py shader documentation links
+- `game/shaders/HOTKEY_MAPPING.md` — in-game controls reference
+
+If you're new, start with:
 - Wiki/01-Overview.md
 - Wiki/02-Getting-Started.md
 

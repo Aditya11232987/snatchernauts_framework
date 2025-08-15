@@ -43,6 +43,11 @@ init -2 python:
 
     # -------------------- Global Hooks (override here if desired) --------------------
     def on_game_start() -> None:
+        # Suppress CRT boot logs until we enter the first room
+        try:
+            store._suppress_crt_boot_logs = True
+        except Exception:
+            pass
         """Called once at game start (after info overlay flow).
 
         Set global defaults, feature toggles, or analytics/logging here.
@@ -83,24 +88,92 @@ init -2 python:
             pass
 
     def on_room_enter(room_id: str) -> None:
+        # Prepare initial frame suppression and enable CRT logs after first room enter
+        try:
+            store._initial_room_frame = True
+        except Exception:
+            pass
+        # Enable CRT logs after first room enter to suppress noisy boot flips
+        try:
+            store._suppress_crt_boot_logs = False
+        except Exception:
+            pass
+        
+        # Ensure CRT is always enabled and animated during gameplay
+        try:
+            if not hasattr(store, '_crt_game_initialized'):
+                store.crt_enabled = True
+                store.crt_animated = True
+                store._crt_game_initialized = True
+                # Re-apply parameters so the shader picks up the state immediately
+                set_crt_parameters(
+                    warp=getattr(store, 'crt_warp', 0.2),
+                    scan=getattr(store, 'crt_scan', 0.5),
+                    chroma=getattr(store, 'crt_chroma', 0.9),
+                    scanline_size=getattr(store, 'crt_scanline_size', 1.0),
+                )
+        except Exception:
+            pass
+        
         """Called after a room is loaded (before entering exploration screen).
 
         Parameters
         - room_id: current room identifier (e.g., "room1").
         """
+        # Reset shaders before applying per-room defaults
+        try:
+            reset_all_shaders()
+            store.suppress_room_fade_once = True
+        except Exception as e:
+            print(f"[GameLogic] Shader reset failed: {e}")
+        
         handler = GAME_LOGIC_HANDLERS.get(room_id)
         if handler and hasattr(handler, 'on_room_enter'):
             try:
                 handler.on_room_enter(room_id)
             except Exception as e:
                 print(f"GameLogic error in on_room_enter: {e}")
+        # Apply per-room default shader presets after reset
+        try:
+            from renpy.store import shader_states
+            def _set(shader_name: str, preset_id: str):
+                state = shader_states.get(shader_name)
+                if not state:
+                    return
+                presets = state.get("presets", [])
+                if preset_id in presets:
+                    state["current"] = presets.index(preset_id)
+            
+            # Room-specific defaults with lighting parameters
+            if room_id == 'room1':
+                _set('color_grading', 'detective_office')
+                _set('lighting', 'car_headlights')
+                store.lighting_strength = 1.2
+                store.lighting_animated = True
+                store.lighting_anim_speed = 0.8
+                store.lighting_anim_strength = 0.2
+            elif room_id == 'room2':
+                _set('color_grading', 'evidence_room')
+                _set('lighting', 'window_blinds')
+                store.lighting_strength = 0.9
+                store.lighting_animated = False
+                store.lighting_anim_speed = 0.3
+                store.lighting_anim_strength = 0.1
+            elif room_id == 'room3':
+                _set('color_grading', 'midnight_chase')
+                _set('lighting', 'car_headlights')
+                store.lighting_strength = 1.5
+                store.lighting_animated = True
+                store.lighting_anim_speed = 1.2
+                store.lighting_anim_strength = 0.25
+        except Exception as e:
+            print(f"[GameLogic] Shader preset apply failed: {e}")
         # Global cross-room logic can go here as well.
         # Example: auto-enable letterbox or set ambience volume.
         # show_letterbox()
         # EXAMPLE: Set a default hint when entering a specific room
         # if room_id == 'room1':
         #     show_hint("Use WASD/Arrows to navigate objects. Press A/Enter to interact.")
-
     def on_object_hover(room_id: str, obj_name: str) -> None:
         """Called when the cursor hovers over an object (not every frame).
 

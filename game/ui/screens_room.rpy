@@ -39,7 +39,82 @@ screen room_background_and_objects():
     if not room_has_faded_in:
         timer ROOM_DISPLAY_CONFIG["fade_duration"] action SetVariable('room_has_faded_in', True)
 
+    # Determine active transforms for unified frame-level post-processing
+    $ cg_state = shader_states["color_grading"]["current"] if "color_grading" in shader_states else 0
+    $ li_state = shader_states["lighting"]["current"] if "lighting" in shader_states else 0
+    $ grain_state = shader_states["film_grain"]["current"] if "film_grain" in shader_states else 0
+
+    $ grade_transform = None
+    if shader_debug_enabled:
+        python:
+            try:
+                cg_name = shader_states["color_grading"]["presets"][cg_state] if cg_state < len(shader_states["color_grading"]["presets"]) else "n/a"
+                li_name = shader_states["lighting"]["presets"][li_state] if li_state < len(shader_states["lighting"]["presets"]) else "n/a"
+                gr_name = shader_states["film_grain"]["presets"][grain_state] if grain_state < len(shader_states["film_grain"]["presets"]) else "n/a"
+                print(f"[SHADER FLOW] States: CG={cg_state} ({cg_name}), LI={li_state} ({li_name}), GR={grain_state} ({gr_name})")
+            except Exception as e:
+                print(f"[SHADER FLOW] Debug print error: {e}")
+    if cg_state > 0:
+        $ cg_preset = shader_states["color_grading"]["presets"][cg_state]
+        if cg_preset == "classic_noir":
+            $ grade_transform = color_grade_classic_noir()
+        elif cg_preset == "neon_night":
+            $ grade_transform = color_grade_neon_night()
+        elif cg_preset == "rain_streets":
+            $ grade_transform = color_grade_rain_streets()
+        elif cg_preset == "smoky_bar":
+            $ grade_transform = color_grade_smoky_bar()
+        elif cg_preset == "miami_vice":
+            $ grade_transform = color_grade_miami_vice()
+        elif cg_preset == "detective_office":
+            $ grade_transform = color_grade_detective_office()
+        elif cg_preset == "crime_scene":
+            $ grade_transform = color_grade_crime_scene()
+        elif cg_preset == "blade_runner":
+            $ grade_transform = color_grade_blade_runner()
+        elif cg_preset == "evidence_room":
+            $ grade_transform = color_grade_evidence_room()
+        elif cg_preset == "midnight_chase":
+            $ grade_transform = color_grade_midnight_chase()
+
+    $ light_transform = None
+    if li_state > 0:
+        $ li_preset = shader_states["lighting"]["presets"][li_state]
+        if li_preset == "street_lamp":
+            $ light_transform = lighting_street_lamp()
+        elif li_preset == "neon_signs":
+            $ light_transform = lighting_neon_signs()
+        elif li_preset == "window_blinds":
+            $ light_transform = lighting_window_blinds()
+        elif li_preset == "police_lights":
+            $ light_transform = lighting_police_lights()
+        elif li_preset == "desk_lamp":
+            $ light_transform = lighting_desk_lamp()
+        elif li_preset == "car_headlights":
+            $ light_transform = lighting_car_headlights()
+        elif li_preset == "interrogation":
+            $ light_transform = lighting_interrogation()
+        elif li_preset == "sunset_window":
+            $ light_transform = lighting_sunset_window()
+        elif li_preset == "dark_alley":
+            $ light_transform = lighting_dark_alley()
+        elif li_preset == "tv_glow":
+            $ light_transform = lighting_tv_glow()
+
+    $ grain_transform = None
+    if grain_state > 0:
+        $ grain_preset = shader_states["film_grain"]["presets"][grain_state]
+        if grain_preset == "subtle":
+            $ grain_transform = room_film_grain_overlay(grain_intensity=0.02, grain_size=120.0)
+        elif grain_preset == "moderate":
+            $ grain_transform = room_film_grain_overlay(grain_intensity=0.05, grain_size=100.0)
+        elif grain_preset == "heavy":
+            $ grain_transform = room_film_grain_overlay(grain_intensity=0.10, grain_size=80.0)
+
     if hasattr(store, 'crt_enabled') and store.crt_enabled:
+        $ _crt_dbg = f"CRT ON (warp={getattr(store,'crt_warp',0.2)}, scan={getattr(store,'crt_scan',0.5)}, chroma={getattr(store,'crt_chroma',0.9)}, size={getattr(store,'crt_scanline_size',1.0)}, vignette=({getattr(store,'crt_vignette_strength',0.35)},{getattr(store,'crt_vignette_width',0.25)}), animated={getattr(store,'crt_animated',False)})"
+        if shader_debug_enabled:
+            $ print(f"[SHADER FLOW] {_crt_dbg}")
         $ crt_warp = getattr(store, 'crt_warp', 0.2)
         $ crt_scan = getattr(store, 'crt_scan', 0.5)
         $ crt_chroma = getattr(store, 'crt_chroma', 0.9)
@@ -47,7 +122,7 @@ screen room_background_and_objects():
         $ crt_vignette_strength = getattr(store, 'crt_vignette_strength', 0.35)
         $ crt_vignette_width = getattr(store, 'crt_vignette_width', 0.25)
         $ crt_animated = getattr(store, 'crt_animated', False)
-        frame at (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width)):
+        frame at (light_transform if light_transform else room_no_fade(), grade_transform if grade_transform else room_no_fade(), grain_transform if grain_transform else room_no_fade(), (animated_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width) if crt_animated else static_chroma_crt(crt_warp, crt_scan, crt_chroma, crt_scanline_size, vignette_strength=crt_vignette_strength, vignette_width=crt_vignette_width))):
             background None
             add get_fallback_background() at black_background()
             if not room_has_faded_in:
@@ -69,29 +144,31 @@ screen room_background_and_objects():
                             ypos props["ypos"]
                             xsize props["xsize"]
                             ysize props["ysize"]
-            use room_bloom_effects_internal
     else:
-        add get_fallback_background() at black_background()
-        if not room_has_faded_in:
-            add get_room_background() at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"])
-        else:
-            add get_room_background() at room_no_fade()
-        for obj_name, obj_data in room_objects.items():
-            if should_display_object(obj_data) and not is_object_hidden(obj_data):
-                $ props = get_object_display_properties(obj_data)
-                if not room_has_faded_in:
-                    add props["image"] at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"]):
-                        xpos props["xpos"]
-                        ypos props["ypos"]
-                        xsize props["xsize"]
-                        ysize props["ysize"]
-                else:
-                    add props["image"] at room_no_fade():
-                        xpos props["xpos"]
-                        ypos props["ypos"]
-                        xsize props["xsize"]
-                        ysize props["ysize"]
-        use room_bloom_effects_internal
+        if shader_debug_enabled:
+            $ print("[SHADER FLOW] CRT OFF")
+        frame at (light_transform if light_transform else room_no_fade(), grade_transform if grade_transform else room_no_fade(), grain_transform if grain_transform else room_no_fade()):
+            background None
+            add get_fallback_background() at black_background()
+            if not room_has_faded_in:
+                add get_room_background() at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"])
+            else:
+                add get_room_background() at room_no_fade()
+            for obj_name, obj_data in room_objects.items():
+                if should_display_object(obj_data) and not is_object_hidden(obj_data):
+                    $ props = get_object_display_properties(obj_data)
+                    if not room_has_faded_in:
+                        add props["image"] at room_fade_in(ROOM_DISPLAY_CONFIG["fade_duration"]):
+                            xpos props["xpos"]
+                            ypos props["ypos"]
+                            xsize props["xsize"]
+                            ysize props["ysize"]
+                    else:
+                        add props["image"] at room_no_fade():
+                            xpos props["xpos"]
+                            ypos props["ypos"]
+                            xsize props["xsize"]
+                            ysize props["ysize"]
 
 screen room_background():
     use room_background_and_objects
@@ -103,9 +180,10 @@ screen room_objects():
 screen room_exploration():
     # Lock input until the initial fade completes
     $ input_locked = not room_has_faded_in
-    # Room background and objects on the same layer
+    # Room background and objects
     use room_background_and_objects
-    use room_bloom_effects
+    # Shader hotkeys and help
+    use shader_hotkeys
 
     # Simplified: No longer using pending dialogue system
     # Dialogue is called directly from room logic with proper UI clearing
@@ -128,6 +206,8 @@ screen room_exploration():
         use room_ui_buttons
     # Debug overlay is registered as an overlay screen; no need to include here
     use info_overlay
+    
+    # Simple shader controls will be added here later
 
     # Keyboard navigation for interaction menus
     if (not input_locked) and interaction_menu_active:
@@ -136,10 +216,7 @@ screen room_exploration():
         key "K_RETURN" action Function(execute_selected_action)
         key "K_ESCAPE" action Function(keyboard_cancel_action)
 
-    # Prevent accidental entry into the game menu (right click / Esc) during exploration
-    # Use dedicated cancel in interaction menu instead.
-    if not input_locked:
-        key "game_menu" action NullAction()
+    # Allow access to game menu with Escape/Start button
 
     # Gamepad controls
     if (not input_locked) and gamepad_navigation_enabled:
@@ -167,12 +244,12 @@ screen room_exploration():
 
     # Global shortcuts
     if not input_locked:
-        key "c" action Function(toggle_crt_effect)
+        key "shift_p" action Function(toggle_crt_effect)  # Changed from 'c' to avoid shader conflict
         key "f" action Function(fade_out_room_audio)
         key "l" action Function(toggle_letterbox)
         key "i" action ToggleVariable("show_info_overlay")
         # Toggle CRT scanline animation
-        key "a" action Function(toggle_crt_animation)
+        key "alt_c" action Function(toggle_crt_animation)  # Changed from 'a' to avoid shader conflict
 
     # Scanline size testing
     if not input_locked:

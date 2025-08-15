@@ -1,38 +1,23 @@
-# Shader System Setup Guide
+# Simplified Shader System - CRT and Bloom Only
 
-## ✅ Complete Shader System with Bloom & CRT Integration
+## ✅ Clean Shader System with Bloom & CRT
 
-### 🔧 **Quick Setup (3 Steps)**
+### 🎯 **Overview** 
+This system provides only the essential visual effects:
+- **CRT Shader**: Authentic CRT monitor effects with scanlines and distortion
+- **Bloom Shader**: Enhanced lighting and glow effects 
+- **Letterbox Shader**: Cinematic letterbox bars for cutscenes
 
-#### 1. Install the System
-Add this to your main game script (e.g., at the `start` label):
+All complex atmospheric and environmental shaders have been removed for performance and simplicity.
 
-```renpy
-label start:
-    # Install the enhanced shader system
-    $ install_shader_system()
-    
-    # Your existing game code continues here...
-    jump room1_exploration
-```
+### 🔧 **Quick Setup**
 
-#### 2. Update Your Room Exploration
-Replace your current room exploration screen usage:
+The system is automatically initialized when the game loads. No manual setup required!
 
-**Old:**
-```renpy 
-show screen room_exploration
-```
-
-**New:**
-```renpy
-show screen room_exploration_shaders
-```
-
-#### 3. Test the System
-- Press `H` in-game for hotkey help
-- Try `Shift+G` for film grain
-- Try `Alt+A` to cycle atmosphere presets
+**Usage:**
+- CRT effects are controlled via the existing CRT controls
+- Bloom effects are handled automatically by the room system
+- Letterbox effects activate during dialogue and cutscenes
 
 ### 🎨 **How the Layering Works**
 
@@ -66,117 +51,44 @@ show screen room_exploration_shaders
 - Investigation modes can override for specific objects (evidence highlighting, etc.)
 - Maintains visual coherence
 
-### ⌨️ **Updated Hotkey Mapping**
+### ⌨️ **Hotkey Controls**
 
-#### **Moved to Avoid Conflicts:**
-- **CRT Toggle**: `C` → `Shift+P`
-- **CRT Animation**: `A` → `Alt+C`
+#### **CRT Shader Controls:**
+- **CRT Toggle**: `C` - Enable/disable CRT effects
+- **CRT Animation**: `A` - Toggle scanline animation
+- **Scanline Size**: `1-4` - Adjust scanline thickness
+- **Vignette**: `[,]` - Adjust vignette strength
+- **Vignette Width**: `-,=` - Adjust vignette width
+- **Reset CRT**: `0` - Reset CRT to defaults
 
-#### **New Shader Controls:**
-- **Help**: `H` - Toggle quick help overlay
-- **Reset**: `R` - Reset all shader effects
-
-#### **Individual Effects (Shift+Key):**
-- `Shift+G` - Film Grain
-- `Shift+F` - Fog Effects  
-- `Shift+V` - Vintage/Sepia
-- `Shift+L` - Lighting
-- `Shift+W` - Weather/Rain
-- `Shift+D` - Depth of Field
-- `Shift+C` - Color Grading
-- `Shift+E` - Edge Detection
-- `Shift+M` - Mystery Reveal
-- `Shift+T` - Flashlight/Torch
-
-#### **Atmosphere Presets (Alt+Key):**
-- `Alt+A` - Cycle atmosphere presets
-- `Alt+I` - Cycle investigation modes
-
-#### **Preserved Controls:**
-- `F` - Audio fade (unchanged)
-- `L` - Letterbox toggle (unchanged)
-- `I` - Info overlay (unchanged)
-- `1-4` - Scanline size (unchanged)
-- `[,],-,=,0` - Vignette tuning (unchanged)
+#### **System Controls:**
+- **Info Overlay**: `I` - Show/hide debug information
+- **Letterbox Toggle**: `L` - Toggle cinematic letterbox bars
+- **Audio Fade**: `F` - Fade audio in/out
 
 ### 🔄 **Usage Examples**
 
-#### **Basic Usage:**
+#### **CRT Effects:**
 ```renpy
-# Apply film grain effect
-# Player presses Shift+G
-# Cycles: off → subtle → moderate → heavy → off
-
-# Apply noir atmosphere  
-# Player presses Alt+A until "alley_atmosphere"
+# Enable CRT with custom settings
+$ store.crt_enabled = True
+$ store.crt_warp = 0.2
+$ store.crt_scan = 0.5
+$ store.crt_chroma = 0.9
 ```
 
-#### **Script Control:**
+#### **Letterbox Control:**
 ```renpy
-# Set atmosphere from script
-$ current_atmosphere_preset = 1  # crime_scene_atmosphere
-
-# Set investigation mode
-$ current_investigation_mode = 1  # evidence_analysis_mode
-
-# Reset everything
-$ reset_all_shaders()
+# Show letterbox for dialogue
+$ show_letterbox_shader()
+"Detective Blake looks serious."
+$ hide_letterbox_shader()
 ```
 
-#### **Context-Sensitive:**
+#### **Bloom Configuration:**
 ```renpy
-# When evidence is found
-$ current_investigation_mode = 1
-"The evidence glows with enhanced highlighting..."
-
-# During flashback
-$ current_investigation_mode = 3  # memory_flashback_mode
-"The scene takes on a vintage, nostalgic quality..."
-```
-
-### 🎨 **Available Atmosphere Presets**
-
-1. **None** - No effects
-2. **Crime Scene** - Professional investigation feel
-3. **Abandoned Building** - Vintage + fog + dim lighting  
-4. **Nighttime Street** - Dynamic lighting + fog
-5. **Laboratory** - Cool color grading + bright lights
-6. **Interrogation Room** - Harsh lighting + vintage feel
-7. **Warehouse** - Heavy fog + atmospheric lighting
-8. **Office** - Subtle lighting + color grading
-9. **Alley** - Noir atmosphere with multiple effects
-10. **Stormy Night** - Rain + fog + dramatic lighting
-11. **Misty Morning** - Soft fog + warm color grading
-12. **Sunset** - Warm lighting + enhanced colors
-
-### 🔍 **Investigation Modes**
-
-1. **None** - Standard exploration
-2. **Evidence Analysis** - Highlights evidence objects
-3. **Suspect Tracking** - Highlights people/suspects
-4. **Memory Flashback** - Vintage + fog for memories
-5. **Revelation Moment** - Mystery reveal effect
-
-### 🛠️ **Customization Options**
-
-#### **Add Custom Atmosphere:**
-```python
-# In shader_integration.rpy, add to atmosphere_presets list
-atmosphere_presets.append("my_custom_atmosphere")
-
-# Create the transform in detective_composite_shaders.rpy  
-transform my_custom_atmosphere():
-    contains:
-        At(Null(), film_grain_effect(0.2, 0.3))
-    contains:
-        At(Null(), color_grading_effect(-0.1, 1.4, 0.8, 1.1, 0.0, (0.9, 0.95, 1.0)))
-```
-
-#### **Modify Individual Shader Presets:**
-```python
-# Change what "heavy" film grain means
-# In shader_states, modify the presets list:
-shader_states["film_grain"]["presets"] = ["off", "subtle", "moderate", "heavy", "extreme"]
+# Objects automatically use bloom based on their bloom_color property
+# No script control needed - handled by room system
 ```
 
 ### 🚀 **Performance Notes**
@@ -194,65 +106,52 @@ shader_states["film_grain"]["presets"] = ["off", "subtle", "moderate", "heavy", 
 
 ### 🐛 **Troubleshooting**
 
-#### **If Shaders Don't Appear:**
-1. Check that all shader files are in `game/shaders/`
-2. Verify `install_shader_system()` was called
-3. Try `R` key to reset and `H` for help
+#### **If CRT Effects Don't Appear:**
+1. Press `C` to toggle CRT effects on/off
+2. Check CRT variables: `crt_enabled`, `crt_warp`, `crt_scan`
+3. Verify `crt_shader.rpy` is loaded
 
 #### **If Bloom Stops Working:**
 1. Verify `use room_bloom_effects_internal` appears in your screen
 2. Check that bloom objects are properly configured  
 3. Bloom should work exactly as before - no changes needed
 
-#### **If CRT Has Issues:**
-1. Use `Shift+P` instead of `C` for CRT toggle
-2. Use `Alt+C` instead of `A` for CRT animation
-3. Verify CRT shaders load after the new shader system
+#### **If Letterbox Doesn't Show:**
+1. Try `L` key to manually toggle letterbox
+2. Check that `letterbox_shader.rpy` is loaded
+3. Verify screen has proper zorder for overlay
 
 #### **Performance Issues:**
-1. Use `R` to reset all effects
-2. Stick to single effects instead of presets
-3. Check graphics settings in your game
+1. Disable CRT effects temporarily with `C` key
+2. Check graphics settings in your game
+3. Monitor performance with debug overlay (`I` key)
 
 ### 📁 **File Structure**
 
 ```
 game/shaders/
-├── film_grain_shader.rpy          # Individual effects
-├── fog_shader.rpy
-├── vintage_shader.rpy
-├── lighting_shader.rpy
-├── rain_shader.rpy
-├── depth_of_field_shader.rpy
-├── color_grading_shader.rpy
-├── edge_detection_shader.rpy
-├── mystery_reveal_shader.rpy
-├── flashlight_shader.rpy
-├── detective_composite_shaders.rpy # Preset combinations
-├── shader_integration.rpy          # Core system
-├── room_background_shaders.rpy     # Room integration
-└── SETUP_GUIDE.md                 # This file
+├── bloom_shader.rpy       # Bloom/glow effects
+├── crt_shader.rpy         # CRT monitor effects  
+├── letterbox_shader.rpy   # Cinematic letterbox bars
+└── SETUP_GUIDE.md         # This file
 ```
 
 ### ✅ **Verification Checklist**
 
-- [ ] `install_shader_system()` called in game script
-- [ ] Using `room_exploration_shaders` screen
-- [ ] `H` key shows shader help overlay  
-- [ ] `Shift+G` cycles film grain effects
-- [ ] `Alt+A` cycles atmosphere presets
-- [ ] Bloom effects still work on hover
-- [ ] CRT toggle works with `Shift+P`
+- [ ] CRT toggle works with `C` key
+- [ ] Scanline animation toggles with `A` key
+- [ ] Bloom effects appear on object hover
+- [ ] Letterbox bars show during dialogue
+- [ ] Debug overlay shows with `I` key
 - [ ] All existing room interactions functional
 
 ### 🎯 **Success Indicators**
 
 ✅ **Working Correctly When:**
-- Pressing shader keys shows notification popups
-- Effects apply to both background and objects uniformly  
-- Bloom still glows on object hover
-- CRT frame contains everything when enabled
-- Performance remains smooth
-- Existing game features unchanged
+- CRT effects apply when enabled with visible scanlines and distortion
+- Bloom glows appear on object hover
+- Letterbox bars smoothly animate during cutscenes
+- Performance remains smooth (60+ FPS)
+- All existing game features work unchanged
 
-This system provides a professional-grade shader system that enhances your detective game without breaking any existing functionality!
+This simplified system provides essential visual effects without complexity!
