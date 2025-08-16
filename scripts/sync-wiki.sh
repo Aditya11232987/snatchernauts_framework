@@ -180,9 +180,9 @@ main() {
         exit 0
     fi
     
-    # Create temporary directories
-    local gitlab_temp="/tmp/snatchernauts-gitlab-wiki-$$"
-    local github_temp="/tmp/snatchernauts-github-wiki-$$"
+    # Create temporary directories (global scope for cleanup)
+    gitlab_temp="/tmp/snatchernauts-gitlab-wiki-$$"
+    github_temp="/tmp/snatchernauts-github-wiki-$$"
     
     # Cleanup function
     cleanup() {
@@ -197,9 +197,12 @@ main() {
     # Sync to GitLab if requested
     if [[ "$github_only" == "false" ]]; then
         ((sync_count++))
+        info "Starting GitLab wiki sync..."
         if sync_to_wiki "GitLab" "$GITLAB_WIKI_REMOTE" "$gitlab_temp"; then
             ((success_count++))
         fi
+    else
+        info "Skipping GitLab sync (github-only mode)"
     fi
     
     # Sync to GitHub if requested
