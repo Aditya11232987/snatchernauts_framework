@@ -5,9 +5,8 @@ _Create visual novels that feel alive — Transform passive reading into immersi
 
 [![version](https://img.shields.io/badge/version-0.5.3-blue)](CHANGELOG.md)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![GitLab Primary](https://img.shields.io/badge/GitLab-Primary_Repository-orange?logo=gitlab)](https://gitlab.com/grahfmusic/snatchernauts_framework)
 
-![Snatchernauts Logo](.gitbook/assets/snatcher-logo.png)
+![Snatchernauts Logo](Wiki/snatcher-logo.png)
 
 ---
 
