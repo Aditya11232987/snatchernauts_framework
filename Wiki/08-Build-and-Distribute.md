@@ -191,6 +191,109 @@ define build.classify = {
 }
 ```
 
+## Automated Development Workflows
+
+### Repository Synchronization
+
+The Snatchernauts Framework includes powerful automation tools that streamline development workflows across GitLab and GitHub platforms.
+
+**Intelligent README Management**:
+```bash
+# Manual GitHub README sync
+scripts/sync-github-readme.sh
+
+# Automatic sync (enabled by default)
+export AUTO_SYNC_README=1  # Set in your shell profile
+```
+
+The framework automatically maintains platform-optimized READMEs:
+- **GitLab**: Shows pipeline status, GitLab-specific badges
+- **GitHub**: Clean presentation, proper logo paths, GitHub-specific badges
+- **Zero maintenance**: Edit main `README.md`, GitHub version auto-generated
+
+**Universal Wiki Synchronization**:
+```bash
+# Sync to both GitLab and GitHub wikis
+scripts/sync-wiki.sh
+
+# Platform-specific syncing
+scripts/sync-wiki.sh --gitlab-only
+scripts/sync-wiki.sh --github-only
+
+# Test changes before deployment
+scripts/sync-wiki.sh --dry-run
+
+# Automatic sync on wiki changes
+export AUTO_SYNC_WIKI=1
+```
+
+**Pre-Push Hook Automation**:
+The enhanced pre-push hook provides intelligent automation:
+- **README Auto-Sync**: Detects `README.md` changes, updates GitHub version
+- **Wiki Auto-Sync**: Pushes `Wiki/` changes to both platform wikis
+- **Smart Detection**: Only processes what actually changed
+- **Non-blocking**: Never prevents code commits or pushes
+- **Environment Controls**: `AUTO_SYNC_README=1` `AUTO_SYNC_WIKI=1`
+
+**Multi-Platform Push Workflow**:
+```bash
+# Push to both GitLab and GitHub simultaneously
+scripts/push-both.sh
+
+# Push specific branches
+scripts/push-both.sh feature-branch
+
+# Push all branches
+scripts/push-both.sh all
+```
+
+### Development Environment Configuration
+
+**Recommended Shell Profile Setup**:
+```bash
+# Add to ~/.bashrc, ~/.zshrc, or equivalent
+export RENPY_SDK="/path/to/renpy-sdk"
+export AUTO_SYNC_README=1  # Enable automatic GitHub README sync
+export AUTO_SYNC_WIKI=0    # Manual wiki sync (set to 1 for auto)
+
+# Development aliases
+alias run-game='scripts/run-game.sh'
+alias lint-game='scripts/lint.sh'
+alias sync-readme='scripts/sync-github-readme.sh'
+alias sync-wiki='scripts/sync-wiki.sh'
+alias push-all='scripts/push-both.sh'
+```
+
+**Git Hook Installation**:
+The automation hooks install automatically, but you can verify:
+```bash
+# Verify pre-push hook is active
+ls -la .git/hooks/pre-push
+
+# Reinstall hooks if needed
+cp scripts/hooks/pre-push .git/hooks/pre-push
+chmod +x .git/hooks/pre-push
+```
+
+### Continuous Integration Setup
+
+**GitLab CI/CD Configuration** (`.gitlab-ci.yml`):
+The framework includes production-ready CI/CD pipelines:
+- **Linting Stage**: Code quality checks
+- **Testing Stage**: Framework functionality tests  
+- **Build Stage**: Multi-platform builds
+- **Deploy Stage**: Automated releases
+- **Mirror Stage**: Repository synchronization to GitHub
+
+**Environment Variables for CI/CD**:
+```bash
+# GitLab CI/CD Variables (Repository Settings → CI/CD → Variables)
+RENPY_SDK_PATH          # Path to Ren'Py SDK in CI environment
+GITHUB_MIRROR_TOKEN     # GitHub access token for mirroring
+DEPLOY_KEY_PRIVATE      # SSH private key for deployments
+BUILD_ENCRYPTION_KEY    # Key for encrypting release builds
+```
+
 ### Asset Optimization
 
 **Image Optimization**:

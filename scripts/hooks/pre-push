@@ -67,14 +67,14 @@ if [[ -n "$CURRENT_BRANCH" ]]; then
   # Check for Wiki changes
   if git log -n 20 --name-only --pretty=format: | grep -qE '^Wiki/'; then
     if [[ "${AUTO_SYNC_WIKI:-0}" == "1" ]]; then
-      info "Wiki changes detected. AUTO_SYNC_WIKI=1 → syncing to GitHub wiki before push..."
-      if bash scripts/sync-github-wiki.sh; then
-        info "Wiki sync completed."
+      info "Wiki changes detected. AUTO_SYNC_WIKI=1 → syncing to both GitLab and GitHub wikis..."
+      if bash scripts/sync-wiki.sh; then
+        success "Wiki sync completed for both platforms"
       else
-        warn "Wiki sync failed; continuing with code push."
+        warn "Wiki sync failed; continuing with code push"
       fi
     else
-      warn "Wiki changes detected. Run 'make wiki-sync' (or set AUTO_SYNC_WIKI=1 to auto-sync)."
+      warn "Wiki changes detected. Run 'scripts/sync-wiki.sh' (or set AUTO_SYNC_WIKI=1 to auto-sync)."
     fi
   fi
 fi
