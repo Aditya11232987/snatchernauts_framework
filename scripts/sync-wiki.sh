@@ -196,10 +196,10 @@ main() {
     
     # Sync to GitLab if requested
     if [[ "$github_only" == "false" ]]; then
-        ((sync_count++))
+        sync_count=$((sync_count + 1))
         info "Starting GitLab wiki sync..."
         if sync_to_wiki "GitLab" "$GITLAB_WIKI_REMOTE" "$gitlab_temp"; then
-            ((success_count++))
+            success_count=$((success_count + 1))
         fi
     else
         info "Skipping GitLab sync (github-only mode)"
@@ -207,10 +207,13 @@ main() {
     
     # Sync to GitHub if requested
     if [[ "$gitlab_only" == "false" ]]; then
-        ((sync_count++))
+        sync_count=$((sync_count + 1))
+        info "Starting GitHub wiki sync..."
         if sync_to_wiki "GitHub" "$GITHUB_WIKI_REMOTE" "$github_temp"; then
-            ((success_count++))
+            success_count=$((success_count + 1))
         fi
+    else
+        info "Skipping GitHub sync (gitlab-only mode)"
     fi
     
     # Report results
