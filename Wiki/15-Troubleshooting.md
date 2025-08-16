@@ -3140,5 +3140,5 @@ This comprehensive troubleshooting guide provides the foundation for resolving a
 
 ---
 
-**Continue to:** [Framework Overview](01-Overview.md) | **Previous:** [Developer Manual](14-Developer-Manual.md)
+**Continue to:** [Framework Overview](01-Overview) | **Previous:** [Developer Manual](14-Developer-Manual)
 

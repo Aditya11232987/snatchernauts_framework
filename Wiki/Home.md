@@ -92,7 +92,7 @@ The framework is under active development with regular updates. Key recent impro
 - **Production Tooling** — Complete CI/CD pipeline automation
 
 For detailed release notes, see the main repository:
-- **[CHANGELOG.md](../CHANGELOG.md)** — Complete version history and release notes
+- **[CHANGELOG.md](../CHANGELOG)** — Complete version history and release notes
 
 ---
 

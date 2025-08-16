@@ -1020,5 +1020,5 @@ The visual effects system provides the foundation for the framework's distinctiv
 
 ---
 
-**Continue to:** [Chapter 7: Audio and Music Integration](07-Audio-and-Music.md)
+**Continue to:** [Chapter 7: Audio and Music Integration](07-Audio-and-Music)
 

@@ -1639,5 +1639,5 @@ This comprehensive UI API provides all the tools needed to create sophisticated,
 
 ---
 
-**Continue to:** [Chapter 14: Developer Manual](14-Developer-Manual.md)
+**Continue to:** [Chapter 14: Developer Manual](14-Developer-Manual)
 

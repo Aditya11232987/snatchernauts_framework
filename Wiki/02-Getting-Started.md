@@ -1026,24 +1026,24 @@ With your development environment properly configured and the framework successf
 
 **Essential Reading Order**:
 
-1. **[Framework Architecture](03-Architecture.md)** - Understand the complete system design, component relationships, and data flow patterns that enable the framework's functionality.
+1. **[Framework Architecture](03-Architecture)** - Understand the complete system design, component relationships, and data flow patterns that enable the framework's functionality.
 
-2. **[Logic Hooks System](04-Logic-Hooks.md)** - Master the event-driven architecture that allows you to implement custom game behavior through standardized callback functions.
+2. **[Logic Hooks System](04-Logic-Hooks)** - Master the event-driven architecture that allows you to implement custom game behavior through standardized callback functions.
 
-3. **[Room API Reference](05-API-Room.md)** - Explore the comprehensive room management system, including loading, configuration, and object manipulation capabilities.
+3. **[Room API Reference](05-API-Room)** - Explore the comprehensive room management system, including loading, configuration, and object manipulation capabilities.
 
-4. **[UI API Reference](06-API-UI.md)** - Learn to create sophisticated user interfaces using the framework's pre-built components and customization options.
+4. **[UI API Reference](06-API-UI)** - Learn to create sophisticated user interfaces using the framework's pre-built components and customization options.
 
-5. **[Interaction System](07-API-Interactions.md)** - Implement complex player interactions, object behaviors, and environmental responses.
+5. **[Interaction System](07-API-Interactions)** - Implement complex player interactions, object behaviors, and environmental responses.
 
 ### Advanced Topics (After Mastering Basics)
 
 **Specialized Development Areas**:
 
-- **[Visual Effects and Shaders](08-API-Effects.md)**: Create stunning visual effects using GLSL shaders and the framework's effect system
-- **[Audio Integration](08-API-Audio.md)**: Implement dynamic audio systems with positional sound, music management, and effect layering
-- **[Save/Load Systems](08-API-Save.md)**: Design robust save game functionality with custom data serialization and state management
-- **[Performance Optimization](10-Performance.md)**: Optimize your game for smooth performance across different platforms and hardware configurations
+- **[Visual Effects and Shaders](08-API-Effects)**: Create stunning visual effects using GLSL shaders and the framework's effect system
+- **[Audio Integration](08-API-Audio)**: Implement dynamic audio systems with positional sound, music management, and effect layering
+- **[Save/Load Systems](08-API-Save)**: Design robust save game functionality with custom data serialization and state management
+- **[Performance Optimization](10-Performance)**: Optimize your game for smooth performance across different platforms and hardware configurations
 
 ### Practical Application
 
@@ -1078,7 +1078,7 @@ With your development environment properly configured and the framework successf
 
 **Navigation**:
 
-← [**Previous: Introduction**](01-Introduction.md) | [**Next: Architecture Overview**](03-Architecture.md) →
+← [**Previous: Introduction**](01-Introduction) | [**Next: Architecture Overview**](03-Architecture) →
 
 ---
 

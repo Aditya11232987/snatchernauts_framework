@@ -1071,19 +1071,19 @@ With mastery of the logic hook system, you're equipped to implement sophisticate
 
 **Immediate Application**:
 
-1. **[Screen and UI System](05-Screens-and-UI.md)** - Learn how logic hooks integrate with user interface components to create seamless interactive experiences.
+1. **[Screen and UI System](05-Screens-and-UI)** - Learn how logic hooks integrate with user interface components to create seamless interactive experiences.
 
-2. **[Room API Deep Dive](10-API-Room.md)** - Explore the room management system that works closely with logic hooks to control game environments.
+2. **[Room API Deep Dive](10-API-Room)** - Explore the room management system that works closely with logic hooks to control game environments.
 
-3. **[Interaction API Integration](11-API-Interactions.md)** - Master the interaction system that provides the framework infrastructure supporting your custom hook logic.
+3. **[Interaction API Integration](11-API-Interactions)** - Master the interaction system that provides the framework infrastructure supporting your custom hook logic.
 
 **Advanced Development**:
 
-4. **[Effects and Visual Integration](06-Effects-and-Shaders.md)** - Learn to trigger sophisticated visual effects from logic hooks for enhanced player feedback.
+4. **[Effects and Visual Integration](06-Effects-and-Shaders)** - Learn to trigger sophisticated visual effects from logic hooks for enhanced player feedback.
 
-5. **[Audio System Coordination](12-API-Audio.md)** - Implement dynamic audio that responds to logic hook events for immersive soundscapes.
+5. **[Audio System Coordination](12-API-Audio)** - Implement dynamic audio that responds to logic hook events for immersive soundscapes.
 
-6. **[Save/Load Integration](13-API-Save.md)** - Design robust save systems that properly preserve your custom game state across sessions.
+6. **[Save/Load Integration](13-API-Save)** - Design robust save systems that properly preserve your custom game state across sessions.
 
 ### Development Best Practices Summary
 
@@ -1100,7 +1100,7 @@ With mastery of the logic hook system, you're equipped to implement sophisticate
 
 **Navigation**:
 
-← [**Previous: Framework Architecture**](03-Architecture.md) | [**Next: Screens and UI System**](05-Screens-and-UI.md) →
+← [**Previous: Framework Architecture**](03-Architecture) | [**Next: Screens and UI System**](05-Screens-and-UI) →
 
 ---
 

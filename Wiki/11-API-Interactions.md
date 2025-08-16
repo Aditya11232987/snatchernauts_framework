@@ -1676,5 +1676,5 @@ This comprehensive Interactions API provides all the tools needed to create soph
 
 ---
 
-**Continue to:** [Chapter 12: API Reference - Display System](12-API-Display.md)
+**Continue to:** [Chapter 12: API Reference - Display System](12-API-Display)
 

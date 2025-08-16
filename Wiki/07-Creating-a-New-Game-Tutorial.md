@@ -1650,4 +1650,4 @@ This tutorial demonstrates the real-world application of framework concepts, pro
 
 ---
 
-**Continue to:** [Chapter 8: Examples and Case Studies](08-Examples.md)
+**Continue to:** [Chapter 8: Examples and Case Studies](08-Examples)

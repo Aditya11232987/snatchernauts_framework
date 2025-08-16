@@ -1283,19 +1283,19 @@ With comprehensive understanding of the screen and UI system, you're equipped to
 
 **Immediate Application**:
 
-1. **[Effects and Shaders](06-Effects-and-Shaders.md)** - Learn to integrate visual effects with your UI components for enhanced presentation and atmosphere.
+1. **[Effects and Shaders](06-Effects-and-Shaders)** - Learn to integrate visual effects with your UI components for enhanced presentation and atmosphere.
 
-2. **[Room API Integration](10-API-Room.md)** - Understand how UI components interact with room management systems for seamless gameplay integration.
+2. **[Room API Integration](10-API-Room)** - Understand how UI components interact with room management systems for seamless gameplay integration.
 
-3. **[Display API Utilization](12-API-Display.md)** - Master the display API for advanced visual effects and rendering control within your UI systems.
+3. **[Display API Utilization](12-API-Display)** - Master the display API for advanced visual effects and rendering control within your UI systems.
 
 **Advanced Development**:
 
-4. **[Audio Integration](13-API-Audio.md)** - Coordinate audio feedback with UI interactions for immersive user experiences.
+4. **[Audio Integration](13-API-Audio)** - Coordinate audio feedback with UI interactions for immersive user experiences.
 
-5. **[Performance Optimization](15-Troubleshooting.md)** - Apply advanced optimization techniques to maintain smooth UI performance across different platforms.
+5. **[Performance Optimization](15-Troubleshooting)** - Apply advanced optimization techniques to maintain smooth UI performance across different platforms.
 
-6. **[Build and Distribution](09-Build-and-Distribute.md)** - Learn to package and distribute games with polished UI systems across multiple platforms.
+6. **[Build and Distribution](09-Build-and-Distribute)** - Learn to package and distribute games with polished UI systems across multiple platforms.
 
 ### Development Best Practices Summary
 
@@ -1312,7 +1312,7 @@ With comprehensive understanding of the screen and UI system, you're equipped to
 
 **Navigation**:
 
-← [**Previous: Logic Hooks System**](04-Logic-Hooks.md) | [**Next: Effects and Shaders**](06-Effects-and-Shaders.md) →
+← [**Previous: Logic Hooks System**](04-Logic-Hooks) | [**Next: Effects and Shaders**](06-Effects-and-Shaders) →
 
 ---
 

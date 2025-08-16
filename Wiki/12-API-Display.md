@@ -1725,5 +1725,5 @@ This comprehensive Display API provides all the tools needed to create visually 
 
 ---
 
-**Continue to:** [Chapter 13: API Reference - UI System](13-API-UI.md)
+**Continue to:** [Chapter 13: API Reference - UI System](13-API-UI)
 

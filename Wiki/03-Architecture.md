@@ -1575,19 +1575,19 @@ With a comprehensive understanding of the framework's architecture, you're prepa
 
 **Immediate Next Steps**:
 
-1. **[Logic Hooks Deep Dive](04-Logic-Hooks.md)** - Master the event-driven system that enables custom game behavior through standardized callback functions and state management.
+1. **[Logic Hooks Deep Dive](04-Logic-Hooks)** - Master the event-driven system that enables custom game behavior through standardized callback functions and state management.
 
-2. **[Room API Mastery](10-API-Room.md)** - Explore advanced room management capabilities including dynamic object manipulation, state persistence, and configuration-driven behavior.
+2. **[Room API Mastery](10-API-Room)** - Explore advanced room management capabilities including dynamic object manipulation, state persistence, and configuration-driven behavior.
 
-3. **[UI System Integration](05-Screens-and-UI.md)** - Learn to create sophisticated user interfaces that integrate seamlessly with the framework's presentation layer.
+3. **[UI System Integration](05-Screens-and-UI)** - Learn to create sophisticated user interfaces that integrate seamlessly with the framework's presentation layer.
 
 **Advanced Development Topics**:
 
-4. **[Visual Effects and Shaders](06-Effects-and-Shaders.md)** - Implement stunning visual effects using GLSL shaders and the framework's comprehensive effect system.
+4. **[Visual Effects and Shaders](06-Effects-and-Shaders)** - Implement stunning visual effects using GLSL shaders and the framework's comprehensive effect system.
 
-5. **[Interaction System Mastery](11-API-Interactions.md)** - Build complex interaction patterns, dialogue systems, and player choice mechanisms.
+5. **[Interaction System Mastery](11-API-Interactions)** - Build complex interaction patterns, dialogue systems, and player choice mechanisms.
 
-6. **[Performance Optimization](15-Troubleshooting.md)** - Optimize your game for smooth performance across different platforms and hardware configurations.
+6. **[Performance Optimization](15-Troubleshooting)** - Optimize your game for smooth performance across different platforms and hardware configurations.
 
 ### Practical Application Strategy
 
@@ -1613,7 +1613,7 @@ With a comprehensive understanding of the framework's architecture, you're prepa
 
 **Navigation**:
 
-← [**Previous: Getting Started Guide**](02-Getting-Started.md) | [**Next: Logic Hooks System**](04-Logic-Hooks.md) →
+← [**Previous: Getting Started Guide**](02-Getting-Started) | [**Next: Logic Hooks System**](04-Logic-Hooks) →
 
 ---
 
