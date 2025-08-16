@@ -31,8 +31,9 @@ image: node:lts
 pages:
   stage: deploy
   script:
-    - mkdir public
-    - echo "Hello World" > public/index.html
+    - mkdir -p public
+    - cp -r public/* public/ 2>/dev/null || true
+    - cp README.md public/
   artifacts:
     paths:
       - public
