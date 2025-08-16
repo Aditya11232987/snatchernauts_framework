@@ -5,6 +5,7 @@ _Create visual novels that feel alive — Transform passive reading into immersi
 
 [![version](https://img.shields.io/badge/version-0.5.3-blue)](CHANGELOG.md)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub mirror](https://img.shields.io/badge/github-mirror-blue?logo=github)](https://github.com/grahfmusic/snatchernauts_framework)
 
 ![Snatchernauts Logo](../Wiki/snatcher-logo.png)
 
@@ -12,9 +13,9 @@ _Create visual novels that feel alive — Transform passive reading into immersi
 
 ## 🚀 **Stop Building Static Visual Novels. Start Creating Interactive Experiences.**
 
-**Your players deserve more than click-to-continue storytelling.** 
+**Your players deserve more than click-to-continue storytelling.**
 
-Snatchernauts Framework is the **only Ren'Py framework** engineered from the ground up to deliver the exploration-rich, tactile gameplay that made classics like _Snatcher_ and _Policenauts_ legendary. 
+Snatchernauts Framework is the **only Ren'Py framework** engineered from the ground up to deliver the exploration-rich, tactile gameplay that made classics like _Snatcher_ and _Policenauts_ legendary.
 
 **The result?** Visual novels that feel less like digital books and more like **living, breathing worlds** your players can truly explore.
 
@@ -28,18 +29,19 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 ✅ **Clean, extensible architecture** — Write less code, accomplish more  
 ✅ **Production-ready tooling** — Built-in debugging, automated builds, CI/CD ready
 
-***
+---
 
 ## 🎆 **The Problem with Traditional Visual Novels**
 
 **95% of visual novels suffer from the same limitation:** They're essentially digital books with pictures. Players click → read text → click again. **That's it.**
 
 **But what if your visual novel could:**
+
 - Let players **explore environments** like real detective games?
 - Feature **dynamic, contextual interactions** that respond to player curiosity?
-- Deliver **cinematic visual effects** that rival AAA productions?
+- Deliver **cinematic visual effects** without knowing advanced Shader knowledge?
 - Support **multiple input methods** for maximum accessibility?
-- Provide **professional-grade development tools** that accelerate your workflow?
+- Provide **visual development tools** that accelerate your workflow?
 
 ### 💡 **The Snatchernauts Solution: Interactive Immersion**
 
@@ -56,7 +58,7 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 🧩 **Professional Architecture**  
     Clean separation of concerns. Write game logic once, use everywhere. No more spaghetti code.
 
-🎬 **Hollywood-Grade Visual Effects**  
+🎬 **Unity and Godot Quality Visual Effects**  
     Real-time shader effects: CRT monitors, film grain, atmospheric fog, dynamic lighting.
 
 🕶️ **Live Visual Tuning**  
@@ -83,9 +85,8 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 **Create games that look like they cost 10x your budget:**
 
 - **Real-time CRT simulation** with authentic scanlines and chromatic aberration
-- **Dynamic bloom effects** that respond to scene lighting and player actions  
+- **Dynamic Colour Grading and Lighting** presets built in and expandable
 - **Cinematic letterboxing** with customizable aspect ratios
-- **Atmospheric shaders** for fog, rain, vintage film effects, and lighting
 - **Live effect tuning** — See changes instantly without recompiling
 
 ### 🎲 **Multi-Platform Excellence**
@@ -119,7 +120,7 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 | 🎯 Pixel‑accurate hotspots | Click only where the image is opaque; no sloppy hitboxes |
 | 🧭 Keyboard/gamepad nav    | Fast navigation across in‑room objects                   |
 | 🗂️ Contextual menus       | Examine, Use, Talk, and custom actions                   |
-| 🧩 Centralized hooks       | on\_game\_start, on\_room\_enter, on\_object\_\* events  |
+| 🧩 Centralized hooks       | on_game_start, on_room_enter, on_object\_\* events       |
 | 🛠️ Debug overlay          | Live logging toggles, FPS/memory hints                   |
 | 🕶️ CRT + vignette         | Warp/scan/chroma + horizontal vignette, live tuning      |
 | 🎬 Shader system           | Film grain, fog, lighting, letterbox via GLSL shaders    |
@@ -128,42 +129,42 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 
 ### How It Works (Architecture)
 
-* Coordinator: `game/script.rpy` starts the info overlay, then calls `on_game_start()` and enters the exploration loop via `play_room()`.
-* Public APIs: `game/api/*.rpy` expose helpers for rooms, display/effects, UI, and interactions.
-* Logic Layer: put your gameplay in `game/logic/game_logic.rpy` and optional `game/logic/rooms/<room>_logic.rpy` files. Register per‑room handlers.
-* UI Layer: screens under `game/ui/` compose descriptions, menus, and overlays.
-* Effects: `game/shaders/` and `game/overlays/` provide CRT/Bloom/Letterbox and startup/debug overlays.
-* Core Config: `game/core/` contains options, logging, and room configuration helpers.
+- Coordinator: `game/script.rpy` starts the info overlay, then calls `on_game_start()` and enters the exploration loop via `play_room()`.
+- Public APIs: `game/api/*.rpy` expose helpers for rooms, display/effects, UI, and interactions.
+- Logic Layer: put your gameplay in `game/logic/game_logic.rpy` and optional `game/logic/rooms/<room>_logic.rpy` files. Register per‑room handlers.
+- UI Layer: screens under `game/ui/` compose descriptions, menus, and overlays.
+- Effects: `game/shaders/` and `game/overlays/` provide CRT/Bloom/Letterbox and startup/debug overlays.
+- Core Config: `game/core/` contains options, logging, and room configuration helpers.
 
 See the Wiki for a deep dive, code walkthroughs, and examples.
 
-***
+---
 
 ### 🚀 Quick Start
 
-1) Install Ren'Py 8.4.x and set your SDK path. Example:
+1. Install Ren'Py 8.4.x and set your SDK path. Example:
    - export RENPY_SDK=~/renpy-8.4.1-sdk
-2) Run the project:
+2. Run the project:
    - **Recommended**: `scripts/run-game.sh` (unified launcher with linting)
    - **Direct**: `$RENPY_SDK/renpy.sh .`
-3) Development workflow:
+3. Development workflow:
    - `scripts/run-game.sh --lint` (lint then launch)
    - `scripts/run-game.sh --debug` (launch with console output)
    - `scripts/run-game.sh --help` (show all options)
-4) Build distributions via Ren'Py Launcher → Build & Distribute.
+4. Build distributions via Ren'Py Launcher → Build & Distribute.
 
 *See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation*
 
 ### 🎮 Controls (Default)
 
-* A/Enter/Space: interact (open action menu)
-* Arrow keys / WASD: navigate objects
-* Esc/B: cancel
-* Mouse: hover/click objects
+- A/Enter/Space: interact (open action menu)
+- Arrow keys / WASD: navigate objects
+- Esc/B: cancel
+- Mouse: hover/click objects
 
 ### 🧠 Core Concepts
 
-* Hooks: write gameplay as Python/renpy functions responding to events:
+- Hooks: write gameplay as Python/renpy functions responding to events:
 
 ```renpy
 # Implement these in game/logic/game_logic.rpy (or per-room handlers)
@@ -181,9 +182,9 @@ def on_object_interact(room_id, obj, action) -> bool:
     ...
 ```
 
-* Per‑room Logic: implement `register_room_logic('<room>', Handler())` with your own methods.
-* APIs: use `room_api`, `ui_api`, `interactions_api`, `display_api` instead of scattering logic in screens.
-* Logging: centralized logging interception with color and truncation; toggles available at runtime.
+- Per‑room Logic: implement `register_room_logic('<room>', Handler())` with your own methods.
+- APIs: use `room_api`, `ui_api`, `interactions_api`, `display_api` instead of scattering logic in screens.
+- Logging: centralized logging interception with color and truncation; toggles available at runtime.
 
 ### 🗺️ Project Layout
 
