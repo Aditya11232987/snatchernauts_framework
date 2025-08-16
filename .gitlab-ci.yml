@@ -25,3 +25,14 @@ wiki_sync:
       : "${GH_WIKI_TOKEN:?Set GH_WIKI_TOKEN in GitLab CI/CD variables (repo PAT with repo access)}"
       GITHUB_WIKI_URL="https://oauth2:${GH_WIKI_TOKEN}@github.com/grahfmusic/snatchernauts_framework.wiki.git"
       git push -f "$GITHUB_WIKI_URL" master
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp -r public/* public/ 2>/dev/null || true # keep if you build elsewhere
+    - cp README.md public/
+  artifacts:
+    paths: [public]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

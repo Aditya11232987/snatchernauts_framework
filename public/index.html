@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Snatchernauts Framework</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0e0e10; /* Background/Base */
+        --text: #eaeaea; /* Text (Light)   */
+        --cyan: #8bd5ff; /* Primary Accent */
+        --pink: #ff4f6d; /* Highlight/Alert*/
+        --yellow: #f5e37c; /* Secondary Glow */
+        --card: #141418;
+        --muted: #b8b8b8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          "Space Grotesk",
+          system-ui,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+        line-height: 1.6;
+      }
+
+      /* Header / Nav */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: linear-gradient(
+          180deg,
+          rgba(14, 14, 16, 0.92),
+          rgba(14, 14, 16, 0.6)
+        );
+        backdrop-filter: saturate(140%) blur(8px);
+        border-bottom: 1px solid #1f1f25;
+      }
+      .nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand img {
+        height: 42px;
+        width: auto;
+        image-rendering: pixelated;
+      }
+      .brand h1 {
+        font-size: 1.05rem;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: radial-gradient(65% 65% at 50% 45%, var(--pink), #661826);
+      }
+      .nav a.btn {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #2a2a33;
+        text-decoration: none;
+        color: var(--text);
+      }
+      .nav a.btn:hover {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(139, 213, 255, 0.15);
+      }
+
+      /* Hero */
+      .hero {
+        position: relative;
+        overflow: hidden;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+      .glow {
+        position: absolute;
+        inset: -40vmax -40vmax auto auto;
+        width: 80vmax;
+        height: 80vmax;
+        background:
+          radial-gradient(
+            closest-side,
+            rgba(139, 213, 255, 0.1),
+            transparent 70%
+          ),
+          radial-gradient(
+            closest-side,
+            rgba(245, 227, 124, 0.05),
+            transparent 75%
+          );
+        filter: blur(40px);
+        pointer-events: none;
+      }
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .title h2 {
+        font-size: 2.2rem;
+        margin: 0;
+      }
+      .subtitle {
+        color: var(--muted);
+        max-width: 65ch;
+      }
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border: 1px solid #2a2a33;
+        border-radius: 10px;
+        font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+        font-size: 0.85rem;
+        color: var(--cyan);
+        box-shadow: 0 0 12px rgba(139, 213, 255, 0.08) inset;
+      }
+
+      /* Section blocks */
+      section {
+        scroll-margin-top: 72px;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--card), #0f0f13);
+        border: 1px solid #22222c;
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.35),
+          0 0 25px rgba(245, 227, 124, 0.04) inset;
+      }
+      h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.2rem;
+      }
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+      @media (min-width: 900px) {
+        .grid.cols-3 {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+        .grid.cols-2 {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* Buttons */
+      .cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .btn {
+        --ring: 0 0 0 0 rgba(0, 0, 0, 0);
+        appearance: none;
+        border: 1px solid #2a2a33;
+        background: #14141a;
+        color: var(--text);
+        padding: 12px 16px;
+        border-radius: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease,
+          border-color 0.12s ease;
+        box-shadow: var(--ring);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(139, 213, 255, 0.15);
+      }
+      .btn.primary {
+        background: linear-gradient(180deg, #152036, #0f1726);
+        border-color: #2b3e5c;
+        color: var(--cyan);
+        text-shadow: 0 0 12px rgba(139, 213, 255, 0.35);
+      }
+      .btn.alert {
+        border-color: #5a2130;
+        color: var(--pink);
+      }
+      .btn.ghost {
+        background: transparent;
+      }
+
+      /* Feature list */
+      .k {
+        font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+        font-size: 0.95rem;
+      }
+      ul.feats {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      ul.feats li {
+        padding: 8px 0;
+        border-bottom: 1px dashed #242432;
+      }
+      ul.feats li:last-child {
+        border-bottom: 0;
+      }
+      .tag {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 8px;
+        border: 1px solid #2a2a33;
+        margin-left: 8px;
+        color: var(--yellow);
+      }
+
+      /* Gallery (CSS lightbox, no JS) */
+      .gallery {
+        display: grid;
+        gap: 14px;
+      }
+      @media (min-width: 860px) {
+        .gallery {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .shot {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid #242432;
+      }
+      .shot img {
+        width: 100%;
+        height: auto;
+        display: block;
+        image-rendering: auto;
+      }
+      .shot .cap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 8px 10px;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.55));
+        font-size: 0.9rem;
+      }
+      .shot a {
+        display: block;
+      }
+      /* Lightbox using :target */
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .lightbox img {
+        max-width: 95vw;
+        max-height: 90vh;
+        border-radius: 10px;
+        border: 1px solid #2a2a33;
+      }
+      .lightbox:target {
+        display: flex;
+      }
+      .lightbox a.close {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        color: var(--text);
+        font-weight: 700;
+        text-decoration: none;
+        padding: 8px 12px;
+        border: 1px solid #2a2a33;
+        border-radius: 10px;
+        background: #121218;
+      }
+      .lightbox a.close:hover {
+        border-color: var(--pink);
+        box-shadow: 0 0 0 3px rgba(255, 79, 109, 0.15);
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid #1f1f25;
+        margin-top: 40px;
+      }
+      .foot {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        color: #cfcfcf;
+        font-size: 0.95rem;
+      }
+      .mono {
+        font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      }
+      a {
+        color: var(--cyan);
+      }
+      a:hover {
+        color: #aee3ff;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <img src="assets/snatcher-logo.png" alt="Snatchernauts logo" />
+          <h1>SNATCHERNAUTS FRAMEWORK</h1>
+        </div>
+        <div>
+          <a class="btn ghost" href="#features">Features</a>
+          <a class="btn ghost" href="#gallery">Screens</a>
+          <a class="btn ghost" href="#quickstart">Quick Start</a>
+        </div>
+        <div>
+          <a
+            class="btn"
+            href="https://gitlab.com/grahfgames/snatchernauts_framework"
+            target="_blank"
+            rel="noopener"
+            >GitLab</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="glow"></div>
+        <div class="container">
+          <span class="badge">Ren’Py · Shader-driven VN/Adventure Toolkit</span>
+          <div class="title" style="margin-top: 14px">
+            <h2>Neo-noir tools for interactive stories</h2>
+          </div>
+          <p class="subtitle">
+            Snatchernauts is a focused framework for building modern,
+            **Snatcher/Policenauts-inspired** visual novels: shader pipeline
+            (CRT, grain, grading, lighting), an interaction/room system,
+            dialogue & cutscenes, and a small API surface to script gameplay.
+          </p>
+          <div class="cta">
+            <a
+              class="btn primary"
+              href="https://gitlab.com/grahfgames/snatchernauts_framework/-/tree/main"
+              target="_blank"
+              rel="noopener"
+              >Browse Repository</a
+            >
+            <a
+              class="btn"
+              href="https://gitlab.com/grahfgames/snatchernauts_framework/-/issues/new"
+              target="_blank"
+              rel="noopener"
+              >Report a Bug</a
+            >
+            <a
+              class="btn alert"
+              href="https://gitlab.com/grahfgames/snatchernauts_framework/-/wikis/home"
+              target="_blank"
+              rel="noopener"
+              >Documentation</a
+            >
+            <a class="btn ghost" href="#gallery">View Screens</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="container">
+        <div class="grid cols-3">
+          <div class="card">
+            <h3>Shader Pipeline</h3>
+            <p>
+              Post-FX chain (CRT → Grain → Grade → Letterbox) on the gameplay
+              layer; object-level FX (blur, lighting) on a dedicated layer. All
+              passes can animate and compose.
+            </p>
+            <ul class="feats">
+              <li class="k">
+                Multi-pass GL2 shaders<span class="tag">Ren’Py 8.4.1</span>
+              </li>
+              <li class="k">Screen & per-object blur</li>
+              <li class="k">Dynamic lighting spots & masks</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Interaction & Rooms</h3>
+            <p>
+              Clickable objects, hover prompts, and contextual menus. Cutscene
+              and dialogue systems integrate cleanly with interactions.
+            </p>
+            <ul class="feats">
+              <li class="k">Room graph + hotspots</li>
+              <li class="k">Interaction dispatcher</li>
+              <li class="k">Cutscene cues & camera FX</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>API & Extensibility</h3>
+            <p>
+              Small Python API for room/object registration, shader toggles, and
+              event hooks. Designed to be readable and mod-friendly.
+            </p>
+            <ul class="feats">
+              <li class="k">`register_object(...)`</li>
+              <li class="k">`enable_shader('letterbox', args)`</li>
+              <li class="k">`on_interact(room,obj,action)`</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="container">
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>Screenshots</h3>
+            <div class="gallery" aria-label="Screenshots">
+              <!-- Shot 1 -->
+              <div class="shot">
+                <a href="#shot1"
+                  ><img
+                    loading="lazy"
+                    src="assets/250817_03h20m51s_screenshot.png"
+                    alt="Dialogue scene with CRT/grade"
+                /></a>
+                <div class="cap">Dialogue scene • CRT + Film Grain + Grade</div>
+              </div>
+              <!-- Shot 2 -->
+              <div class="shot">
+                <a href="#shot2"
+                  ><img
+                    loading="lazy"
+                    src="assets/250817_03h22m55s_screenshot.png"
+                    alt="Object highlight and narration panel"
+                /></a>
+                <div class="cap">Object highlight • Narration panel</div>
+              </div>
+              <!-- Shot 3 (full-width on wrap) -->
+              <div class="shot" style="grid-column: 1/-1">
+                <a href="#shot3"
+                  ><img
+                    loading="lazy"
+                    src="assets/250817_03h23m20s_screenshot.png"
+                    alt="Shader Control Panel"
+                /></a>
+                <div class="cap">
+                  Shader Control Panel • Presets & animation
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 id="quickstart">Quick Start</h3>
+            <ol class="k" style="margin: 0; padding-left: 18px">
+              <li>Clone the repo and run with Ren’Py 8.4.1 (GL2 enabled).</li>
+              <li>
+                Open <code>script.rpy</code> and
+                <code>ui/screens_room.rpy</code> to explore interactions.
+              </li>
+              <li>
+                Tweak shader presets in <code>shaders/*.glsl</code> and enable
+                via the API.
+              </li>
+              <li>
+                Replace the demo room art and add hotspots in
+                <code>rooms/</code>.
+              </li>
+            </ol>
+            <div class="cta" style="margin-top: 14px">
+              <a
+                class="btn primary"
+                href="https://gitlab.com/grahfgames/snatchernauts_framework/-/archive/main/snatchernauts_framework-main.zip"
+                target="_blank"
+                rel="noopener"
+                >Download ZIP</a
+              >
+              <a
+                class="btn"
+                href="https://gitlab.com/grahfgames/snatchernauts_framework/-/blob/main/README.md"
+                target="_blank"
+                rel="noopener"
+                >Readme</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Lightbox Targets -->
+    <div id="shot1" class="lightbox" aria-modal="true">
+      <a class="close" href="#gallery">Close ✕</a>
+      <img
+        src="assets/250817_03h20m51s_screenshot.png"
+        alt="Dialogue scene enlarged"
+      />
+    </div>
+    <div id="shot2" class="lightbox" aria-modal="true">
+      <a class="close" href="#gallery">Close ✕</a>
+      <img
+        src="assets/250817_03h22m55s_screenshot.png"
+        alt="Object highlight enlarged"
+      />
+    </div>
+    <div id="shot3" class="lightbox" aria-modal="true">
+      <a class="close" href="#gallery">Close ✕</a>
+      <img
+        src="assets/250817_03h23m20s_screenshot.png"
+        alt="Shader control panel enlarged"
+      />
+    </div>
+
+    <footer>
+      <div class="foot">
+        <div>
+          Palette: <span class="mono">#0e0e10</span> •
+          <span class="mono">#8BD5FF</span> •
+          <span class="mono">#FF4F6D</span> •
+          <span class="mono">#F5E37C</span> • <span class="mono">#EAEAEA</span>
+        </div>
+        <div style="margin-top: 6px">
+          © Snatchernauts Framework. Built for developers who like their noir
+          with scanlines.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
