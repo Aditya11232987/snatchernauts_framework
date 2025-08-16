@@ -1,4 +1,5 @@
 # Snatchernauts Framework
+
 ## **The Revolutionary Ren'Py Framework That Changes Everything**
 
 _Create visual novels that feel alive — Transform passive reading into immersive exploration_
@@ -7,7 +8,7 @@ _Create visual novels that feel alive — Transform passive reading into immersi
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub mirror](https://img.shields.io/badge/github-mirror-blue?logo=github)](https://github.com/grahfmusic/snatchernauts_framework)
 
-![Snatchernauts Logo](../Wiki/snatcher-logo.png)
+![Snatchernauts Logo](.gitbook/assets/snatcher-logo.png)
 
 ---
 
@@ -50,19 +51,19 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 **What makes us different:**
 
 🎯 **Pixel-Perfect Exploration**  
-    No more rectangular hitboxes. Players click only on actual objects, creating natural, intuitive interaction.
+    No more rectangular hitboxes. Players click only on actual objects, creating natural, intuitive interaction.
 
 🧭 **Context-Aware Interactions**  
-    Dynamic menus that change based on story progress, inventory, and player actions.
+    Dynamic menus that change based on story progress, inventory, and player actions.
 
 🧩 **Professional Architecture**  
-    Clean separation of concerns. Write game logic once, use everywhere. No more spaghetti code.
+    Clean separation of concerns. Write game logic once, use everywhere. No more spaghetti code.
 
 🎬 **Unity and Godot Quality Visual Effects**  
-    Real-time shader effects: CRT monitors, film grain, atmospheric fog, dynamic lighting.
+    Real-time shader effects: CRT monitors, film grain, atmospheric fog, dynamic lighting.
 
 🕶️ **Live Visual Tuning**  
-    Adjust bloom, vignette, scanlines, and color grading in real-time during development.
+    Adjust bloom, vignette, scanlines, and color grading in real-time during development.
 
 **Result:** Visual novels that feel like **living, breathing worlds** instead of static storybooks.
 
@@ -71,9 +72,6 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 ## 💪 **Why Developers Choose Snatchernauts**
 
 ### 🚀 **Accelerated Development**
-
-**"Cut development time by 60% while adding features I never thought possible."**  
-— *Independent developer testimonial*
 
 - **Pre-built interaction systems** — No need to reinvent point-and-click mechanics
 - **Comprehensive API library** — Room management, UI, effects, all ready to use
@@ -119,10 +117,10 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 | -------------------------- | -------------------------------------------------------- |
 | 🎯 Pixel‑accurate hotspots | Click only where the image is opaque; no sloppy hitboxes |
 | 🧭 Keyboard/gamepad nav    | Fast navigation across in‑room objects                   |
-| 🗂️ Contextual menus       | Examine, Use, Talk, and custom actions                   |
+| 🗂️ Contextual menus        | Examine, Use, Talk, and custom actions                   |
 | 🧩 Centralized hooks       | on_game_start, on_room_enter, on_object\_\* events       |
-| 🛠️ Debug overlay          | Live logging toggles, FPS/memory hints                   |
-| 🕶️ CRT + vignette         | Warp/scan/chroma + horizontal vignette, live tuning      |
+| 🛠️ Debug overlay           | Live logging toggles, FPS/memory hints                   |
+| 🕶️ CRT + vignette          | Warp/scan/chroma + horizontal vignette, live tuning      |
 | 🎬 Shader system           | Film grain, fog, lighting, letterbox via GLSL shaders    |
 | 🌸 Bloom effects           | Cinematic overlays with color correlation                |
 | 🧰 Clean APIs              | room/display/ui/interactions modules                     |
@@ -153,7 +151,7 @@ See the Wiki for a deep dive, code walkthroughs, and examples.
    - `scripts/run-game.sh --help` (show all options)
 4. Build distributions via Ren'Py Launcher → Build & Distribute.
 
-*See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation*
+_See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation_
 
 ### 🎮 Controls (Default)
 
@@ -206,10 +204,6 @@ snatchernauts-framework/
 │   │       └── room_config.rpy   # Room definitions and editor
 │   ├── logic/                     # Game logic implementation
 │   │   └── game_logic.rpy        # Global game logic hooks
-│   ├── rooms/                     # Room definitions and assets
-│   │   ├── room1/                # Example room with assets and scripts
-│   │   ├── room2/                # Additional example rooms
-│   │   └── room3/                # Room-specific configurations
 │   ├── ui/                        # User interface screens
 │   │   ├── screens_room.rpy      # Room exploration screens
 │   │   ├── screens_interactions.rpy # Interaction menu screens
@@ -266,30 +260,30 @@ snatchernauts-framework/
 ### 🛠️ **Development Scripts Explained**
 
 **🎮 `run-game.sh`** — **Your main development launcher**  
-    • `--lint` — Run code checks before launching  
-    • `--debug` — Launch with debug console visible  
-    • `--compile` — Force recompilation before launch  
-    • Auto-detects Ren'Py SDK path and validates setup
+    • `--lint` — Run code checks before launching  
+    • `--debug` — Launch with debug console visible  
+    • `--compile` — Force recompilation before launch  
+    • Auto-detects Ren'Py SDK path and validates setup
 
 **🚀 `push-both.sh`** — **Synchronized repository management**  
-    • Pushes to both GitLab (primary) and GitHub (mirror) simultaneously  
-    • Handles branches and tags across both platforms  
-    • Supports `all` branches or specific branch targeting
+    • Pushes to both GitLab (primary) and GitHub (mirror) simultaneously  
+    • Handles branches and tags across both platforms  
+    • Supports `all` branches or specific branch targeting
 
 **📚 `sync-github-wiki.sh`** — **Manual wiki synchronization**  
-    • Syncs local `Wiki/` directory to GitHub wiki repository  
-    • Creates clean snapshot with force-push to wiki repo  
-    • Includes `dry-run` mode for testing
+    • Syncs local `Wiki/` directory to GitHub wiki repository  
+    • Creates clean snapshot with force-push to wiki repo  
+    • Includes `dry-run` mode for testing
 
 **🔗 `github-init.sh`** — **Repository setup automation**  
-    • Converts any GitHub URL format to SSH  
-    • Sets up origin remote with proper branch naming  
-    • Handles initial repository connection and push
+    • Converts any GitHub URL format to SSH  
+    • Sets up origin remote with proper branch naming  
+    • Handles initial repository connection and push
 
 **⚠️ `pre-push` hook** — **Automatic wiki sync**  
-    • Detects wiki changes in recent commits  
-    • Auto-syncs wiki if `AUTO_SYNC_WIKI=1` environment variable set  
-    • Non-blocking — never prevents code pushes
+    • Detects wiki changes in recent commits  
+    • Auto-syncs wiki if `AUTO_SYNC_WIKI=1` environment variable set  
+    • Non-blocking — never prevents code pushes
 
 ---
 
@@ -298,20 +292,20 @@ snatchernauts-framework/
 ### 🎆 **Perfect For These Game Types:**
 
 🕵️ **Detective/Mystery Games**  
-    Create immersive crime scenes with pixel-perfect evidence discovery  
-        *"Players can examine every detail, just like real forensic investigation"*
+    Create immersive crime scenes with pixel-perfect evidence discovery  
+        _"Players can examine every detail, just like real forensic investigation"_
 
 🏭 **Sci-Fi Adventures**  
-    Build futuristic environments with dynamic lighting and atmospheric effects  
-        *"CRT shaders and bloom effects create authentic retro-futuristic atmosphere"*
+    Build futuristic environments with dynamic lighting and atmospheric effects  
+        _"CRT shaders and bloom effects create authentic retro-futuristic atmosphere"_
 
 🏰 **Point-and-Click Adventures**  
-    Traditional adventure game mechanics with modern visual novel storytelling  
-        *"All the exploration depth of LucasArts classics, powered by Ren'Py"*
+    Traditional adventure game mechanics with modern visual novel storytelling  
+        _"All the exploration depth of LucasArts classics, powered by Ren'Py"_
 
 🏠 **Interactive Fiction**  
-    Rich, explorable environments that respond to player curiosity  
-        *"Every object tells a story when players can truly interact with the world"*
+    Rich, explorable environments that respond to player curiosity  
+        _"Every object tells a story when players can truly interact with the world"_
 
 ### 💻 **Code Example: See How Easy It Is**
 
@@ -350,46 +344,52 @@ def on_object_interact(room_id, obj_name, action):
 
 **400+ pages of comprehensive guides:**
 
-📚 **Complete Framework Manual**  
-- Wiki/01-Overview.md — Framework introduction and concepts  
-- Wiki/02-Getting-Started.md — Zero-to-hero tutorial  
+📚 **Complete Framework Manual**
+
+- Wiki/01-Overview.md — Framework introduction and concepts
+- Wiki/02-Getting-Started.md — Zero-to-hero tutorial
 - Wiki/03-Architecture.md — System design and best practices
 
-🔧 **API Reference Library**  
-- Wiki/05-API-Room.md — Room and object management  
-- Wiki/05-API-Display.md — Visual effects and rendering  
-- Wiki/05-API-Interactions.md — Player input and actions  
+🔧 **API Reference Library**
+
+- Wiki/05-API-Room.md — Room and object management
+- Wiki/05-API-Display.md — Visual effects and rendering
+- Wiki/05-API-Interactions.md — Player input and actions
 - Wiki/05-API-UI.md — Interface and screen management
 
-🎬 **Visual Effects Guide**  
-- Wiki/07-Effects-and-Shaders.md — CRT, bloom, and cinematic effects  
+🎬 **Visual Effects Guide**
+
+- Wiki/07-Effects-and-Shaders.md — CRT, bloom, and cinematic effects
 - Complete shader reference with real-time tuning examples
 
-🛠️ **Production Guides**  
-- Wiki/08-Build-and-Distribute.md — CI/CD, cross-platform builds  
+🛠️ **Production Guides**
+
+- Wiki/08-Build-and-Distribute.md — CI/CD, cross-platform builds
 - Wiki/10-Troubleshooting.md — Common issues and solutions
 
-📝 **Developer Resources**  
-- `DEVELOPMENT_TOOLS.md` — Game launcher and linting tools  
-- `SHADER_REFERENCE.md` — Ren'Py shader documentation links  
+📝 **Developer Resources**
+
+- `DEVELOPMENT_TOOLS.md` — Game launcher and linting tools
+- `SHADER_REFERENCE.md` — Ren'Py shader documentation links
 - `game/shaders/HOTKEY_MAPPING.md` — In-game controls reference
 
 **New to game development?** Start here:
+
 1. Wiki/01-Overview.md
 2. Wiki/02-Getting-Started.md
 3. Wiki/09-Examples.md
 
 ### 🛠️ Debug & Effects
 
-* **i**: toggle info overlay
-* **c**: toggle CRT • **a**: toggle scanline animation
-* **1–4**: scanline size presets
-* **\[ / ]**: vignette strength • **- / =**: vignette width • **0**: reset
-* **l**: toggle letterbox (shader‑based)
-* **Shift+G/F/V/L/W**: cycle shader effects (grain/fog/vintage/lighting/weather)
-* **Alt+A/I**: atmosphere presets / investigation modes
-* **R**: reset all shader effects • **H**: shader help
-* **Cmd+Shift+F12 / Ctrl+Shift+F12**: cycle debug overlay
+- **i**: toggle info overlay
+- **c**: toggle CRT • **a**: toggle scanline animation
+- **1–4**: scanline size presets
+- **\[ / ]**: vignette strength • **- / =**: vignette width • **0**: reset
+- **l**: toggle letterbox (shader‑based)
+- **Shift+G/F/V/L/W**: cycle shader effects (grain/fog/vintage/lighting/weather)
+- **Alt+A/I**: atmosphere presets / investigation modes
+- **R**: reset all shader effects • **H**: shader help
+- **Cmd+Shift+F12 / Ctrl+Shift+F12**: cycle debug overlay
 
 ---
 
@@ -397,15 +397,15 @@ def on_object_interact(room_id, obj_name, action):
 
 ### 🏆 **Framework Comparison**
 
-| **Feature** | **Traditional Ren'Py** | **Other Frameworks** | **Snatchernauts** |
-|-------------|------------------------|---------------------|-------------------|
-| **Setup Time** | Days of coding | Weeks of setup | **5 minutes** |
-| **Pixel-Perfect Interaction** | ❌ Manual implementation | ❌ Limited support | ✅ **Built-in** |
-| **Visual Effects** | ❌ Basic only | ❌ Plugin-dependent | ✅ **Professional** |
-| **Multi-Input Support** | ❌ Manual coding | ❌ Partial | ✅ **Complete** |
-| **Documentation** | ❌ Scattered | ❌ Basic | ✅ **400+ pages** |
-| **Production Tools** | ❌ DIY | ❌ Limited | ✅ **Full suite** |
-| **Commercial Ready** | ❌ Requires work | ❌ Maybe | ✅ **Day one** |
+| **Feature**                   | **Traditional Ren'Py**   | **Other Frameworks** | **Snatchernauts**   |
+| ----------------------------- | ------------------------ | -------------------- | ------------------- |
+| **Setup Time**                | Days of coding           | Weeks of setup       | **5 minutes**       |
+| **Pixel-Perfect Interaction** | ❌ Manual implementation | ❌ Limited support   | ✅ **Built-in**     |
+| **Visual Effects**            | ❌ Basic only            | ❌ Plugin-dependent  | ✅ **Professional** |
+| **Multi-Input Support**       | ❌ Manual coding         | ❌ Partial           | ✅ **Complete**     |
+| **Documentation**             | ❌ Scattered             | ❌ Basic             | ✅ **400+ pages**   |
+| **Production Tools**          | ❌ DIY                   | ❌ Limited           | ✅ **Full suite**   |
+| **Commercial Ready**          | ❌ Requires work         | ❌ Maybe             | ✅ **Day one**      |
 
 ---
 
@@ -414,21 +414,20 @@ def on_object_interact(room_id, obj_name, action):
 ### 🎆 **Choose Your Path**
 
 🔥 **I want to start creating immediately**  
-    → Clone the repository and run `scripts/run-game.sh`  
-    → Follow Wiki/02-Getting-Started.md
+    → Clone the repository and run `scripts/run-game.sh`  
+    → Follow Wiki/02-Getting-Started.md
 
 📚 **I want to understand the framework first**  
-    → Read Wiki/01-Overview.md  
-    → Explore Wiki/03-Architecture.md
+    → Read Wiki/01-Overview.md  
+    → Explore Wiki/03-Architecture.md
 
 🛠️ **I'm ready for production**  
-    → Check out Wiki/08-Build-and-Distribute.md  
-    → Set up automated CI/CD pipelines
+    → Check out Wiki/08-Build-and-Distribute.md  
+    → Set up automated CI/CD pipelines
 
 ### 🔗 **Quick Links**
 
-- **💻 [Download Framework](https://github.com/grahfmusic/snatchernauts_framework)**
-- **🌐 [Primary Repository (GitLab)](https://gitlab.com/grahfmusic/snatchernauts_framework)**
+- **💻 [Download Framework](https://gitlab.com/grahfmusic/snatchernauts_framework)**
 - **📚 [Complete Documentation](Wiki/)**
 - **🎬 [Visual Effects Demo](Wiki/07-Effects-and-Shaders.md)**
 - **🚀 [5-Minute Quick Start](Wiki/02-Getting-Started.md)**
@@ -437,9 +436,9 @@ def on_object_interact(room_id, obj_name, action):
 
 ### 🌐 **Join the Community**
 
-💬 **Questions?** Open an issue on [GitLab](https://gitlab.com/grahfmusic/snatchernauts_framework/-/issues) or [GitHub](https://github.com/grahfmusic/snatchernauts_framework/issues)  
+💬 **Questions?** Open an issue on GitLab  
 🔄 **Updates?** Star the repository for notifications  
-🤝 **Contributing?** Pull requests welcome with brief rationale  
+🤝 **Contributing?** Pull requests welcome with brief rationale
 
 ### 📄 **Open Source & Commercial Friendly**
 
@@ -459,4 +458,4 @@ def on_object_interact(room_id, obj_name, action):
 
 ---
 
-**⭐ [Star this repository](https://github.com/grahfmusic/snatchernauts_framework) · 📚 [Read the docs](Wiki/) · 🚀 [Start building](Wiki/02-Getting-Started.md)**
+**⭐ [Star this repository](https://gitlab.com/grahfmusic/snatchernauts_framework) · 📚 [Read the docs](Wiki/) · 🚀 [Start building](Wiki/02-Getting-Started.md)**
