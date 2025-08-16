@@ -8,51 +8,37 @@
 
 _Create visual novels that feel alive — Transform passive reading into immersive exploration_
 
-Welcome to the comprehensive documentation for the Snatchernauts Framework, the only Ren'Py framework engineered from the ground up to deliver exploration-rich, tactile gameplay that made classics like _Snatcher_ and _Policenauts_ legendary.
+Welcome to the comprehensive documentation for the Snatchernauts Framework. This manual guides you through creating exploration-rich, tactile gameplay experiences that made classics like _Snatcher_ and _Policenauts_ legendary. The framework transforms traditional visual novel storytelling by adding structured room-based exploration, contextual interactions, and cinematic effects.
 
-## 🚀 Quick Navigation
+## Table of Contents
 
-### 📖 **Getting Started**
-- **[01-Overview](01-Overview.md)** — Framework introduction and core concepts
-- **[02-Getting-Started](02-Getting-Started.md)** — Zero-to-hero tutorial and setup
-- **[Mini-Tutorial](Mini-Tutorial.md)** — Quick hands-on introduction
+### Part I: Getting Started
+- **[01-Overview](01-Overview.md)** — Framework introduction and design philosophy  
+- **[02-Getting-Started](02-Getting-Started.md)** — Installation, setup, and first project
 
-### 🏗️ **Architecture & Design**
-- **[03-Architecture](03-Architecture.md)** — System design and best practices
-- **[04-Logic-Hooks](04-Logic-Hooks.md)** — Game logic system documentation
-- **[Modules](Modules.md)** — Framework module overview
+### Part II: Core Framework Concepts
+- **[03-Architecture](03-Architecture.md)** — System design and component organization
+- **[04-Logic-Hooks](04-Logic-Hooks.md)** — Event-driven game logic implementation
+- **[05-Screens-and-UI](05-Screens-and-UI.md)** — User interface system and screen composition
+- **[06-Effects-and-Shaders](06-Effects-and-Shaders.md)** — Visual effects, CRT shaders, and atmospheric rendering
 
-### 🔧 **API Reference Library**
-- **[05-API-Room](05-API-Room.md)** — Room and object management
-- **[05-API-Display](05-API-Display.md)** — Visual effects and rendering
-- **[05-API-Interactions](05-API-Interactions.md)** — Player input and actions
-- **[05-API-UI](05-API-UI.md)** — Interface and screen management
+### Part III: Practical Implementation
+- **[07-Creating-a-New-Game-Tutorial](07-Creating-a-New-Game-Tutorial.md)** — Complete detective game walkthrough
+- **[08-Examples](08-Examples.md)** — Code examples and implementation patterns
+- **[09-Build-and-Distribute](09-Build-and-Distribute.md)** — Deployment, CI/CD, and production workflows
 
-### 🎨 **User Interface & Visual Effects**
-- **[06-Screens-and-UI](06-Screens-and-UI.md)** — UI system documentation
-- **[07-Effects-and-Shaders](07-Effects-and-Shaders.md)** — CRT, bloom, and cinematic effects
-- **[Effects-and-Overlays](Effects-and-Overlays.md)** — Visual overlay system
+### Part IV: API Reference Manual
+- **[10-API-Room](10-API-Room.md)** — Room management and object manipulation functions
+- **[11-API-Interactions](11-API-Interactions.md)** — Player input handling and interaction systems
+- **[12-API-Display](12-API-Display.md)** — Visual rendering and display control functions
+- **[13-API-UI](13-API-UI.md)** — User interface creation and management utilities
 
-### 🛠️ **Development & Production**
-- **[08-Build-and-Distribute](08-Build-and-Distribute.md)** — CI/CD, builds, automation
-- **[09-Examples](09-Examples.md)** — Extensive code examples
-- **[Build-and-CI](Build-and-CI.md)** — Continuous integration setup
-- **[CI-Examples](CI-Examples.md)** — CI/CD pipeline examples
+### Part V: Advanced Development
+- **[14-Developer-Manual](14-Developer-Manual.md)** — Advanced workflows and development practices
+- **[15-Troubleshooting](15-Troubleshooting.md)** — Common issues, debugging, and problem resolution
 
-### 🔍 **Reference & Troubleshooting**
-- **[10-Troubleshooting](10-Troubleshooting.md)** — Common issues and solutions
-- **[DeveloperManual](DeveloperManual.md)** — Complete developer reference
-- **[screenshots/](screenshots/)** — Framework screenshots and examples
-
-### 📈 **Legacy Documentation**
-- **[Architecture](Architecture.md)** — Legacy architecture notes
-- **[Getting-Started](Getting-Started.md)** — Legacy getting started guide
-- **[Rooms-and-Objects](Rooms-and-Objects.md)** — Legacy room system docs
-- **[GameLogic](GameLogic.md)** — Legacy game logic documentation
-- **[Interactions](Interactions.md)** — Legacy interaction system
-- **[UI-and-Screens](UI-and-Screens.md)** — Legacy UI documentation
-- **[QuickStart](QuickStart.md)** — Legacy quick start guide
-- **[Troubleshooting](Troubleshooting.md)** — Legacy troubleshooting
+### Supplementary Resources
+- **[screenshots/](screenshots/)** — Framework screenshots and visual examples
 
 ---
 
@@ -78,20 +64,19 @@ Welcome to the comprehensive documentation for the Snatchernauts Framework, the 
 ### 🌟 **New to Game Development?**
 1. **[01-Overview](01-Overview.md)** — Understand what makes Snatchernauts special
 2. **[02-Getting-Started](02-Getting-Started.md)** — Set up your development environment
-3. **[Mini-Tutorial](Mini-Tutorial.md)** — Build your first interactive scene
-4. **[09-Examples](09-Examples.md)** — Study practical code examples
+3. **[07-Creating-a-New-Game-Tutorial](07-Creating-a-New-Game-Tutorial.md)** — Build a complete detective game
+4. **[08-Examples](08-Examples.md)** — Study practical code examples
 
 ### 🔧 **Experienced Ren'Py Developer?**
 1. **[03-Architecture](03-Architecture.md)** — Understand the framework's design philosophy
 2. **[04-Logic-Hooks](04-Logic-Hooks.md)** — Learn the event-driven game logic system
-3. **[05-API-* series](05-API-Room.md)** — Master the comprehensive API library
-4. **[07-Effects-and-Shaders](07-Effects-and-Shaders.md)** — Implement professional visual effects
+3. **[10-API-Room](10-API-Room.md)** — Master the comprehensive API library
+4. **[06-Effects-and-Shaders](06-Effects-and-Shaders.md)** — Implement professional visual effects
 
 ### 🚀 **Ready for Production?**
-1. **[08-Build-and-Distribute](08-Build-and-Distribute.md)** — Set up automated build pipelines
-2. **[Build-and-CI](Build-and-CI.md)** — Configure continuous integration
-3. **[DeveloperManual](DeveloperManual.md)** — Advanced development workflows
-4. **[10-Troubleshooting](10-Troubleshooting.md)** — Debug common production issues
+1. **[09-Build-and-Distribute](09-Build-and-Distribute.md)** — Set up automated build pipelines
+2. **[14-Developer-Manual](14-Developer-Manual.md)** — Advanced development workflows
+3. **[15-Troubleshooting](15-Troubleshooting.md)** — Debug common production issues
 
 ---
 
@@ -99,15 +84,15 @@ Welcome to the comprehensive documentation for the Snatchernauts Framework, the 
 
 The framework is under active development with regular updates. Key recent improvements:
 
+- **Complete Documentation Reorganization** — Logical numbering system (01-15) with proper flow
+- **New Comprehensive Game Tutorial** — Step-by-step detective game creation guide
 - **Enhanced Automation System** — Intelligent README and wiki synchronization
 - **Universal Wiki Sync** — Deploy documentation to both GitLab and GitHub
 - **Improved Visual Effects** — Unity/Godot quality shader system
 - **Production Tooling** — Complete CI/CD pipeline automation
-- **Comprehensive Documentation** — 400+ pages of guides and examples
 
-For detailed release notes, see:
-- **[Release-0.5.1](Release-0.5.1.md)** — Previous major release notes
-- **[CHANGELOG.md](../CHANGELOG.md)** — Complete version history (main repository)
+For detailed release notes, see the main repository:
+- **[CHANGELOG.md](../CHANGELOG.md)** — Complete version history and release notes
 
 ---
 
