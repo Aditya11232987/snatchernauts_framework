@@ -26,13 +26,15 @@ wiki_sync:
       GITHUB_WIKI_URL="https://oauth2:${GH_WIKI_TOKEN}@github.com/grahfmusic/snatchernauts_framework.wiki.git"
       git push -f "$GITHUB_WIKI_URL" master
 
+image: node:lts
+
 pages:
   stage: deploy
   script:
-    - mkdir -p public
-    - cp -r public/* public/ 2>/dev/null || true # keep if you build elsewhere
-    - cp README.md public/
+    - mkdir public
+    - echo "Hello World" > public/index.html
   artifacts:
-    paths: [public]
+    paths:
+      - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
