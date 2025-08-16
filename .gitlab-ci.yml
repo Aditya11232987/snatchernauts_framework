@@ -1,38 +1,13 @@
-stages:
-  - wiki
-
-variables:
-  GIT_STRATEGY: fetch
-
-wiki_sync:
-  stage: wiki
-  image: alpine:3.20
-  only:
-    - main
-  before_script:
-    - apk add --no-cache git bash rsync
-  script:
-    - |
-      set -euo pipefail
-      if [ ! -d Wiki ]; then
-        echo "No Wiki/ directory present; skipping."; exit 0; fi
-      rsync -a --delete Wiki/ wiki-tmp/
-      cd wiki-tmp
-      git init -q
-      git checkout -q -b master
-      git add -A
-      git -c user.name="gitlab-ci" -c user.email="ci@example.com" commit -q -m "chore(wiki): sync from repo Wiki/"
-      : "${GH_WIKI_TOKEN:?Set GH_WIKI_TOKEN in GitLab CI/CD variables (repo PAT with repo access)}"
-      GITHUB_WIKI_URL="https://oauth2:${GH_WIKI_TOKEN}@github.com/grahfmusic/snatchernauts_framework.wiki.git"
-      git push -f "$GITHUB_WIKI_URL" master
-
-pages:
-  stage: deploy
-  script:
-    - mkdir -p public
-    - cp -r public/* public/ 2>/dev/null || true # keep if you build elsewhere
-    - cp README.md public/
-  artifacts:
-    paths: [public]
+# The Docker image that will be used to build your app
+image: node:lts
+create-pages:
+  pages:
+    # The folder that contains the files to be exposed at the Page URL
+    publish: public
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # This ensures that only pushes to the default branch will trigger
+    # a pages deploy
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  # Functions that should be executed before the build script is run
+  before_script:
+    - npm ci
