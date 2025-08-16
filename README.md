@@ -1,4 +1,5 @@
 # Snatchernauts Framework
+
 ## **The Revolutionary Ren'Py Framework That Changes Everything**
 
 _Create visual novels that feel alive — Transform passive reading into immersive exploration_
@@ -14,9 +15,9 @@ _Create visual novels that feel alive — Transform passive reading into immersi
 
 ## 🚀 **Stop Building Static Visual Novels. Start Creating Interactive Experiences.**
 
-**Your players deserve more than click-to-continue storytelling.** 
+**Your players deserve more than click-to-continue storytelling.**
 
-Snatchernauts Framework is the **only Ren'Py framework** engineered from the ground up to deliver the exploration-rich, tactile gameplay that made classics like _Snatcher_ and _Policenauts_ legendary. 
+Snatchernauts Framework is the **only Ren'Py framework** engineered from the ground up to deliver the exploration-rich, tactile gameplay that made classics like _Snatcher_ and _Policenauts_ legendary.
 
 **The result?** Visual novels that feel less like digital books and more like **living, breathing worlds** your players can truly explore.
 
@@ -30,18 +31,19 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 ✅ **Clean, extensible architecture** — Write less code, accomplish more  
 ✅ **Production-ready tooling** — Built-in debugging, automated builds, CI/CD ready
 
-***
+---
 
 ## 🎆 **The Problem with Traditional Visual Novels**
 
 **95% of visual novels suffer from the same limitation:** They're essentially digital books with pictures. Players click → read text → click again. **That's it.**
 
 **But what if your visual novel could:**
+
 - Let players **explore environments** like real detective games?
 - Feature **dynamic, contextual interactions** that respond to player curiosity?
-- Deliver **cinematic visual effects** that rival AAA productions?
+- Deliver **cinematic visual effects** without knowing advanced Shader knowledge?
 - Support **multiple input methods** for maximum accessibility?
-- Provide **professional-grade development tools** that accelerate your workflow?
+- Provide **visual development tools** that accelerate your workflow?
 
 ### 💡 **The Snatchernauts Solution: Interactive Immersion**
 
@@ -58,7 +60,7 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 🧩 **Professional Architecture**  
     Clean separation of concerns. Write game logic once, use everywhere. No more spaghetti code.
 
-🎬 **Hollywood-Grade Visual Effects**  
+🎬 **Unity and Godot Quality Visual Effects**  
     Real-time shader effects: CRT monitors, film grain, atmospheric fog, dynamic lighting.
 
 🕶️ **Live Visual Tuning**  
@@ -72,9 +74,6 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 
 ### 🚀 **Accelerated Development**
 
-**"Cut development time by 60% while adding features I never thought possible."**  
-— *Independent developer testimonial*
-
 - **Pre-built interaction systems** — No need to reinvent point-and-click mechanics
 - **Comprehensive API library** — Room management, UI, effects, all ready to use
 - **Automated development tools** — Linting, building, and deployment scripts included
@@ -85,9 +84,8 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 **Create games that look like they cost 10x your budget:**
 
 - **Real-time CRT simulation** with authentic scanlines and chromatic aberration
-- **Dynamic bloom effects** that respond to scene lighting and player actions  
+- **Dynamic Colour Grading and Lighting** presets built in and expandable
 - **Cinematic letterboxing** with customizable aspect ratios
-- **Atmospheric shaders** for fog, rain, vintage film effects, and lighting
 - **Live effect tuning** — See changes instantly without recompiling
 
 ### 🎲 **Multi-Platform Excellence**
@@ -120,52 +118,52 @@ Tired of the limitations of traditional visual novel frameworks? **Snatchernauts
 | -------------------------- | -------------------------------------------------------- |
 | 🎯 Pixel‑accurate hotspots | Click only where the image is opaque; no sloppy hitboxes |
 | 🧭 Keyboard/gamepad nav    | Fast navigation across in‑room objects                   |
-| 🗂️ Contextual menus       | Examine, Use, Talk, and custom actions                   |
-| 🧩 Centralized hooks       | on\_game\_start, on\_room\_enter, on\_object\_\* events  |
-| 🛠️ Debug overlay          | Live logging toggles, FPS/memory hints                   |
-| 🕶️ CRT + vignette         | Warp/scan/chroma + horizontal vignette, live tuning      |
+| 🗂️ Contextual menus        | Examine, Use, Talk, and custom actions                   |
+| 🧩 Centralized hooks       | on_game_start, on_room_enter, on_object\_\* events       |
+| 🛠️ Debug overlay           | Live logging toggles, FPS/memory hints                   |
+| 🕶️ CRT + vignette          | Warp/scan/chroma + horizontal vignette, live tuning      |
 | 🎬 Shader system           | Film grain, fog, lighting, letterbox via GLSL shaders    |
 | 🌸 Bloom effects           | Cinematic overlays with color correlation                |
 | 🧰 Clean APIs              | room/display/ui/interactions modules                     |
 
 ### How It Works (Architecture)
 
-* Coordinator: `game/script.rpy` starts the info overlay, then calls `on_game_start()` and enters the exploration loop via `play_room()`.
-* Public APIs: `game/api/*.rpy` expose helpers for rooms, display/effects, UI, and interactions.
-* Logic Layer: put your gameplay in `game/logic/game_logic.rpy` and optional `game/logic/rooms/<room>_logic.rpy` files. Register per‑room handlers.
-* UI Layer: screens under `game/ui/` compose descriptions, menus, and overlays.
-* Effects: `game/shaders/` and `game/overlays/` provide CRT/Bloom/Letterbox and startup/debug overlays.
-* Core Config: `game/core/` contains options, logging, and room configuration helpers.
+- Coordinator: `game/script.rpy` starts the info overlay, then calls `on_game_start()` and enters the exploration loop via `play_room()`.
+- Public APIs: `game/api/*.rpy` expose helpers for rooms, display/effects, UI, and interactions.
+- Logic Layer: put your gameplay in `game/logic/game_logic.rpy` and optional `game/logic/rooms/<room>_logic.rpy` files. Register per‑room handlers.
+- UI Layer: screens under `game/ui/` compose descriptions, menus, and overlays.
+- Effects: `game/shaders/` and `game/overlays/` provide CRT/Bloom/Letterbox and startup/debug overlays.
+- Core Config: `game/core/` contains options, logging, and room configuration helpers.
 
 See the Wiki for a deep dive, code walkthroughs, and examples.
 
-***
+---
 
 ### 🚀 Quick Start
 
-1) Install Ren'Py 8.4.x and set your SDK path. Example:
+1. Install Ren'Py 8.4.x and set your SDK path. Example:
    - export RENPY_SDK=~/renpy-8.4.1-sdk
-2) Run the project:
+2. Run the project:
    - **Recommended**: `scripts/run-game.sh` (unified launcher with linting)
    - **Direct**: `$RENPY_SDK/renpy.sh .`
-3) Development workflow:
+3. Development workflow:
    - `scripts/run-game.sh --lint` (lint then launch)
    - `scripts/run-game.sh --debug` (launch with console output)
    - `scripts/run-game.sh --help` (show all options)
-4) Build distributions via Ren'Py Launcher → Build & Distribute.
+4. Build distributions via Ren'Py Launcher → Build & Distribute.
 
-*See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation*
+_See `DEVELOPMENT_TOOLS.md` for complete development workflow documentation_
 
 ### 🎮 Controls (Default)
 
-* A/Enter/Space: interact (open action menu)
-* Arrow keys / WASD: navigate objects
-* Esc/B: cancel
-* Mouse: hover/click objects
+- A/Enter/Space: interact (open action menu)
+- Arrow keys / WASD: navigate objects
+- Esc/B: cancel
+- Mouse: hover/click objects
 
 ### 🧠 Core Concepts
 
-* Hooks: write gameplay as Python/renpy functions responding to events:
+- Hooks: write gameplay as Python/renpy functions responding to events:
 
 ```renpy
 # Implement these in game/logic/game_logic.rpy (or per-room handlers)
@@ -183,9 +181,9 @@ def on_object_interact(room_id, obj, action) -> bool:
     ...
 ```
 
-* Per‑room Logic: implement `register_room_logic('<room>', Handler())` with your own methods.
-* APIs: use `room_api`, `ui_api`, `interactions_api`, `display_api` instead of scattering logic in screens.
-* Logging: centralized logging interception with color and truncation; toggles available at runtime.
+- Per‑room Logic: implement `register_room_logic('<room>', Handler())` with your own methods.
+- APIs: use `room_api`, `ui_api`, `interactions_api`, `display_api` instead of scattering logic in screens.
+- Logging: centralized logging interception with color and truncation; toggles available at runtime.
 
 ### 🗺️ Project Layout
 
@@ -296,19 +294,19 @@ snatchernauts-framework/
 
 🕵️ **Detective/Mystery Games**  
     Create immersive crime scenes with pixel-perfect evidence discovery  
-        *"Players can examine every detail, just like real forensic investigation"*
+        _"Players can examine every detail, just like real forensic investigation"_
 
 🏭 **Sci-Fi Adventures**  
     Build futuristic environments with dynamic lighting and atmospheric effects  
-        *"CRT shaders and bloom effects create authentic retro-futuristic atmosphere"*
+        _"CRT shaders and bloom effects create authentic retro-futuristic atmosphere"_
 
 🏰 **Point-and-Click Adventures**  
     Traditional adventure game mechanics with modern visual novel storytelling  
-        *"All the exploration depth of LucasArts classics, powered by Ren'Py"*
+        _"All the exploration depth of LucasArts classics, powered by Ren'Py"_
 
 🏠 **Interactive Fiction**  
     Rich, explorable environments that respond to player curiosity  
-        *"Every object tells a story when players can truly interact with the world"*
+        _"Every object tells a story when players can truly interact with the world"_
 
 ### 💻 **Code Example: See How Easy It Is**
 
@@ -347,46 +345,52 @@ def on_object_interact(room_id, obj_name, action):
 
 **400+ pages of comprehensive guides:**
 
-📚 **Complete Framework Manual**  
-- Wiki/01-Overview.md — Framework introduction and concepts  
-- Wiki/02-Getting-Started.md — Zero-to-hero tutorial  
+📚 **Complete Framework Manual**
+
+- Wiki/01-Overview.md — Framework introduction and concepts
+- Wiki/02-Getting-Started.md — Zero-to-hero tutorial
 - Wiki/03-Architecture.md — System design and best practices
 
-🔧 **API Reference Library**  
-- Wiki/05-API-Room.md — Room and object management  
-- Wiki/05-API-Display.md — Visual effects and rendering  
-- Wiki/05-API-Interactions.md — Player input and actions  
+🔧 **API Reference Library**
+
+- Wiki/05-API-Room.md — Room and object management
+- Wiki/05-API-Display.md — Visual effects and rendering
+- Wiki/05-API-Interactions.md — Player input and actions
 - Wiki/05-API-UI.md — Interface and screen management
 
-🎬 **Visual Effects Guide**  
-- Wiki/07-Effects-and-Shaders.md — CRT, bloom, and cinematic effects  
+🎬 **Visual Effects Guide**
+
+- Wiki/07-Effects-and-Shaders.md — CRT, bloom, and cinematic effects
 - Complete shader reference with real-time tuning examples
 
-🛠️ **Production Guides**  
-- Wiki/08-Build-and-Distribute.md — CI/CD, cross-platform builds  
+🛠️ **Production Guides**
+
+- Wiki/08-Build-and-Distribute.md — CI/CD, cross-platform builds
 - Wiki/10-Troubleshooting.md — Common issues and solutions
 
-📝 **Developer Resources**  
-- `DEVELOPMENT_TOOLS.md` — Game launcher and linting tools  
-- `SHADER_REFERENCE.md` — Ren'Py shader documentation links  
+📝 **Developer Resources**
+
+- `DEVELOPMENT_TOOLS.md` — Game launcher and linting tools
+- `SHADER_REFERENCE.md` — Ren'Py shader documentation links
 - `game/shaders/HOTKEY_MAPPING.md` — In-game controls reference
 
 **New to game development?** Start here:
+
 1. Wiki/01-Overview.md
 2. Wiki/02-Getting-Started.md
 3. Wiki/09-Examples.md
 
 ### 🛠️ Debug & Effects
 
-* **i**: toggle info overlay
-* **c**: toggle CRT • **a**: toggle scanline animation
-* **1–4**: scanline size presets
-* **\[ / ]**: vignette strength • **- / =**: vignette width • **0**: reset
-* **l**: toggle letterbox (shader‑based)
-* **Shift+G/F/V/L/W**: cycle shader effects (grain/fog/vintage/lighting/weather)
-* **Alt+A/I**: atmosphere presets / investigation modes
-* **R**: reset all shader effects • **H**: shader help
-* **Cmd+Shift+F12 / Ctrl+Shift+F12**: cycle debug overlay
+- **i**: toggle info overlay
+- **c**: toggle CRT • **a**: toggle scanline animation
+- **1–4**: scanline size presets
+- **\[ / ]**: vignette strength • **- / =**: vignette width • **0**: reset
+- **l**: toggle letterbox (shader‑based)
+- **Shift+G/F/V/L/W**: cycle shader effects (grain/fog/vintage/lighting/weather)
+- **Alt+A/I**: atmosphere presets / investigation modes
+- **R**: reset all shader effects • **H**: shader help
+- **Cmd+Shift+F12 / Ctrl+Shift+F12**: cycle debug overlay
 
 ---
 
@@ -394,15 +398,15 @@ def on_object_interact(room_id, obj_name, action):
 
 ### 🏆 **Framework Comparison**
 
-| **Feature** | **Traditional Ren'Py** | **Other Frameworks** | **Snatchernauts** |
-|-------------|------------------------|---------------------|-------------------|
-| **Setup Time** | Days of coding | Weeks of setup | **5 minutes** |
-| **Pixel-Perfect Interaction** | ❌ Manual implementation | ❌ Limited support | ✅ **Built-in** |
-| **Visual Effects** | ❌ Basic only | ❌ Plugin-dependent | ✅ **Professional** |
-| **Multi-Input Support** | ❌ Manual coding | ❌ Partial | ✅ **Complete** |
-| **Documentation** | ❌ Scattered | ❌ Basic | ✅ **400+ pages** |
-| **Production Tools** | ❌ DIY | ❌ Limited | ✅ **Full suite** |
-| **Commercial Ready** | ❌ Requires work | ❌ Maybe | ✅ **Day one** |
+| **Feature**                   | **Traditional Ren'Py**   | **Other Frameworks** | **Snatchernauts**   |
+| ----------------------------- | ------------------------ | -------------------- | ------------------- |
+| **Setup Time**                | Days of coding           | Weeks of setup       | **5 minutes**       |
+| **Pixel-Perfect Interaction** | ❌ Manual implementation | ❌ Limited support   | ✅ **Built-in**     |
+| **Visual Effects**            | ❌ Basic only            | ❌ Plugin-dependent  | ✅ **Professional** |
+| **Multi-Input Support**       | ❌ Manual coding         | ❌ Partial           | ✅ **Complete**     |
+| **Documentation**             | ❌ Scattered             | ❌ Basic             | ✅ **400+ pages**   |
+| **Production Tools**          | ❌ DIY                   | ❌ Limited           | ✅ **Full suite**   |
+| **Commercial Ready**          | ❌ Requires work         | ❌ Maybe             | ✅ **Day one**      |
 
 ---
 
@@ -435,7 +439,7 @@ def on_object_interact(room_id, obj_name, action):
 
 💬 **Questions?** Open an issue on GitLab  
 🔄 **Updates?** Star the repository for notifications  
-🤝 **Contributing?** Pull requests welcome with brief rationale  
+🤝 **Contributing?** Pull requests welcome with brief rationale
 
 ### 📄 **Open Source & Commercial Friendly**
 
