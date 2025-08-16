@@ -1,6 +1,33 @@
-# Creating a New Game Tutorial
+# Game Development Tutorial
 
-This comprehensive tutorial guides you through creating a complete detective game using the Snatchernauts Framework. You'll learn the actual framework structure, room system, object interactions, and logic implementation by building a functional point-and-click investigation game.
+**Part II: Core Development - Chapter 7**
+
+*A comprehensive hands-on tutorial for creating complete interactive experiences using the Snatchernauts Framework. Master the framework through practical application by building "The Missing Files" - a complete detective mystery game.*
+
+---
+
+## Chapter Overview
+
+This chapter provides a complete, hands-on tutorial for developing games with the Snatchernauts Framework. Rather than abstract concepts, you'll learn by building a fully functional detective mystery game that demonstrates every major framework system. This tutorial bridges the gap between understanding the framework's capabilities and actually implementing them in a production environment.
+
+The tutorial is structured as a progressive development process, where each section builds upon previous work while introducing new framework concepts and techniques. By the end, you'll have created a complete game and gained deep practical knowledge of the framework's development patterns.
+
+**What makes this tutorial comprehensive:**
+- **Real-World Implementation**: Build an actual game, not just examples
+- **Progressive Complexity**: Start simple, gradually add advanced features
+- **Production Practices**: Learn proper code organization, testing, and optimization
+- **Complete Coverage**: Touch every major framework system through practical application
+- **Debugging Guidance**: Learn to troubleshoot common issues and optimize performance
+
+**By the end of this chapter, you will have mastered:**
+- Complete game development workflow using the framework
+- Advanced room system implementation with complex state management
+- Sophisticated object interaction patterns and dialogue systems
+- Visual effects integration for atmospheric storytelling
+- Audio design and dynamic music systems
+- Save/load system implementation and state persistence
+- Performance optimization and cross-platform compatibility
+- Production deployment and distribution preparation
 
 ## Table of Contents
 
@@ -861,4 +888,766 @@ init -1 python:
     register_room_logic('your_room_id', your_room_handler)
 ```
 
-This tutorial accurately reflects the real framework structure and demonstrates how to create games using the actual Snatchernauts Framework APIs and systems.
+## Character Interactions and Dialogue
+
+The framework's dialogue system integrates seamlessly with room logic and state management, allowing for complex character interactions that respond to investigation progress.
+
+### Character Definition and State Tracking
+
+```python
+# Character definitions with relationship tracking
+define chief_watson = Character("Chief Watson", color="#4a4a4a")
+define officer_martinez = Character("Officer Martinez", color="#2a5a2a")
+define secretary_jane = Character("Secretary Jane", color="#5a2a5a")
+
+# Dynamic character state system
+init python:
+    class CharacterState:
+        def __init__(self, name, trust=50, suspicion=0):
+            self.name = name
+            self.trust = trust
+            self.suspicion = suspicion
+            self.talked_to = False
+            self.topics_discussed = []
+            self.evidence_shown = []
+            self.relationship_status = "neutral"  # neutral, trusted, suspicious, hostile
+        
+        def modify_trust(self, amount):
+            self.trust = max(0, min(100, self.trust + amount))
+            self.update_relationship_status()
+        
+        def modify_suspicion(self, amount):
+            self.suspicion = max(0, min(100, self.suspicion + amount))
+            self.update_relationship_status()
+        
+        def update_relationship_status(self):
+            if self.suspicion > 70:
+                self.relationship_status = "hostile"
+            elif self.suspicion > 40:
+                self.relationship_status = "suspicious"
+            elif self.trust > 70:
+                self.relationship_status = "trusted"
+            else:
+                self.relationship_status = "neutral"
+```
+
+### Context-Sensitive Dialogue Trees
+
+Implement dialogue that changes based on evidence collected and investigation progress:
+
+```python
+# Evidence-aware dialogue system
+label interrogate_chief_watson:
+    scene black with fade
+    
+    # Dialogue changes based on evidence and relationship
+    if store.character_relations["chief_watson"]["trust"] > 60:
+        chief_watson "Detective Morgan, I'm glad you're handling this case personally."
+    else:
+        chief_watson "Detective. I trust you'll resolve this matter quickly and quietly."
+    
+    # Dynamic menu based on evidence collected
+    menu:
+        "Ask about file access" if "case_file_original" in store.evidence_collected:
+            detective_player "Chief, I need to ask about access to the evidence files."
+            
+            if "security_logs" in store.evidence_collected:
+                detective_player "The security logs show unusual activity Tuesday night."
+                chief_watson "I was here late that night, reviewing case summaries."
+                $ store.character_relations["chief_watson"]["suspicion"] += 10
+            else:
+                chief_watson "Of course. Only three people have access, including yourself."
+        
+        "Show evidence" if len(store.evidence_collected) > 2:
+            call show_evidence_to_character("chief_watson") from _call_show_evidence_1
+        
+        "Ask about Officer Martinez" if "officer_martinez" in store.character_relations:
+            detective_player "What can you tell me about Officer Martinez?"
+            chief_watson "Good officer. Been with us for five years. Why do you ask?"
+            
+            if "martinez_message" in store.case_notes:
+                detective_player "He left a message about seeing lights in the evidence room."
+                chief_watson "Did he? That's... concerning. You should speak with him directly."
+                $ store.investigation_points += 5
+        
+        "End conversation":
+            detective_player "Thank you, Chief. I'll continue my investigation."
+            $ store.character_relations["chief_watson"]["talked_to"] = True
+            return
+    
+    jump interrogate_chief_watson
+
+# Dynamic evidence presentation system
+label show_evidence_to_character(character_name):
+    "What evidence would you like to show?"
+    
+    # Build menu from collected evidence
+    python:
+        evidence_menu = []
+        for evidence in store.evidence_collected:
+            evidence_descriptions = {
+                "case_file_original": "Original case file",
+                "security_logs": "Security access logs",
+                "backup_files": "Backup file copies",
+                "contact_list": "Contact list"
+            }
+            desc = evidence_descriptions.get(evidence, evidence)
+            evidence_menu.append((desc, evidence))
+        
+        if not evidence_menu:
+            renpy.say(None, "You don't have any evidence to show.")
+            return
+    
+    menu(evidence_menu):
+        pass
+    
+    # Handle character reactions to specific evidence
+    python:
+        selected_evidence = _return
+        character_state = store.character_relations.get(character_name, {})
+        
+        # Character-specific evidence reactions
+        if character_name == "chief_watson":
+            if selected_evidence == "security_logs":
+                renpy.say(chief_watson, "These logs... where did you get these?")
+                character_state["suspicion"] = character_state.get("suspicion", 0) + 15
+            elif selected_evidence == "backup_files":
+                renpy.say(chief_watson, "I didn't know we had backups of those files.")
+                character_state["trust"] = character_state.get("trust", 50) + 5
+        
+        # Track what evidence was shown
+        evidence_shown = character_state.get("evidence_shown", [])
+        if selected_evidence not in evidence_shown:
+            evidence_shown.append(selected_evidence)
+            character_state["evidence_shown"] = evidence_shown
+    
+    return
+```
+
+## Visual Effects and Atmosphere
+
+Integrate visual effects to enhance storytelling and create atmospheric immersion.
+
+### Room-Specific Atmospheric Presets
+
+```python
+# Atmospheric configurations for different rooms
+define ROOM_ATMOSPHERES = {
+    "detective_office": {
+        "color_grade": "detective_office",
+        "lighting": "desk_lamp",
+        "film_grain": 0.3,
+        "crt_enabled": True,
+        "letterbox": False,
+        "mood": "contemplative"
+    },
+    "evidence_room": {
+        "color_grade": "cold_fluorescent",
+        "lighting": "overhead_harsh",
+        "film_grain": 0.2,
+        "crt_enabled": True,
+        "letterbox": False,
+        "mood": "clinical"
+    },
+    "interrogation_room": {
+        "color_grade": "high_contrast",
+        "lighting": "interrogation",
+        "film_grain": 0.4,
+        "crt_enabled": True,
+        "letterbox": True,
+        "mood": "tense"
+    }
+}
+
+# Apply atmospheric presets based on story context
+def set_room_atmosphere(room_id, intensity="normal"):
+    """Apply atmospheric effects based on room and story context."""
+    atmosphere = ROOM_ATMOSPHERES.get(room_id, {})
+    
+    # Modify intensity based on investigation progress
+    tension_multiplier = 1.0
+    if store.investigation_points > 50:
+        tension_multiplier = 1.3
+    elif store.investigation_points > 100:
+        tension_multiplier = 1.5
+    
+    # Apply visual effects
+    if atmosphere.get("color_grade"):
+        set_color_grade(atmosphere["color_grade"])
+    
+    if atmosphere.get("lighting"):
+        set_lighting(atmosphere["lighting"], intensity=tension_multiplier)
+    
+    # Film grain increases with tension
+    if atmosphere.get("film_grain"):
+        film_grain_intensity = atmosphere["film_grain"] * tension_multiplier
+        set_film_grain(min(film_grain_intensity, 1.0))
+    
+    # CRT effects
+    if atmosphere.get("crt_enabled"):
+        store.crt_enabled = True
+        store.crt_warp = 0.12 * tension_multiplier
+        store.crt_scan = 0.25 + (0.1 * tension_multiplier)
+    
+    # Letterbox for dramatic scenes
+    if atmosphere.get("letterbox") and intensity == "dramatic":
+        enable_cinematic_mode()
+```
+
+### Dynamic Visual Feedback System
+
+```python
+# Visual feedback for investigation progress
+def update_investigation_visuals():
+    """Update visual effects based on case progress."""
+    progress_ratio = store.investigation_points / 150.0  # Max expected points
+    
+    # Increase tension as case progresses
+    if progress_ratio > 0.8:  # Near resolution
+        # High tension visuals
+        renpy.set_shader_parameter("atmosphere_shader", "u_red_tint", 0.15)
+        renpy.set_shader_parameter("atmosphere_shader", "u_contrast", 1.4)
+        store.film_grain_intensity = 0.5
+    elif progress_ratio > 0.5:  # Mid investigation
+        # Moderate tension
+        renpy.set_shader_parameter("atmosphere_shader", "u_desaturation", 0.3)
+        renpy.set_shader_parameter("atmosphere_shader", "u_contrast", 1.2)
+        store.film_grain_intensity = 0.3
+    
+    # Update object highlighting based on relevance
+    for obj_name, obj_config in current_room_objects.items():
+        if is_evidence_relevant(obj_name):
+            apply_desaturation_preset(obj_name, "explosive_intense")
+        elif has_been_examined(obj_name):
+            apply_desaturation_preset(obj_name, "whisper_subtle")
+
+# Evidence relevance system
+def is_evidence_relevant(obj_name):
+    """Determine if object is currently relevant to investigation."""
+    relevance_map = {
+        "case_file": not store.case_file_examined,
+        "phone": not store.phone_messages_heard,
+        "security_terminal": "security_logs" not in store.evidence_collected,
+        "filing_cabinet": store.case_status == "investigating"
+    }
+    
+    return relevance_map.get(obj_name, False)
+```
+
+## Building Multiple Rooms
+
+Expand the detective game with additional investigation locations.
+
+### Evidence Room Implementation
+
+Create `game/rooms/evidence_room/scripts/evidence_room_config.rpy`:
+
+```python
+# Evidence Room Configuration
+# Secure storage for case evidence and files
+
+define EVIDENCE_BASE_PATH = "rooms/evidence_room/"
+define EVIDENCE_SPRITES_PATH = EVIDENCE_BASE_PATH + "sprites/"
+define EVIDENCE_BACKGROUND = EVIDENCE_BASE_PATH + "background_evidence.png"
+define EVIDENCE_AMBIENT = "audio/evidence_room_hum.ogg"
+
+# Evidence room objects
+define EVIDENCE_ROOM_OBJECTS = {
+    # Main filing system
+    "filing_cabinet_a": merge_configs({
+        "x": 200, "y": 350,
+        "width": 120, "height": 200,
+        "image": EVIDENCE_SPRITES_PATH + "filing_cabinet_a.png",
+        "description": "Filing Cabinet A-M: Contains case files for suspects with last names A through M. Several drawers appear to have been recently accessed.",
+        "object_type": "storage",
+        "contains_evidence": ["morrison_witness_statements", "alibis_archive"],
+        "z_order": 10
+    },
+    create_desaturation_config(DESATURATION_PRESETS["evidence_highlight"])),
+    
+    # Security terminal
+    "security_terminal": merge_configs({
+        "x": 500, "y": 300,
+        "width": 150, "height": 100,
+        "image": EVIDENCE_SPRITES_PATH + "security_terminal.png",
+        "description": "Security access terminal. Shows entry logs and access history. The screen displays recent activity.",
+        "object_type": "device",
+        "requires_clearance": True,
+        "z_order": 12
+    },
+    create_desaturation_config(DESATURATION_PRESETS["neon_normal"])),
+    
+    # Evidence storage boxes
+    "storage_boxes": merge_configs({
+        "x": 600, "y": 400,
+        "width": 100, "height": 80,
+        "image": EVIDENCE_SPRITES_PATH + "storage_boxes.png",
+        "description": "Sealed evidence storage boxes. Some seals appear broken or tampered with.",
+        "object_type": "storage",
+        "tampered": True,
+        "z_order": 8
+    },
+    create_desaturation_config(DESATURATION_PRESETS["explosive_subtle"])),
+    
+    # Exit back to office
+    "exit_door": merge_configs({
+        "x": 50, "y": 200,
+        "width": 80, "height": 200,
+        "image": EVIDENCE_SPRITES_PATH + "door_exit.png",
+        "description": "Exit back to the detective office.",
+        "object_type": "navigation",
+        "destination": "detective_office",
+        "z_order": 5
+    },
+    create_desaturation_config(DESATURATION_PRESETS["neon_subtle"]))
+}
+
+# Register evidence room
+define ROOM_DEFINITIONS_EVIDENCE_ROOM = {
+    "evidence_room": {
+        "background": EVIDENCE_BACKGROUND,
+        "objects": EVIDENCE_ROOM_OBJECTS,
+        "ambient_audio": EVIDENCE_AMBIENT,
+        "lighting_preset": "cold_fluorescent",
+        "atmosphere": "clinical_investigation"
+    }
+}
+
+init python:
+    if 'ROOM_DEFINITIONS' in globals():
+        ROOM_DEFINITIONS.update(ROOM_DEFINITIONS_EVIDENCE_ROOM)
+```
+
+### Cross-Room State Management
+
+Implement systems that track player actions across multiple rooms:
+
+```python
+# Global investigation state tracker
+init python:
+    class InvestigationTracker:
+        def __init__(self):
+            self.rooms_searched = set()
+            self.evidence_chain = []  # Tracks order evidence was found
+            self.timeline = []  # Investigation timeline
+            self.breakthrough_moments = []
+        
+        def add_evidence(self, evidence_id, room_id, method="found"):
+            """Add evidence with context tracking."""
+            import time
+            evidence_entry = {
+                "id": evidence_id,
+                "room": room_id,
+                "method": method,
+                "timestamp": time.time(),
+                "investigation_points": store.investigation_points
+            }
+            
+            self.evidence_chain.append(evidence_entry)
+            self.timeline.append(f"Found {evidence_id} in {room_id}")
+            
+            # Check for breakthrough moments
+            self.check_breakthroughs()
+        
+        def check_breakthroughs(self):
+            """Identify key investigation breakthroughs."""
+            evidence_count = len(store.evidence_collected)
+            
+            if evidence_count == 3 and "first_breakthrough" not in self.breakthrough_moments:
+                self.breakthrough_moments.append("first_breakthrough")
+                renpy.notify("Investigation Breakthrough: Pattern Emerging")
+                # Trigger special visual effects
+                update_investigation_visuals()
+            
+            elif evidence_count >= 6 and "major_breakthrough" not in self.breakthrough_moments:
+                self.breakthrough_moments.append("major_breakthrough")
+                renpy.notify("Major Breakthrough: Suspect Identified")
+                # Enable new dialogue options
+                self.enable_confrontation_dialogue()
+        
+        def enable_confrontation_dialogue(self):
+            """Enable final confrontation options."""
+            store.case_status = "confrontation"
+            # Update all character relationship options
+            for char_name in store.character_relations:
+                store.character_relations[char_name]["confrontation_available"] = True
+    
+    # Initialize global tracker
+    investigation_tracker = InvestigationTracker()
+```
+
+## Testing and Debugging
+
+### Comprehensive Testing Framework
+
+```python
+# Testing and debugging utilities
+init python:
+    class GameTester:
+        def __init__(self):
+            self.test_results = []
+            self.performance_metrics = {}
+        
+        def test_room_functionality(self, room_id):
+            """Test all room interactions and state changes."""
+            results = {"room_id": room_id, "tests": []}
+            
+            try:
+                # Test room loading
+                load_room(room_id)
+                results["tests"].append({"test": "room_loading", "passed": True})
+                
+                # Test object interactions
+                room_config = ROOM_DEFINITIONS.get(room_id, {})
+                objects = room_config.get("objects", {})
+                
+                for obj_name in objects:
+                    # Test hover functionality
+                    try:
+                        on_object_hover(room_id, obj_name)
+                        results["tests"].append({"test": f"hover_{obj_name}", "passed": True})
+                    except Exception as e:
+                        results["tests"].append({"test": f"hover_{obj_name}", "passed": False, "error": str(e)})
+                    
+                    # Test interaction functionality
+                    try:
+                        on_object_interact(room_id, obj_name, "examine")
+                        results["tests"].append({"test": f"interact_{obj_name}", "passed": True})
+                    except Exception as e:
+                        results["tests"].append({"test": f"interact_{obj_name}", "passed": False, "error": str(e)})
+                        
+            except Exception as e:
+                results["tests"].append({"test": "room_loading", "passed": False, "error": str(e)})
+            
+            self.test_results.append(results)
+            return results
+        
+        def test_investigation_flow(self):
+            """Test complete investigation workflow."""
+            # Reset game state
+            self.reset_test_state()
+            
+            # Test progression through investigation stages
+            test_stages = [
+                {"action": lambda: self.simulate_case_file_examination(), "expected_status": "investigating"},
+                {"action": lambda: self.simulate_evidence_collection(), "expected_points_min": 20},
+                {"action": lambda: self.simulate_character_interviews(), "expected_relations_updated": True}
+            ]
+            
+            for stage in test_stages:
+                try:
+                    stage["action"]()
+                    # Validate expected outcomes
+                    if "expected_status" in stage and store.case_status != stage["expected_status"]:
+                        raise Exception(f"Expected status {stage['expected_status']}, got {store.case_status}")
+                    if "expected_points_min" in stage and store.investigation_points < stage["expected_points_min"]:
+                        raise Exception(f"Expected at least {stage['expected_points_min']} points, got {store.investigation_points}")
+                except Exception as e:
+                    print(f"Investigation flow test failed: {e}")
+                    return False
+            
+            return True
+        
+        def reset_test_state(self):
+            """Reset game state for testing."""
+            store.case_status = "briefing"
+            store.evidence_collected = []
+            store.investigation_points = 0
+            store.case_notes = []
+            store.rooms_visited = []
+        
+        def simulate_case_file_examination(self):
+            """Simulate examining the case file."""
+            store.case_file_examined = True
+            store.case_status = "investigating"
+            store.investigation_points += 10
+        
+        def simulate_evidence_collection(self):
+            """Simulate collecting evidence."""
+            test_evidence = ["case_file_original", "security_logs", "backup_files"]
+            for evidence in test_evidence:
+                store.evidence_collected.append(evidence)
+                store.investigation_points += 5
+        
+        def simulate_character_interviews(self):
+            """Simulate interviewing characters."""
+            for char_name in store.character_relations:
+                store.character_relations[char_name]["talked_to"] = True
+    
+    # Initialize tester
+    game_tester = GameTester()
+
+# Debug console commands
+label debug_menu:
+    menu:
+        "Test Current Room":
+            python:
+                results = game_tester.test_room_functionality(store.current_room_id)
+                print(f"Room test results: {results}")
+        
+        "Test Investigation Flow":
+            python:
+                success = game_tester.test_investigation_flow()
+                print(f"Investigation flow test: {'PASSED' if success else 'FAILED'}")
+        
+        "Show Game State":
+            python:
+                print(f"Case Status: {store.case_status}")
+                print(f"Investigation Points: {store.investigation_points}")
+                print(f"Evidence: {store.evidence_collected}")
+                print(f"Rooms Visited: {store.rooms_visited}")
+        
+        "Reset Game State":
+            python:
+                game_tester.reset_test_state()
+                renpy.notify("Game state reset for testing")
+        
+        "Exit Debug Menu":
+            return
+    
+    jump debug_menu
+```
+
+### Performance Optimization
+
+```python
+# Performance monitoring and optimization
+init python:
+    class PerformanceMonitor:
+        def __init__(self):
+            self.frame_times = []
+            self.shader_costs = {}
+            self.room_load_times = {}
+        
+        def monitor_frame_performance(self):
+            """Monitor frame rate performance."""
+            import time
+            start_time = time.time()
+            
+            # Your frame processing here
+            
+            frame_time = time.time() - start_time
+            self.frame_times.append(frame_time)
+            
+            # Keep only recent measurements
+            if len(self.frame_times) > 60:
+                self.frame_times.pop(0)
+            
+            # Warn if performance drops
+            avg_frame_time = sum(self.frame_times) / len(self.frame_times)
+            if avg_frame_time > 1/30:  # Below 30 FPS
+                self.optimize_for_performance()
+        
+        def optimize_for_performance(self):
+            """Apply performance optimizations."""
+            # Reduce visual effects if performance is poor
+            if store.film_grain_intensity > 0.3:
+                store.film_grain_intensity = 0.2
+                renpy.notify("Performance optimization: Reduced film grain")
+            
+            if store.crt_enabled and store.crt_scan > 0.2:
+                store.crt_scan = 0.1
+                renpy.notify("Performance optimization: Reduced CRT effects")
+    
+    performance_monitor = PerformanceMonitor()
+```
+
+## Advanced Features
+
+### Save/Load System Integration
+
+```python
+# Advanced save/load with investigation state
+init python:
+    def save_investigation_state():
+        """Save complete investigation state."""
+        save_data = {
+            "case_status": store.case_status,
+            "investigation_points": store.investigation_points,
+            "evidence_collected": store.evidence_collected[:],  # Copy list
+            "case_notes": store.case_notes[:],
+            "character_relations": dict(store.character_relations),  # Copy dict
+            "rooms_visited": store.rooms_visited[:],
+            "current_room": store.current_room_id,
+            "visual_effects_state": {
+                "crt_enabled": store.crt_enabled,
+                "film_grain_intensity": getattr(store, 'film_grain_intensity', 0.0),
+                "current_atmosphere": getattr(store, 'current_atmosphere', 'default')
+            },
+            "investigation_timeline": investigation_tracker.timeline[:],
+            "breakthrough_moments": investigation_tracker.breakthrough_moments[:]
+        }
+        
+        store.save_game_data = save_data
+        return save_data
+    
+    def load_investigation_state(save_data):
+        """Load complete investigation state."""
+        if not save_data:
+            return False
+        
+        try:
+            # Restore game state
+            store.case_status = save_data.get("case_status", "briefing")
+            store.investigation_points = save_data.get("investigation_points", 0)
+            store.evidence_collected = save_data.get("evidence_collected", [])
+            store.case_notes = save_data.get("case_notes", [])
+            store.character_relations = save_data.get("character_relations", {})
+            store.rooms_visited = save_data.get("rooms_visited", [])
+            
+            # Restore visual effects
+            visual_state = save_data.get("visual_effects_state", {})
+            store.crt_enabled = visual_state.get("crt_enabled", True)
+            store.film_grain_intensity = visual_state.get("film_grain_intensity", 0.0)
+            
+            # Restore investigation timeline
+            if hasattr(investigation_tracker, 'timeline'):
+                investigation_tracker.timeline = save_data.get("investigation_timeline", [])
+                investigation_tracker.breakthrough_moments = save_data.get("breakthrough_moments", [])
+            
+            # Load the saved room
+            saved_room = save_data.get("current_room", "detective_office")
+            load_room(saved_room)
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error loading investigation state: {e}")
+            return False
+
+# Custom save/load screens with investigation preview
+screen save_slot_investigation(slot):
+    button:
+        xsize 300
+        ysize 150
+        
+        has vbox spacing 5
+        
+        # Standard save info
+        text "[slot]" size 16
+        text "[FileTime(slot)]" size 12
+        
+        # Investigation-specific info
+        if FileSave(slot):
+            $ save_data = FileJson(slot, "save_game_data", {})
+            text "Case: [save_data.get('case_status', 'Unknown')]" size 12 color "#ffff00"
+            text "Evidence: [len(save_data.get('evidence_collected', []))]" size 12 color "#00ff00"
+            text "Points: [save_data.get('investigation_points', 0)]" size 12 color "#00ffff"
+        
+        action [
+            FileAction(slot),
+            Function(load_investigation_state, FileJson(slot, "save_game_data", {}))
+        ]
+```
+
+## Best Practices
+
+### Code Organization and Architecture
+
+```
+/game/
+├── core/                           # Framework core (don't modify)
+├── logic/                          # Game-specific logic
+│   ├── game_state.rpy             # Global state management
+│   ├── investigation_tracker.rpy   # Investigation-specific logic
+│   └── character_manager.rpy       # Character relationship system
+├── rooms/                          # Room-specific code
+│   ├── detective_office/
+│   │   ├── scripts/
+│   │   │   ├── config.rpy          # Room configuration
+│   │   │   ├── logic.rpy           # Room logic handler
+│   │   │   └── scenes.rpy          # Dialogue and cutscenes
+│   │   └── sprites/                # Room-specific assets
+│   └── [other rooms]/
+├── systems/                        # Game systems
+│   ├── evidence_system.rpy         # Evidence collection and tracking
+│   ├── dialogue_system.rpy         # Advanced dialogue features
+│   └── atmosphere_system.rpy       # Visual atmosphere management
+└── ui/                            # Custom UI components
+    ├── investigation_ui.rpy        # Investigation-specific screens
+    └── save_load_ui.rpy           # Custom save/load interface
+```
+
+### Performance Best Practices
+
+1. **Efficient State Management**: Use dictionaries for fast lookups, avoid unnecessary list iterations
+2. **Visual Effect Optimization**: Apply effects only when needed, disable during transitions
+3. **Asset Management**: Preload critical assets, use appropriate image formats and sizes
+4. **Memory Management**: Clean up temporary variables, avoid memory leaks in logic handlers
+
+### Debugging and Troubleshooting
+
+```python
+# Comprehensive logging system
+init python:
+    import logging
+    
+    # Set up game-specific logger
+    game_logger = logging.getLogger("MissingFiles")
+    game_logger.setLevel(logging.DEBUG)
+    
+    def log_interaction(room_id, obj_name, action):
+        game_logger.info(f"Interaction: {room_id}.{obj_name} -> {action}")
+    
+    def log_state_change(variable_name, old_value, new_value):
+        game_logger.info(f"State change: {variable_name} {old_value} -> {new_value}")
+    
+    def log_investigation_progress(event_type, details):
+        game_logger.info(f"Investigation: {event_type} - {details}")
+
+# Error handling in room logic
+def safe_room_interaction(room_id, obj_name, action):
+    """Safely handle room interactions with error recovery."""
+    try:
+        return on_object_interact(room_id, obj_name, action)
+    except Exception as e:
+        game_logger.error(f"Interaction error: {room_id}.{obj_name}.{action} - {e}")
+        renpy.notify(f"Interaction error: {str(e)[:50]}...")
+        return False
+```
+
+---
+
+## Recommended Learning Path
+
+### Phase 1: Foundation (Basic Room and Object Setup)
+- [ ] Complete the detective office room with all interactions
+- [ ] Implement basic object highlighting and description system
+- [ ] Test room navigation and state persistence
+- [ ] Set up basic visual atmosphere and audio
+
+### Phase 2: Expansion (Multiple Rooms and Complex Logic)
+- [ ] Add evidence room with advanced object interactions
+- [ ] Implement cross-room state management
+- [ ] Create character dialogue system with relationship tracking
+- [ ] Add investigation progress tracking and feedback
+
+### Phase 3: Polish (Advanced Features and Optimization)
+- [ ] Implement complete save/load system with investigation state
+- [ ] Add performance monitoring and optimization
+- [ ] Create comprehensive testing framework
+- [ ] Design and implement final confrontation sequence
+
+### Phase 4: Production (Testing, Distribution, and Deployment)
+- [ ] Conduct thorough playtesting across different devices
+- [ ] Optimize for various performance levels and screen sizes
+- [ ] Prepare assets and build distribution packages
+- [ ] Document code and create maintenance guides
+
+---
+
+## Next Steps
+
+Having completed this comprehensive tutorial, you now have practical experience with every major aspect of the Snatchernauts Framework. The next chapters will help you refine and expand your development skills:
+
+- **Chapter 8: Examples and Case Studies** - Additional game examples and advanced implementation patterns
+- **Chapter 9: Build and Distribution** - Preparing your game for release across multiple platforms
+- **Chapter 10-13: API References** - Detailed technical references for each framework API
+- **Chapter 14: Developer Manual** - Advanced development techniques and framework customization
+- **Chapter 15: Troubleshooting** - Common issues, solutions, and optimization strategies
+
+This tutorial demonstrates the real-world application of framework concepts, providing you with both the theoretical understanding and practical experience needed to create compelling interactive experiences with the Snatchernauts Framework.
+
+---
+
+**Continue to:** [Chapter 8: Examples and Case Studies](08-Examples.md)
