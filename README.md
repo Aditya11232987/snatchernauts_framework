@@ -235,10 +235,12 @@ snatchernauts-framework/
 │   ├── run-game.sh               # 🎮 Unified game launcher (lint + debug options)
 │   ├── lint.sh                   # 🔍 Ren'Py code linting
 │   ├── push-both.sh              # 🚀 Push to GitLab + GitHub simultaneously
-│   ├── sync-github-wiki.sh       # 📚 Manual wiki synchronization to GitHub
+│   ├── sync-github-readme.sh     # 📄 GitHub README synchronization
+│   ├── sync-wiki.sh              # 📚 Universal wiki sync (GitLab + GitHub)
+│   ├── sync-github-wiki.sh       # 📚 Legacy GitHub-only wiki sync
 │   ├── github-init.sh            # 🔗 Initialize GitHub remote repository
 │   └── hooks/                    # Git hooks for automation
-│       └── pre-push             # ⚠️  Auto-sync wiki on push (if enabled)
+│       └── pre-push             # 🤖 Auto-sync README + wiki on push
 ├── Wiki/                          # Documentation (auto-synced to wikis)
 │   ├── 01-Overview.md            # Framework introduction and concepts
 │   ├── 02-Getting-Started.md     # Zero-to-hero tutorial
