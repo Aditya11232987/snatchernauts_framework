@@ -234,10 +234,12 @@ snatchernauts-framework/
 │   ├── run-game.sh               # 🎮 Unified game launcher (lint + debug options)
 │   ├── lint.sh                   # 🔍 Ren'Py code linting
 │   ├── push-both.sh              # 🚀 Push to GitLab + GitHub simultaneously
-│   ├── sync-github-wiki.sh       # 📚 Manual wiki synchronization to GitHub
+│   ├── sync-github-readme.sh     # 📄 GitHub README synchronization
+│   ├── sync-wiki.sh              # 📚 Universal wiki sync (GitLab + GitHub)
+│   ├── sync-github-wiki.sh       # 📚 Legacy GitHub-only wiki sync
 │   ├── github-init.sh            # 🔗 Initialize GitHub remote repository
 │   └── hooks/                    # Git hooks for automation
-│       └── pre-push             # ⚠️  Auto-sync wiki on push (if enabled)
+│       └── pre-push             # 🤖 Auto-sync README + wiki on push
 ├── Wiki/                          # Documentation (auto-synced to wikis)
 │   ├── 01-Overview.md            # Framework introduction and concepts
 │   ├── 02-Getting-Started.md     # Zero-to-hero tutorial
@@ -266,24 +268,33 @@ snatchernauts-framework/
     • Auto-detects Ren'Py SDK path and validates setup
 
 **🚀 `push-both.sh`** — **Synchronized repository management**  
-    • Pushes to both GitLab (primary) and GitHub (mirror) simultaneously  
-    • Handles branches and tags across both platforms  
-    • Supports `all` branches or specific branch targeting
+    • Pushes to both GitLab (primary) and GitHub (mirror) simultaneously  
+    • Handles branches and tags across both platforms  
+    • Supports `all` branches or specific branch targeting
 
-**📚 `sync-github-wiki.sh`** — **Manual wiki synchronization**  
-    • Syncs local `Wiki/` directory to GitHub wiki repository  
-    • Creates clean snapshot with force-push to wiki repo  
-    • Includes `dry-run` mode for testing
+**📄 `sync-github-readme.sh`** — **GitHub README synchronization**  
+    • Automatically creates GitHub-specific README from main README.md  
+    • Removes GitLab pipeline badges for clean GitHub presentation  
+    • Fixes logo paths and adds GitHub mirror badges  
+    • Perfect for manual README updates when needed
+
+**📚 `sync-wiki.sh`** — **Multi-platform wiki synchronization**  
+    • Syncs local `Wiki/` directory to both GitLab and GitHub wikis  
+    • Creates clean snapshots with force-push to wiki repositories  
+    • Includes `dry-run` mode for testing changes  
+    • Handles platform-specific wiki requirements automatically
 
 **🔗 `github-init.sh`** — **Repository setup automation**  
-    • Converts any GitHub URL format to SSH  
-    • Sets up origin remote with proper branch naming  
-    • Handles initial repository connection and push
+    • Converts any GitHub URL format to SSH  
+    • Sets up origin remote with proper branch naming  
+    • Handles initial repository connection and push
 
-**⚠️ `pre-push` hook** — **Automatic wiki sync**  
-    • Detects wiki changes in recent commits  
-    • Auto-syncs wiki if `AUTO_SYNC_WIKI=1` environment variable set  
-    • Non-blocking — never prevents code pushes
+**🤖 `pre-push` hook** — **Intelligent automation system**  
+    • **README Auto-Sync**: Detects README.md changes and updates GitHub version  
+    • **Wiki Auto-Sync**: Syncs Wiki/ changes to both GitLab and GitHub wikis  
+    • **Smart Detection**: Only syncs what actually changed  
+    • **Non-blocking**: Never prevents code pushes, always prioritizes development  
+    • **Environment Controls**: `AUTO_SYNC_README=1` `AUTO_SYNC_WIKI=1`
 
 ---
 
