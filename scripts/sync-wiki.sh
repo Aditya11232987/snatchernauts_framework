@@ -6,7 +6,8 @@ set -euo pipefail
 WIKI_SRC_DIR="Wiki"
 GITLAB_WIKI_REMOTE="git@gitlab.com:grahfmusic/snatchernauts_framework.wiki.git"
 GITHUB_WIKI_REMOTE="git@github.com:grahfmusic/snatchernauts_framework.wiki.git"
-DEFAULT_BRANCH="master"
+GITLAB_BRANCH="main"
+GITHUB_BRANCH="master"
 
 GRN="\033[32m"; YEL="\033[33m"; RED="\033[31m"; BLU="\033[34m"; NC="\033[0m"
 
@@ -69,7 +70,15 @@ sync_to_wiki() {
     local remote_url="$2"
     local temp_dir="$3"
     
-    section "Syncing to $platform Wiki"
+    # Determine the correct branch for this platform
+    local branch_name
+    if [[ "$platform" == "GitLab" ]]; then
+        branch_name="$GITLAB_BRANCH"
+    else
+        branch_name="$GITHUB_BRANCH"
+    fi
+    
+    section "Syncing to $platform Wiki (branch: $branch_name)"
     
     # Create clean temporary repository
     rm -rf "$temp_dir"
@@ -85,7 +94,7 @@ sync_to_wiki() {
         
         # Initialize and configure repository
         git init -q
-        git checkout -q -b "$DEFAULT_BRANCH"
+        git checkout -q -b "$branch_name"
         
         # Add all wiki files
         git add -A
@@ -97,15 +106,16 @@ sync_to_wiki() {
 
 Updated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
 Platform: $platform
+Branch: $branch_name
 Source: Local Wiki/ directory"
             
             git -c user.name="wiki-sync" -c user.email="wiki-sync@local" commit -q -m "$commit_msg"
             
             # Add remote and push
             git remote add origin "$remote_url"
-            info "Pushing to $platform wiki repository..."
+            info "Pushing to $platform wiki repository ($branch_name)..."
             
-            if git push -f -u origin "$DEFAULT_BRANCH" 2>/dev/null; then
+            if git push -f -u origin "$branch_name"; then
                 success "$platform wiki sync completed successfully"
                 return 0
             else
@@ -176,8 +186,8 @@ main() {
     
     # Cleanup function
     cleanup() {
-        [[ -d "$gitlab_temp" ]] && rm -rf "$gitlab_temp"
-        [[ -d "$github_temp" ]] && rm -rf "$github_temp"
+        [[ -n "${gitlab_temp:-}" && -d "$gitlab_temp" ]] && rm -rf "$gitlab_temp"
+        [[ -n "${github_temp:-}" && -d "$github_temp" ]] && rm -rf "$github_temp"
     }
     trap cleanup EXIT
     
