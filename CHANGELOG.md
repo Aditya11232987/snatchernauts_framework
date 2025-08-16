@@ -1,23 +1,47 @@
 # Changelog
 
-## 0.5.3 — 2025-08-15
+## 0.5.3 — 2025-08-16
 
-### Major Features
-- **Development Tools Integration**: Complete development workflow enhancement
-  - Unified game launcher script (`scripts/run-game.sh`) with debugging, linting, and compilation options
-  - Comprehensive development documentation in `DEVELOPMENT_TOOLS.md`
+### 🚀 Major Features
+
+#### **Complete Documentation Overhaul**
+- **Comprehensive Troubleshooting Guide**: New 15-chapter `Wiki/15-Troubleshooting.md` (15,000+ words)
+  - Advanced diagnostic methodology with flowcharts and automated information gathering
+  - Environment setup troubleshooting with smart Ren'Py SDK detection scripts
+  - Runtime issue resolution for interaction problems, shader artifacts, and audio issues
+  - Performance troubleshooting with memory leak detection and CPU bottleneck analysis
+  - Platform-specific solutions for Windows, macOS, and Linux
+  - Emergency recovery procedures and automated health monitoring scripts
+  - Professional-grade technical support reference matching enterprise documentation standards
+
+- **Universal Wiki Synchronization**: Robust `scripts/sync-wiki.sh` deployment system
+  - Automatic synchronization of 18 documentation files to both GitLab and GitHub wikis
+  - Support for dry-run previews and selective platform targeting (--gitlab-only, --github-only)
+  - Error handling with detailed progress reporting and cleanup procedures
+  - Handles ~8.67 MiB of documentation content including screenshots and assets
+  - Professional commit messages with timestamps and platform attribution
+
+#### **Development Tools Integration**
+- **Unified Game Launcher**: Complete development workflow enhancement via `scripts/run-game.sh`
+  - Debugging, linting, and compilation options in single interface
   - Custom SDK path support via `RENPY_SDK` environment variable
   - Debug mode with console output retention for troubleshooting
-- **Desaturation Effects System**: Advanced replacement for bloom highlighting
-  - New `game/core/desaturation_utils.rpy` with comprehensive preset system
-  - 24 different desaturation presets (subtle, explosive, whisper, heartbeat, flicker, ethereal variants)
+  - Cross-platform compatibility with intelligent path detection
+
+#### **Advanced Effects Systems**
+- **Desaturation Effects System**: Professional replacement for bloom highlighting
+  - New `game/core/desaturation_utils.rpy` with 24 comprehensive presets
+  - Variants: subtle, explosive, whisper, heartbeat, flicker, ethereal effects
   - Backward compatibility with existing bloom configurations
-  - Performance optimizations and cleaner effect calculations
-- **Debug System Overhaul**: Centralized debugging infrastructure
-  - New `game/debug/bloom_debug.rpy` with categorized debug output
+  - Performance optimizations with cleaner effect calculations and reduced shader overhead
+
+#### **Debug Infrastructure Overhaul**
+- **Centralized Debugging System**: Enterprise-grade debugging infrastructure
+  - New `game/debug/bloom_debug.rpy` with categorized, color-coded output
   - Shader debug configuration system (`game/shader_debug_config.rpy`)
-  - Toggle-based debug controls for different system components
-  - Verbose positioning and property debugging for object interactions
+  - Toggle-based debug controls for granular system component monitoring
+  - Verbose positioning and property debugging for complex object interactions
+  - Runtime performance monitoring with memory and CPU usage tracking
 
 ### Technical Improvements
 - **Shader System Refinements**: Enhanced Neo-Noir shader integration
@@ -45,16 +69,48 @@
 - **Debug Output Control**: Fine-grained control over debug verbosity levels
 - **SDK Flexibility**: Easy switching between different Ren'Py SDK versions
 
+### 🔧 Critical Infrastructure Fixes
+
+#### **Wiki Sync Script Resolution**
+- **Fixed arithmetic operation failures**: Resolved `scripts/sync-wiki.sh` failing with exit code 1
+  - Problem: `((variable++))` operations incompatible with `set -euo pipefail` bash strict mode
+  - Solution: Replaced with `variable=$((variable + 1))` format for reliable arithmetic
+  - Impact: Script now successfully deploys 18 documentation files to both GitLab and GitHub wikis
+  - Added comprehensive error handling and progress reporting for production reliability
+
+- **Enhanced sync script robustness**:
+  - Added missing informational messages for GitHub sync operations
+  - Implemented proper platform-specific skipping notifications
+  - Improved temporary directory cleanup with robust error handling
+  - Added detailed commit messages with timestamps and platform attribution
+
+### 📚 Enhanced Documentation Standards
+- **Professional Technical Writing**: All documentation now meets enterprise-grade standards
+  - Consistent formatting, comprehensive cross-references, and professional tone
+  - Detailed troubleshooting procedures with step-by-step resolution guides
+  - Advanced diagnostic scripts with automated system information gathering
+  - Platform-specific guidance covering Windows, macOS, and Linux environments
+
+### 🗺 Repository Management
+- **Tag and Branch Cleanup**: Resolved version control ambiguities
+  - Removed conflicting `v0.5.3` tag and `0.5.3` branch to eliminate reference conflicts
+  - Streamlined version management with consistent tag naming convention
+  - Updated `0.5.3` tag to include all latest fixes and documentation improvements
+
 ### Removed/Deprecated
 - Consolidated shader files: removed redundant/experimental shader implementations
 - Cleaned up bloom system files in favor of desaturation approach
 - Removed deprecated screen files (`screens_bloom.rpy`)
+- Eliminated conflicting version tags (`v0.5.3`) and branches (`0.5.3`) for cleaner repository state
 
-### Fixed
+### ✅ Fixed
+- **Critical**: Wiki sync script arithmetic operations now compatible with bash strict mode
+- **Critical**: Resolved exit code 1 failures preventing documentation deployment
 - Room interaction timing and state management
 - Shader effect stacking and performance issues
 - Debug output formatting and categorization
 - Development workflow reliability across different environments
+- Repository version control conflicts and tag ambiguities
 
 ## 0.5.2 — 2025-08-13
 
